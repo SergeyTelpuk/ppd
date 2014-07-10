@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>ППД</title>
     <link rel="stylesheet" type="text/css" href="css/compiled/style.css">
-    <script type="text/javascript" src="js/quizData.js"></script>
 </head>
 <body>
 <header>
@@ -20,16 +19,21 @@
 </div>
 <div id='test' class="hidden">
     <p> <spam id="numberAnswer"> </spam></p>
+    <div class="statistics">
+        <p>Количество правильных ответов <spam class="countRightAnswer">0</spam></p>
+        <p>Количество неправильных ответов <spam class="countWrongAnswer">0</spam></p>
+    </div>
     <div id="questionText">
         Текст вопроса
         <div id="contentAnswer">
             <img id="imgAnswer" src="">
             <div id="listAnswer"></div>
         </div>
-        <button id="reply">Ответить</button>
-        <button id="skip">Пропустить</button>
+        <button class="reply">Ответить</button>
+        <button class="skip">Пропустить</button>
     </div>
 </div>
 </body>
-<script type="text/javascript" src="js/myJavaScipt.js"></script>
+<script type="text/javascript" src="js/quizData.js"></script>
+<script type="text/javascript" src="js/myJavaScript.js"></script>
 </html>
