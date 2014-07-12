@@ -1,39 +1,41 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
+<head>
+    <title>TODO supply a title</title>
     <meta charset="UTF-8">
-    <title>ППД</title>
-    <link rel="stylesheet" type="text/css" href="css/compiled/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link  href="css/compiled/style.css" rel="stylesheet" type="text/css" >
 </head>
 <body>
-<header>
-    <h1>Доступные тесты по ППД</h1>
- </header>
-<div id="listTest">
-    <ul>
-        <li><a href="#">Проезд перекрестков</a></li>
-        <li><a href="#">Опкавказание первой помощи</a></li>
-        <li><a href="#">Дорожный знаки</a></li>
-        <li><a href="#">Административная отвественность</a></li>
-    </ul>
+<div class="testList">
+    <header>
+        <h3>Доступные тесты</h3>
+    </header>
+    <section>
+        <div class="namesTest"></div>
+    </section>
 </div>
-<div id='test' class="hidden">
-    <p> <spam id="numberAnswer"> </spam></p>
-    <div class="statistics">
-        <p>Количество правильных ответов <spam class="countRightAnswer">0</spam></p>
-        <p>Количество неправильных ответов <spam class="countWrongAnswer">0</spam></p>
-    </div>
-    <div id="questionText">
-        Текст вопроса
-        <div id="contentAnswer">
-            <img id="imgAnswer" src="">
-            <div id="listAnswer"></div>
+<div class="hidden">
+    <div class="test">
+        <div class="titleTest"></div>
+        <div class="questions">
+            <p>Количество всего вопросов данного теста: <spam class="countQuestions"></spam> активный <spam class="activeQuestions"></spam></p>
+            <p>Количество правильных вопросов: <spam class="right"></spam></p>
+            <p>Количество неправильных вопросов: <spam class="wrong"></spam></p>
+            <div class="content"></div>
+            <div class="imgQuestions"></div>
+            <div class="answers">
+                <div class="listAnswers"></div>
+                <div class="button">
+                    <button class="answerButton">ответить</button>
+                    <button class="skipAnswerButton">пропустить</button>
+                </div>
+            </div>
         </div>
-        <button class="reply">Ответить</button>
-        <button class="skip">Пропустить</button>
     </div>
 </div>
+
 </body>
 <script type="text/javascript" src="js/quizData.js"></script>
-<script type="text/javascript" src="js/myJavaScript.js"></script>
+<script type="text/javascript" src="js/ppdscript.js"></script>
 </html>
