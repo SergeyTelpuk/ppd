@@ -1,21 +1,23 @@
 function QuestionModule(appWrapper) {
 
-    this.doc = appWrapper;
+    this.wrapper = appWrapper;
 
     this.activeQuestionIndex = 0;
     this.indexActiveTest = 0;
     this.countAnsweredQuestion = 0;
 
     this.img = null;
-    this.listTestName = this.doc.getElementsByClassName('namesTest')[0];
-    this.hidden = this.doc.getElementsByClassName('hidden')[0];
-    this.testList = this.doc.getElementsByClassName('testList')[0];
-    this.activeQuestions = this.doc.getElementsByClassName('activeQuestions')[0];
-    this.contentQuestions = this.doc.getElementsByClassName('content')[0];
-    this.imgQuestions = this.doc.getElementsByClassName('imgQuestions')[0];
-    this.button = this.doc.getElementsByClassName('button')[0];
-    this.listAnswers = this.doc.getElementsByClassName('listAnswers')[0];
-    this.skipAnswerButton = this.doc.getElementsByClassName('skipAnswerButton')[0];
+    this.listTestName = this.wrapper.getElementsByClassName('namesTest')[0];
+    this.hidden = this.wrapper.getElementsByClassName('hidden')[0];
+    this.floatWindows = this.wrapper.getElementsByClassName('hidden')[1];
+    this.closedWindows = this.wrapper.getElementsByClassName('closed')[0];
+    this.testList = this.wrapper.getElementsByClassName('testList')[0];
+    this.activeQuestions = this.wrapper.getElementsByClassName('activeQuestions')[0];
+    this.contentQuestions = this.wrapper.getElementsByClassName('content')[0];
+    this.imgQuestions = this.wrapper.getElementsByClassName('imgQuestions')[0];
+    this.button = this.wrapper.getElementsByClassName('button')[0];
+    this.listAnswers = this.wrapper.getElementsByClassName('listAnswers')[0];
+    this.skipAnswerButton = this.wrapper.getElementsByClassName('skipAnswerButton')[0];
 }
 
 QuestionModule.prototype.setIndexActiveTest = function(indexActive) {
@@ -115,19 +117,27 @@ QuestionModule.prototype.getActiveQuestionIndex = function(idx) {
 
 QuestionModule.prototype.clickNextButton = function() {
     var inputListRadio = this.listAnswers.getElementsByTagName('input');
+    this.setAnsweredQuestion();
+
     for (var idInput = 0; idInput < inputListRadio.length; ++idInput) {
         if (inputListRadio[idInput].checked) {
             var answer = parseInt(inputListRadio[idInput].value, 10);
             if ((++answer) === parseInt(quizData[this.indexActiveTest].questions[this.activeQuestionIndex].right, 10)) {
                 app.objStatistics.displayShowRightQuestions(++app.objStatistics.rightQuestions);
+                this.nextBuildQuestion();
             } else {
-                app.objStatistics.displayShowWrongQuestions(++app.objStatistics.wrongQuestions);
-                alert(quizData[this.indexActiveTest].questions[this.activeQuestionIndex].wrongAnswersComment);
+                Utils.removeClass(this.floatWindows, 'hidden');
             }
         }
     }
+};
+
+QuestionModule.prototype.setAnsweredQuestion = function(){
     quizData[this.indexActiveTest].questions[this.activeQuestionIndex].answeredQuestion = true;
     ++this.countAnsweredQuestion;
+};
+
+QuestionModule.prototype.nextBuildQuestion = function(){
     var id = this.getActiveQuestionIndex(this.activeQuestionIndex);
     if (id !== false) {
         Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
@@ -139,17 +149,24 @@ QuestionModule.prototype.clickNextButton = function() {
     }
 };
 
+
 QuestionModule.prototype.clickSkipButton = function() {
     var id = this.getActiveQuestionIndex(this.activeQuestionIndex);
     Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
     this.buildQuestion(id);
 };
 
+QuestionModule.prototype.closedWindowsClick = function(evt){
+    Utils.addClass(this.floatWindows, 'hidden');
+    app.objStatistics.displayShowWrongQuestions(++app.objStatistics.wrongQuestions);
+    this.nextBuildQuestion();
+};
+
 
 QuestionModule.prototype.createListTest = function() {
     var ul = document.createElement('UL'),
         self = this;
-    this.listTestName.appendChild(ul);
+    self.listTestName.appendChild(ul);
     
     ul.addEventListener('click', function(evt) {
         evt.preventDefault();
@@ -157,8 +174,14 @@ QuestionModule.prototype.createListTest = function() {
         return false;
     });
 
-    this.button.addEventListener('click', function(evt) {
+    self.button.addEventListener('click', function(evt) {
         self.buttonTestEvent(evt);
+        return false;
+    });
+
+
+    self.closedWindows.addEventListener('click', function(evt) {
+        self.closedWindowsClick(evt);
         return false;
     });
 
