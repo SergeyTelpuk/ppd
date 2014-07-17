@@ -68,7 +68,6 @@ figure,
 figcaption,
 footer,
 header,
-hgroup,
 menu,
 nav,
 output,
@@ -92,7 +91,6 @@ figcaption,
 figure,
 footer,
 header,
-hgroup,
 menu,
 nav,
 section {
@@ -118,32 +116,47 @@ html {
   margin: 0;
   padding: 0;
 }
+/* reset styles */
 body {
-  width: 1000px;
+  width: 60%;
   height: 100%;
-  min-height: 100%;
   margin: 30px auto;
-  padding: 50px 48px 0;
+  padding: 50px ;
   line-height: 200%;
-  color: #333;
   background: #ffffff;
-  font-family: ff-tisa-web-pro, Georgia, sans-serif;
   box-shadow: 0px 5px 10px #1c1c1c;
-  -webkit-text-size-adjust: 100%;
+}
+header h3 {
+  font-size: 1.2em;
+  padding-bottom: 10px;
 }
 .testList {
-  margin: 30px auto;
+  margin: 0 auto;
+  width: 190px;
+  color: #6A94CC;
+  padding-left: 30px;
+  padding-bottom: 10px;
+}
+button.answerButton {
+  background-color: green;
+}
+button.skipAnswerButton {
+  background-color: red;
 }
 a {
   text-decoration: none;
 }
 a:hover {
+  background: greenyellow;
   color: green;
-  padding: 2px;
-  border: green solid 1px;
+  padding: 6px;
+  font-size: 18px;
+  border: azure solid 3px ;
 }
-a:visited {
-  color: green;
+a {
+  color: blue;
+  border: 1px green solid;
+  padding: 5px;
 }
 a:link {
   color: darkgoldenrod;
@@ -157,25 +170,28 @@ ul {
 .namesTest ul {
   list-style-type: none;
 }
-img {
-  width: 300px;
-  height: 100px;
-}
 .right {
+  font-size: 1.4em;
   color: green;
 }
+.wrong {
+  font-size: 1.4em;
+  color: red;
+}
 .widget {
-  display: block;
-  float: right;
-  width: 40%;
-  background: wheat;
+  background-color: #f5f5f5;
+  padding-left: 8px;
+  width: 150px;
+  position: absolute;
+  left: 70%;
+}
+.boll {
+  background-color: red;
+  width: 150px;
+  height: 150px;
+  position: absolute;
+  padding: 0 auto;
 }
 .questions {
-  display: block;
-  float: left;
-  width: 60%;
-  background: azure;
-}
-.wrong {
-  color: red;
+  width: 80%;
 }

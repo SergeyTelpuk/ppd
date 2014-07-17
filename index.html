@@ -4,39 +4,48 @@
     <title>TODO supply a title</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link  href="css/styles.css" rel="stylesheet" type="text/css" >
+    <link  href="css/compiled/style.css" rel="stylesheet" type="text/css" >
 </head>
 <body>
-<div class="testList">
-    <header>
-        <h3>Доступные тесты</h3>
-    </header>
-    <section>
-        <div class="namesTest"></div>
-    </section>
-</div>
-<div class="hidden">
-    <div  class = 'contentQuestions'>
-        <div class="widget">
-            <p>Количество всего вопросов данного теста: <span class="countQuestions"></span> активный <span class="activeQuestions"></span></p>
-            <p>Количество правильных вопросов: <span class="right"></span></p>
-            <p>Количество неправильных вопросов: <span class="wrong"></span></p>
-        </div>
-        <div class="questions">
-            <div class="titleTest"></div>
-            <div class="content"></div>
-            <figure class="imgQuestions"></figure>
-            <div class="answers">
-                <div class="listAnswers"></div>
-                <div class="button">
-                    <button class="answerButton">ответить</button>
-                    <button class="skipAnswerButton">пропустить</button>
+<div class='appWrapper'>
+    <div class="testList">
+        <header>
+            <h3>Доступные тесты</h3>
+        </header>
+        <section>
+            <div class="namesTest"></div>
+        </section>
+    </div>
+    <div class="hidden">
+        <div  class = 'contentQuestions'>
+            <div class="widget">
+                <p>Всех вопросов: <span class="countQuestions"></span></p>
+                <p>активный: <span class="activeQuestions"></span></p>
+                <p>правильных: <span class="right"></span></p>
+                <p>неправильных: <span class="wrong"></span></p>
+            </div>
+            <div class="questions">
+                <div class="titleTest"></div>
+                <div class="content"></div>
+                <figure class="imgQuestions"></figure>
+                <div class="answers">
+                    <div class="listAnswers"></div>
+                    <div class="button">
+                        <button class="answerButton">ответить</button>
+                        <button class="skipAnswerButton">пропустить</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class='boll'></div>
 </div>
 </body>
 <script type="text/javascript" src="js/quizData.js"></script>
-<script type="text/javascript" src="js/ppdscript.js"></script>
+<script type='text/javascript' src='js/setFlag.js' ></script>
+<script type='text/javascript' src='js/Utils.js'></script>
+<script type='text/javascript' src='js/Statistics.js'></script>
+<script type='text/javascript' src='js/QuestionModule.js'></script>
+<script type="text/javascript" src="js/QuizzApp.js"></script>
 </html>
+
