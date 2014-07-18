@@ -23,7 +23,7 @@ Statistics.prototype.testWidget = function (indexActive) {
     this.showWrongQuestions(this.wrongQuestions);
 };
 
-Statistics.prototype.getWrongWindowsStatic = function (self) {
+Statistics.prototype.getWrongWindowsStatic = function () {
     if (this.wrongQuestions > (this.rightQuestions + this.wrongQuestions) / 2) {
         return '<p class="wrong">Ваша статистика!</p>' +
             '<p>правильных: ' + '<span class="right">' + this.rightQuestions + '</span><br>' +
@@ -34,7 +34,6 @@ Statistics.prototype.getWrongWindowsStatic = function (self) {
             '<p>правильных: ' + '<span class="right">' + this.rightQuestions + '</span><br>' +
             '<span class="wrong">неправильных: ' + this.wrongQuestions + '</span></p>' +
             '<span class="right">Вы молодец!!!<span>';
-
     }
 
 };

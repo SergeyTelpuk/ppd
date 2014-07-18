@@ -7,6 +7,7 @@ function QuestionModule(appWrapper) {
     this.countAnsweredQuestion = 0;
 
     this.img = null;
+    this.exitTest = this.appWrapper.getElementsByClassName('exitTest')[0];
     this.listTestName = this.appWrapper.getElementsByClassName('namesTest')[0];
     this.hidden = this.appWrapper.getElementsByClassName('hidden')[0];
     this.floatWindows = this.appWrapper.getElementsByClassName('hidden')[1];
@@ -194,31 +195,56 @@ QuestionModule.prototype.nextQuestion = function (evt) {
         Utils.addClass(this.floatWindows, 'hidden');
         this.reset();
     }
-
 };
 
 
-QuestionModule.prototype.createListTest = function () {
-    var ul = document.createElement('UL'),
-        self = this;
-    self.listTestName.appendChild(ul);
+QuestionModule.prototype.closedTest = function () {
+    Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
+    Utils.addClass(this.floatWindows, 'hidden');
+    this.resetTest();
+};
 
+QuestionModule.prototype.addEventListenerExitTest = function () {
+    var self = this;
+    self.exitTest.addEventListener('click', function (evt) {
+        evt.preventDefault();
+        self.closedTest(evt);
+        return false;
+    });
+};
+
+
+QuestionModule.prototype.addEventListenerUL = function (ul) {
+    var self = this;
     ul.addEventListener('click', function (evt) {
         evt.preventDefault();
         self.listTestEvent(evt);
         return false;
     });
+};
 
+QuestionModule.prototype.addEventListenerButton = function () {
+    var self = this;
     self.button.addEventListener('click', function (evt) {
         self.buttonTestEvent(evt);
         return false;
     });
+};
 
+QuestionModule.prototype.addEventListenerClosedWindows = function () {
+    var self = this;
 
     self.closedWindows.addEventListener('click', function (evt) {
         self.nextQuestion(evt);
         return false;
     });
+};
+
+
+QuestionModule.prototype.createListTest = function () {
+    var ul = document.createElement('UL');
+
+    this.listTestName.appendChild(ul);
 
     for (var testId in quizData) {
         var text = document.createTextNode(quizData[testId].title);
@@ -230,6 +256,14 @@ QuestionModule.prototype.createListTest = function () {
         li.appendChild(a);
         ul.appendChild(li);
     }
+
+    this.addEventListenerUL(ul);
+
+    this.addEventListenerExitTest();
+
+    this.addEventListenerButton();
+
+    this.addEventListenerClosedWindows();
 };
 
 QuestionModule.prototype.resetTest = function () {
