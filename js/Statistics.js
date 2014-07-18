@@ -8,40 +8,32 @@ function Statistics(appWrapper) {
     this.countWrongQuestions = this.appWrapper.getElementsByClassName('wrong')[0];
 }
 
-Statistics.prototype.displayShowRightQuestions = function (text) {
+Statistics.prototype.showRightQuestions = function (text) {
     this.countRightQuestions.innerText = text;
 };
 
-Statistics.prototype.displayShowWrongQuestions = function (text) {
+Statistics.prototype.showWrongQuestions = function (text) {
     this.countWrongQuestions.innerText = text;
 };
 
-Statistics.prototype.buildTestWidget = function (indexActive) {
+Statistics.prototype.testWidget = function (indexActive) {
     this.titleTest.innerText = quizData[indexActive].title;
     this.question.innerText = quizData[indexActive].questions.length;
-    this.displayShowRightQuestions(this.rightQuestions);
-    this.displayShowWrongQuestions(this.wrongQuestions);
+    this.showRightQuestions(this.rightQuestions);
+    this.showWrongQuestions(this.wrongQuestions);
 };
 
-Statistics.prototype.setWrongWindowsStatic = function (self) {
-    var repeatTest = '';
+Statistics.prototype.getWrongWindowsStatic = function (self) {
     if (this.wrongQuestions > (this.rightQuestions + this.wrongQuestions) / 2) {
-        repeatTest += '<span class="wrong"><button class="repeat">Повторить</button></span>';
-        self.wrongContent.innerHTML = '<p class="wrong">Ваша статистика!</p>' +
+        return '<p class="wrong">Ваша статистика!</p>' +
             '<p>правильных: ' + '<span class="right">' + this.rightQuestions + '</span><br>' +
             '<span class="wrong">неправильных: ' + this.wrongQuestions + '</span></p>' +
-            repeatTest;
-        this.appWrapper.getElementsByClassName('repeat')[0].addEventListener('click',
-            function (evt) {
-                self.repeatTest(evt);
-                return false;
-            });
+            '<span class="wrong"><button class="repeat">Повторить</button></span>';
     } else {
-        repeatTest += '<span class="right">Вы молодец!!!<span>';
-        self.wrongContent.innerHTML = '<p class="wrong">Ваша статистика!</p>' +
+        return '<p class="wrong">Ваша статистика!</p>' +
             '<p>правильных: ' + '<span class="right">' + this.rightQuestions + '</span><br>' +
             '<span class="wrong">неправильных: ' + this.wrongQuestions + '</span></p>' +
-            repeatTest;
+            '<span class="right">Вы молодец!!!<span>';
     }
 
 };

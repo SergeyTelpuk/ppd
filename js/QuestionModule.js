@@ -1,24 +1,24 @@
 function QuestionModule(appWrapper) {
 
-    this.wrapper = appWrapper;
+    this.appWrapper = appWrapper;
 
     this.activeQuestionIndex = 0;
     this.indexActiveTest = 0;
     this.countAnsweredQuestion = 0;
 
     this.img = null;
-    this.listTestName = this.wrapper.getElementsByClassName('namesTest')[0];
-    this.hidden = this.wrapper.getElementsByClassName('hidden')[0];
-    this.floatWindows = this.wrapper.getElementsByClassName('hidden')[1];
-    this.closedWindows = this.wrapper.getElementsByClassName('closed')[0];
-    this.wrongContent = this.wrapper.getElementsByClassName('wrongContent')[0];
-    this.testList = this.wrapper.getElementsByClassName('testList')[0];
-    this.activeQuestions = this.wrapper.getElementsByClassName('activeQuestions')[0];
-    this.contentQuestions = this.wrapper.getElementsByClassName('content')[0];
-    this.imgQuestions = this.wrapper.getElementsByClassName('imgQuestions')[0];
-    this.button = this.wrapper.getElementsByClassName('button')[0];
-    this.listAnswers = this.wrapper.getElementsByClassName('listAnswers')[0];
-    this.skipAnswerButton = this.wrapper.getElementsByClassName('skipAnswerButton')[0];
+    this.listTestName = this.appWrapper.getElementsByClassName('namesTest')[0];
+    this.hidden = this.appWrapper.getElementsByClassName('hidden')[0];
+    this.floatWindows = this.appWrapper.getElementsByClassName('hidden')[1];
+    this.closedWindows = this.appWrapper.getElementsByClassName('closed')[0];
+    this.wrongContent = this.appWrapper.getElementsByClassName('wrongContent')[0];
+    this.testList = this.appWrapper.getElementsByClassName('testList')[0];
+    this.activeQuestions = this.appWrapper.getElementsByClassName('activeQuestions')[0];
+    this.contentQuestions = this.appWrapper.getElementsByClassName('content')[0];
+    this.imgQuestions = this.appWrapper.getElementsByClassName('imgQuestions')[0];
+    this.button = this.appWrapper.getElementsByClassName('button')[0];
+    this.listAnswers = this.appWrapper.getElementsByClassName('listAnswers')[0];
+    this.skipAnswerButton = this.appWrapper.getElementsByClassName('skipAnswerButton')[0];
 }
 
 QuestionModule.prototype.setIndexActiveTest = function (indexActive) {
@@ -26,13 +26,11 @@ QuestionModule.prototype.setIndexActiveTest = function (indexActive) {
 };
 
 QuestionModule.prototype.listTestEvent = function (evt) {
-
-    var e = evt || window.event;
-    var target = e.target || e.srcElement;
+    var target = evt.target;
 
     if (target.tagName.toUpperCase() === 'A') {
         this.setIndexActiveTest(target.getAttribute('data-id-question'));
-        app.objStatistics.buildTestWidget(target.getAttribute('data-id-question'));
+        app.objStatistics.testWidget(target.getAttribute('data-id-question'));
         this.buildQuestion(0);
         this.testList.className = 'hidden';
         Utils.removeClass(this.hidden, 'hidden');
@@ -40,9 +38,7 @@ QuestionModule.prototype.listTestEvent = function (evt) {
 };
 
 QuestionModule.prototype.buttonTestEvent = function (evt) {
-
-    var e = evt || window.event;
-    var target = e.target || e.srcElement;
+    var target = evt.target;
 
     if (target.className === 'answerButton') {
         this.clickNextButton();
@@ -56,14 +52,14 @@ QuestionModule.prototype.repeatTest = function (evt) {
     Utils.addClass(this.floatWindows, 'hidden');
     Utils.removeClass(this.skipAnswerButton, 'hidden');
     Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
-    app.objStatistics.buildTestWidget(this.indexActiveTest);
+    app.objStatistics.testWidget(this.indexActiveTest);
     this.buildQuestion(0);
 };
 
-QuestionModule.prototype.createContentList = function (id, listAnswers) {
+QuestionModule.prototype.getContentLI = function (id, listAnswers) {
     var li = document.createElement('LI');
     var input = document.createElement('INPUT');
-    var textAnswers = document.createTextNode(listAnswers[id]);
+    var textAnswers = document.createTextNode(listAnswers);
     input.setAttribute('type', 'radio');
     input.setAttribute('name', 'answer');
     input.setAttribute('value', id);
@@ -77,10 +73,10 @@ QuestionModule.prototype.createContentList = function (id, listAnswers) {
     return li;
 };
 
-QuestionModule.prototype.createListAnswers = function (listAnswers) {
+QuestionModule.prototype.getContentUL = function (listAnswers) {
     var ul = document.createElement('UL');
-    for (var id in listAnswers) {
-        var li = this.createContentList(id, listAnswers);
+    for (var id = 0; id < listAnswers.length; ++id) {
+        var li = this.getContentLI(id, listAnswers[id]);
         ul.appendChild(li);
     }
     return ul;
@@ -91,31 +87,37 @@ QuestionModule.prototype.buildQuestion = function (indexActive) {
     this.activeQuestions.innerText = this.activeQuestionIndex + 1;
     this.contentQuestions.innerText = quizData[this.indexActiveTest].questions[this.activeQuestionIndex].question;
 
-    if (this.img === null && quizData[this.indexActiveTest].questions[this.activeQuestionIndex].questionImg) {
-        this.img = document.createElement('IMG');
-        this.img.src = quizData[this.indexActiveTest].questions[this.activeQuestionIndex].questionImg;
-        this.imgQuestions.appendChild(this.img);
-    } else if (quizData[this.indexActiveTest].questions[this.activeQuestionIndex].questionImg) {
-        this.img.src = quizData[this.indexActiveTest].questions[this.activeQuestionIndex].questionImg;
-        if (this.img.className === 'hidden') {
-            Utils.removeClass(this.img, 'hidden');
+    try {
+        if (this.img === null && quizData[this.indexActiveTest].questions[this.activeQuestionIndex].questionImg) {
+            this.img = document.createElement('IMG');
+            this.img.src = quizData[this.indexActiveTest].questions[this.activeQuestionIndex].questionImg;
+            this.imgQuestions.appendChild(this.img);
+        } else if (quizData[this.indexActiveTest].questions[this.activeQuestionIndex].questionImg) {
+            this.img.src = quizData[this.indexActiveTest].questions[this.activeQuestionIndex].questionImg;
+            if (this.img.className === 'hidden') {
+                Utils.removeClass(this.img, 'hidden');
+            }
+        } else if (!quizData[this.indexActiveTest].questions[this.activeQuestionIndex].questionImg && this.img) {
+            Utils.addClass(this.img, 'hidden');
         }
-    } else if (!quizData[this.indexActiveTest].questions[this.activeQuestionIndex].questionImg && this.img) {
-        Utils.addClass(this.img, 'hidden');
+    } catch (e) {
+        console.log(e.message);
     }
-    this.listAnswers.appendChild(this.createListAnswers(quizData[this.indexActiveTest].questions[this.activeQuestionIndex].answers));
+
+    this.listAnswers.appendChild(this.getContentUL(quizData[this.indexActiveTest].questions[this.activeQuestionIndex].answers));
 };
 
-QuestionModule.prototype.getActiveQuestionIndex = function (idx) {
+QuestionModule.prototype.getNextActiveQuestionIndex = function (idx) {
     var countQuestions = quizData[this.indexActiveTest].questions.length;
 
     if (this.countAnsweredQuestion === countQuestions - 1) {
         Utils.addClass(this.skipAnswerButton, 'hidden');
     }
-    idx = ++idx > (countQuestions - 1) ? 0 : idx;
-    while (quizData[this.indexActiveTest].questions[idx].answeredQuestion) {
+
+    do {
         idx = ++idx > (countQuestions - 1) ? 0 : idx;
-    }
+    } while (quizData[this.indexActiveTest].questions[idx].answeredQuestion);
+
     return idx;
 
 };
@@ -128,10 +130,10 @@ QuestionModule.prototype.clickNextButton = function () {
         if (inputListRadio[idInput].checked) {
             var answer = parseInt(inputListRadio[idInput].value, 10);
             if ((++answer) === parseInt(quizData[this.indexActiveTest].questions[this.activeQuestionIndex].right, 10)) {
-                app.objStatistics.displayShowRightQuestions(++app.objStatistics.rightQuestions);
-                this.closedWindowsClick();
+                app.objStatistics.showRightQuestions(++app.objStatistics.rightQuestions);
+                this.nextQuestion();
             } else {
-                app.objStatistics.displayShowWrongQuestions(++app.objStatistics.wrongQuestions);
+                app.objStatistics.showWrongQuestions(++app.objStatistics.wrongQuestions);
                 this.setWrongContent();
                 Utils.removeClass(this.floatWindows, 'hidden');
             }
@@ -151,7 +153,7 @@ QuestionModule.prototype.setAnsweredQuestion = function () {
 };
 
 QuestionModule.prototype.nextBuildQuestion = function () {
-    var id = this.getActiveQuestionIndex(this.activeQuestionIndex);
+    var id = this.getNextActiveQuestionIndex(this.activeQuestionIndex);
     Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
     this.buildQuestion(id);
 };
@@ -162,17 +164,28 @@ QuestionModule.prototype.reset = function () {
 };
 
 QuestionModule.prototype.clickSkipButton = function () {
-    var id = this.getActiveQuestionIndex(this.activeQuestionIndex);
+    var id = this.getNextActiveQuestionIndex(this.activeQuestionIndex);
     Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
     this.buildQuestion(id);
 };
 
-QuestionModule.prototype.closedWindowsClick = function (evt) {
+QuestionModule.prototype.nextQuestion = function (evt) {
     if (this.countAnsweredQuestion < quizData[this.indexActiveTest].questions.length) {
         Utils.addClass(this.floatWindows, 'hidden');
         this.nextBuildQuestion();
     } else if (this.countAnsweredQuestion === quizData[this.indexActiveTest].questions.length) {
-        app.objStatistics.setWrongWindowsStatic(this);
+        var self = this;
+
+        this.wrongContent.innerHTML = app.objStatistics.getWrongWindowsStatic();
+
+        if (this.appWrapper.getElementsByClassName('repeat')[0]) {
+            this.appWrapper.getElementsByClassName('repeat')[0].addEventListener('click', function (evt) {
+                self.repeatTest(evt)
+                return false;
+            });
+        }
+
+
         Utils.removeClass(this.floatWindows, 'hidden');
         //кончены вопросы или нет
         ++this.countAnsweredQuestion;
@@ -203,7 +216,7 @@ QuestionModule.prototype.createListTest = function () {
 
 
     self.closedWindows.addEventListener('click', function (evt) {
-        self.closedWindowsClick(evt);
+        self.nextQuestion(evt);
         return false;
     });
 
