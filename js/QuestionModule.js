@@ -24,7 +24,16 @@ function QuestionModule(appWrapper) {
 
 QuestionModule.prototype.setIndexActiveTest = function (indexActive) {
     this.indexActiveTest = indexActive;
+
+    app.localStorage.setTestId(indexActive);
+    app.localStorage.stringifyStorage();
+
 };
+
+QuestionModule.prototype.setCountAnsweredQuestion = function (countAnsweredQuestion) {
+    this.countAnsweredQuestion = countAnsweredQuestion;
+};
+
 
 QuestionModule.prototype.listTestEvent = function (evt) {
     var target = evt.target;
@@ -53,6 +62,7 @@ QuestionModule.prototype.repeatTest = function (evt) {
     Utils.addClass(this.floatWindows, 'hidden');
     Utils.removeClass(this.skipAnswerButton, 'hidden');
     Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
+    Utils.JSONppdLocalStorageRepeat();
     app.objStatistics.testWidget(this.indexActiveTest);
     this.buildQuestion(0);
 };
@@ -108,15 +118,17 @@ QuestionModule.prototype.buildQuestion = function (indexActive) {
     this.listAnswers.appendChild(this.getContentUL(quizData[this.indexActiveTest].questions[this.activeQuestionIndex].answers));
 };
 
-QuestionModule.prototype.getNextActiveQuestionIndex = function (idx) {
-    var countQuestions = quizData[this.indexActiveTest].questions.length;
-
-    if (this.countAnsweredQuestion === countQuestions - 1) {
+QuestionModule.prototype.hiddenButtonSkip = function () {
+    if (this.countAnsweredQuestion === quizData[this.indexActiveTest].questions.length - 1) {
         Utils.addClass(this.skipAnswerButton, 'hidden');
     }
+};
+
+QuestionModule.prototype.getNextActiveQuestionIndex = function (idx) {
+    this.hiddenButtonSkip();
 
     do {
-        idx = ++idx > (countQuestions - 1) ? 0 : idx;
+        idx = ++idx > (quizData[this.indexActiveTest].questions.length - 1) ? 0 : idx;
     } while (quizData[this.indexActiveTest].questions[idx].answeredQuestion);
 
     return idx;
@@ -132,14 +144,17 @@ QuestionModule.prototype.clickNextButton = function () {
             var answer = parseInt(inputListRadio[idInput].value, 10);
             if ((++answer) === parseInt(quizData[this.indexActiveTest].questions[this.activeQuestionIndex].right, 10)) {
                 app.objStatistics.showRightQuestions(++app.objStatistics.rightQuestions);
+                app.localStorage.setAnswerRightQuestLocalStorage(this.activeQuestionIndex);
                 this.nextQuestion();
             } else {
+                app.localStorage.setAnswerWrongQuestLocalStorage(this.activeQuestionIndex);
                 app.objStatistics.showWrongQuestions(++app.objStatistics.wrongQuestions);
                 this.setWrongContent();
                 Utils.removeClass(this.floatWindows, 'hidden');
             }
         }
     }
+    app.localStorage.stringifyStorage();
 };
 
 QuestionModule.prototype.setWrongContent = function () {
@@ -157,6 +172,10 @@ QuestionModule.prototype.nextBuildQuestion = function () {
     var id = this.getNextActiveQuestionIndex(this.activeQuestionIndex);
     Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
     this.buildQuestion(id);
+    //=========================================
+    app.localStorage.setQuestionID(id);
+    app.localStorage.stringifyStorage();
+
 };
 
 QuestionModule.prototype.reset = function () {
@@ -168,6 +187,9 @@ QuestionModule.prototype.clickSkipButton = function () {
     var id = this.getNextActiveQuestionIndex(this.activeQuestionIndex);
     Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
     this.buildQuestion(id);
+    //============================
+    app.localStorage.setQuestionID(id);
+    app.localStorage.stringifyStorage();
 };
 
 QuestionModule.prototype.nextQuestion = function (evt) {
@@ -185,10 +207,7 @@ QuestionModule.prototype.nextQuestion = function (evt) {
                 return false;
             });
         }
-
-
         Utils.removeClass(this.floatWindows, 'hidden');
-        //кончены вопросы или нет
         ++this.countAnsweredQuestion;
     } else {
         Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
@@ -272,6 +291,7 @@ QuestionModule.prototype.resetTest = function () {
     Utils.addClass(this.testList, 'testList');
     Utils.removeClass(this.skipAnswerButton, 'hidden');
     Utils.resetFlagsANDanswers(this);
+    Utils.clearLocalStorage(app.localStorage.JSONppdLocalStorage);
 };
 
 QuestionModule.prototype.setFlagPassedTest = function () {

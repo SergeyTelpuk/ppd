@@ -1,39 +1,54 @@
 function QuizzApp() {
     this.objStatistics;
     this.objQuestion;
-    this.JSONppdLocalStorage = null;
+    this.localStorage;
 }
 
-QuizzApp.prototype.init = function() {
+QuizzApp.prototype.init = function () {
     var wrapper = document.getElementsByClassName('appWrapper')[0];
+
+    this.localStorage = new LocalStorage();
+
+    if (JSON.parse(localStorage.getItem('JSONppdLocalStorage'))) {
+        this.localStorage.parseStorage();
+    } else {
+        this.localStorage.stringifyStorage();
+    }
+
+
     this.objQuestion = new QuestionModule(wrapper);
     this.objStatistics = new Statistics(wrapper);
 
-    if(typeof this.JSONppdLocalStorage.testID === null){
-        this.objQuestion.createListTest();
-    }else{
+    this.objQuestion.createListTest();
 
-        for(var id = 0;  id <  this.JSONppdLocalStorage.answeredRightQuestion.length; ++id){
-            quizData[this.JSONppdLocalStorage.testID].questions[this.JSONppdLocalStorage.answeredRightQuestion[id]].answeredQuestion = true;
+    if (this.localStorage.getTestId() !== null) {
+        for (var id = 0; id < this.localStorage.getAnsweredRightQuestion().length; ++id) {
+            quizData[this.localStorage.getTestId()].questions[this.localStorage.getAnsweredRightQuestion()[id]].answeredQuestion = true;
         }
-        this.objQuestion.setIndexActiveTest(this.JSONppdLocalStorage.testID);
-        this.objStatistics.testWidget(this.JSONppdLocalStorage.testID);
-        this.objQuestion.buildQuestion(this.JSONppdLocalStorage.questionID);
-        this.objQuestion.createListTest();
+
+        for (var id = 0; id < this.localStorage.getAnsweredWrongQuestion(); ++id) {
+            quizData[this.localStorage.getTestId()].questions[this.localStorage.getAnsweredWrongQuestion()[id]].answeredQuestion = true;
+        }
+
+        this.objQuestion.setCountAnsweredQuestion(this.localStorage.getAnsweredRightQuestion().length + this.localStorage.getAnsweredWrongQuestion().length);
+
+        this.objQuestion.hiddenButtonSkip();
+
+        this.objQuestion.setIndexActiveTest(this.localStorage.getTestId());
+
+        this.objStatistics.setRightQuestions(this.localStorage.getAnsweredRightQuestion().length);
+        this.objStatistics.setWrongQuestions(this.localStorage.getAnsweredWrongQuestion().length);
+        this.objStatistics.testWidget(this.localStorage.getTestId());
+
+
+        this.objQuestion.buildQuestion(this.localStorage.getQuestionID());
         this.objQuestion.testList.className = 'hidden';
         Utils.removeClass(this.objQuestion.hidden, 'hidden');
     }
 
 };
 
-QuizzApp.prototype.localStorage = function(){
-    if(!localStorage.getItem('JSONppdLocalStorage')){
-        localStorage.setItem('JSONppdLocalStorage', JSON.stringify(JSONppdLocalStorage));
-    }
-    this.JSONppdLocalStorage = JSON.parse(localStorage.getItem('JSONppdLocalStorage'));
-};
 var app = new QuizzApp();
-app.localStorage();
 app.init();
 
 

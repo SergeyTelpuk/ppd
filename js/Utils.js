@@ -20,3 +20,11 @@ Utils.resetFlagsANDanswers = function (thisObj) {
     }
 };
 
+Utils.JSONppdLocalStorageRepeat = function () {
+    console.log( app.localStorage.JSONppdLocalStorage.answeredWrongQuestion);
+    app.localStorage.JSONppdLocalStorage.questionID = 0;
+    app.localStorage.JSONppdLocalStorage.answeredRightQuestion = [];
+    app.localStorage.JSONppdLocalStorage.answeredWrongQuestion = [];
+    app.localStorage.stringifyStorage();
+};
+

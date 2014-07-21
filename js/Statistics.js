@@ -2,6 +2,7 @@ function Statistics(appWrapper) {
     this.appWrapper = appWrapper;
     this.rightQuestions = 0;
     this.wrongQuestions = 0;
+
     this.titleTest = this.appWrapper.getElementsByClassName('titleTest')[0];
     this.question = this.appWrapper.getElementsByClassName('countQuestions')[0];
     this.countRightQuestions = this.appWrapper.getElementsByClassName('right')[0];
@@ -15,6 +16,15 @@ Statistics.prototype.showRightQuestions = function (text) {
 Statistics.prototype.showWrongQuestions = function (text) {
     this.countWrongQuestions.innerText = text;
 };
+
+Statistics.prototype.setRightQuestions = function(count){
+    this.rightQuestions = count;
+};
+
+Statistics.prototype.setWrongQuestions = function(count){
+    this.wrongQuestions = count;
+};
+
 
 Statistics.prototype.testWidget = function (indexActive) {
     this.titleTest.innerText = quizData[indexActive].title;
