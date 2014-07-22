@@ -19,12 +19,21 @@ Utils.resetFlagsANDanswers = function (thisObj) {
         quizData[thisObj.indexActiveTest].questions[id].answeredQuestion = false;
     }
 };
+Utils.JSONppdLocalStorageANDRightdWrongReset = function () {
+    app.objParseModule.JSONppdLocalStorage.answeredRightQuestion = [];
+    app.objParseModule.JSONppdLocalStorage.answeredWrongQuestion = [];
+};
 
 Utils.JSONppdLocalStorageRepeat = function () {
-    console.log( app.localStorage.JSONppdLocalStorage.answeredWrongQuestion);
-    app.localStorage.JSONppdLocalStorage.questionID = 0;
-    app.localStorage.JSONppdLocalStorage.answeredRightQuestion = [];
-    app.localStorage.JSONppdLocalStorage.answeredWrongQuestion = [];
-    app.localStorage.stringifyStorage();
+    app.objParseModule.JSONppdLocalStorage.questionID = 0;
+    this.JSONppdLocalStorageANDRightdWrongReset();
+    app.objParseModule.stringifyStorage();
+};
+
+Utils.JSONppdLocalStorageReset = function () {
+    app.objParseModule.JSONppdLocalStorage.testID = null;
+    app.objParseModule.JSONppdLocalStorage.questionID = 0;
+    this.JSONppdLocalStorageANDRightdWrongReset();
+    app.objParseModule.stringifyStorage();
 };
 

@@ -1,50 +1,23 @@
 function QuizzApp() {
     this.objStatistics;
     this.objQuestion;
-    this.localStorage;
+    this.objParseModule;
 }
 
 QuizzApp.prototype.init = function () {
     var wrapper = document.getElementsByClassName('appWrapper')[0];
 
-    this.localStorage = new LocalStorage();
-
-    if (JSON.parse(localStorage.getItem('JSONppdLocalStorage'))) {
-        this.localStorage.parseStorage();
-    } else {
-        this.localStorage.stringifyStorage();
-    }
-
+    this.objParseModule = new ParseModule();
 
     this.objQuestion = new QuestionModule(wrapper);
     this.objStatistics = new Statistics(wrapper);
 
     this.objQuestion.createListTest();
 
-    if (this.localStorage.getTestId() !== null) {
-        for (var id = 0; id < this.localStorage.getAnsweredRightQuestion().length; ++id) {
-            quizData[this.localStorage.getTestId()].questions[this.localStorage.getAnsweredRightQuestion()[id]].answeredQuestion = true;
-        }
+    this.objQuestion.buildQuestionIFexit(this.objParseModule, this.objStatistics);
 
-        for (var id = 0; id < this.localStorage.getAnsweredWrongQuestion(); ++id) {
-            quizData[this.localStorage.getTestId()].questions[this.localStorage.getAnsweredWrongQuestion()[id]].answeredQuestion = true;
-        }
+    this.objQuestion.setFlagPassedTest(this.objParseModule);
 
-        this.objQuestion.setCountAnsweredQuestion(this.localStorage.getAnsweredRightQuestion().length + this.localStorage.getAnsweredWrongQuestion().length);
-
-        this.objQuestion.hiddenButtonSkip();
-
-        this.objQuestion.setIndexActiveTest(this.localStorage.getTestId());
-
-        this.objStatistics.setRightQuestions(this.localStorage.getAnsweredRightQuestion().length);
-        this.objStatistics.setWrongQuestions(this.localStorage.getAnsweredWrongQuestion().length);
-        this.objStatistics.testWidget(this.localStorage.getTestId());
-
-
-        this.objQuestion.buildQuestion(this.localStorage.getQuestionID());
-        this.objQuestion.testList.className = 'hidden';
-        Utils.removeClass(this.objQuestion.hidden, 'hidden');
-    }
 
 };
 

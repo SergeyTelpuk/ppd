@@ -25,8 +25,8 @@ function QuestionModule(appWrapper) {
 QuestionModule.prototype.setIndexActiveTest = function (indexActive) {
     this.indexActiveTest = indexActive;
 
-    app.localStorage.setTestId(indexActive);
-    app.localStorage.stringifyStorage();
+    app.objParseModule.setTestId(indexActive);
+    app.objParseModule.stringifyStorage();
 
 };
 
@@ -74,7 +74,6 @@ QuestionModule.prototype.getContentLI = function (id, listAnswers) {
     input.setAttribute('type', 'radio');
     input.setAttribute('name', 'answer');
     input.setAttribute('value', id);
-    //устанавливаем default
     if (parseInt(id, 10) === 0) {
         input.setAttribute('checked', 'true');
     }
@@ -144,17 +143,17 @@ QuestionModule.prototype.clickNextButton = function () {
             var answer = parseInt(inputListRadio[idInput].value, 10);
             if ((++answer) === parseInt(quizData[this.indexActiveTest].questions[this.activeQuestionIndex].right, 10)) {
                 app.objStatistics.showRightQuestions(++app.objStatistics.rightQuestions);
-                app.localStorage.setAnswerRightQuestLocalStorage(this.activeQuestionIndex);
+                app.objParseModule.setAnswerRightQuestLocalStorage(this.activeQuestionIndex);
                 this.nextQuestion();
             } else {
-                app.localStorage.setAnswerWrongQuestLocalStorage(this.activeQuestionIndex);
+                app.objParseModule.setAnswerWrongQuestLocalStorage(this.activeQuestionIndex);
                 app.objStatistics.showWrongQuestions(++app.objStatistics.wrongQuestions);
                 this.setWrongContent();
                 Utils.removeClass(this.floatWindows, 'hidden');
             }
         }
     }
-    app.localStorage.stringifyStorage();
+    app.objParseModule.stringifyStorage();
 };
 
 QuestionModule.prototype.setWrongContent = function () {
@@ -173,13 +172,15 @@ QuestionModule.prototype.nextBuildQuestion = function () {
     Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
     this.buildQuestion(id);
     //=========================================
-    app.localStorage.setQuestionID(id);
-    app.localStorage.stringifyStorage();
+    app.objParseModule.setQuestionID(id);
+    app.objParseModule.stringifyStorage();
 
 };
 
 QuestionModule.prototype.reset = function () {
-    this.setFlagPassedTest();
+    Utils.JSONppdLocalStorageReset();
+    this.setFlagPassedTestLocalStorage(app.objParseModule);
+    this.setFlagPassedTest(app.objParseModule);
     this.resetTest();
 };
 
@@ -188,8 +189,8 @@ QuestionModule.prototype.clickSkipButton = function () {
     Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
     this.buildQuestion(id);
     //============================
-    app.localStorage.setQuestionID(id);
-    app.localStorage.stringifyStorage();
+    app.objParseModule.setQuestionID(id);
+    app.objParseModule.stringifyStorage();
 };
 
 QuestionModule.prototype.nextQuestion = function (evt) {
@@ -220,7 +221,9 @@ QuestionModule.prototype.nextQuestion = function (evt) {
 QuestionModule.prototype.closedTest = function () {
     Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
     Utils.addClass(this.floatWindows, 'hidden');
+    Utils.JSONppdLocalStorageReset();
     this.resetTest();
+
 };
 
 QuestionModule.prototype.addEventListenerExitTest = function () {
@@ -269,10 +272,12 @@ QuestionModule.prototype.createListTest = function () {
         var text = document.createTextNode(quizData[testId].title);
         var li = document.createElement('LI');
         var a = document.createElement('A');
+        var span = document.createElement('SPAN')
         a.setAttribute("href", '');
         a.setAttribute("data-id-question", testId);
         a.appendChild(text);
         li.appendChild(a);
+        li.appendChild(span);
         ul.appendChild(li);
     }
 
@@ -285,17 +290,60 @@ QuestionModule.prototype.createListTest = function () {
     this.addEventListenerClosedWindows();
 };
 
+QuestionModule.prototype.buildQuestionIFexit = function (objParseModule, objStatistics) {
+
+    if (JSON.parse(localStorage.getItem('JSONppdLocalStorage'))) {
+        objParseModule.parseStorage();
+    } else {
+        objParseModule.stringifyStorage();
+    }
+
+    if (objParseModule.getTestId() !== null) {
+        for (var id = 0; id < objParseModule.getAnsweredRightQuestion().length; ++id) {
+            quizData[objParseModule.getTestId()].questions[objParseModule.getAnsweredRightQuestion()[id]].answeredQuestion = true;
+        }
+
+        for (var id = 0; id < objParseModule.getAnsweredWrongQuestion(); ++id) {
+            quizData[objParseModule.getTestId()].questions[objParseModule.getAnsweredWrongQuestion()[id]].answeredQuestion = true;
+        }
+
+        this.setCountAnsweredQuestion(objParseModule.getAnsweredRightQuestion().length + objParseModule.getAnsweredWrongQuestion().length);
+        this.setIndexActiveTest(objParseModule.getTestId());
+        this.hiddenButtonSkip();
+
+        objStatistics.setRightQuestions(objParseModule.getAnsweredRightQuestion().length);
+        objStatistics.setWrongQuestions(objParseModule.getAnsweredWrongQuestion().length);
+        objStatistics.testWidget(objParseModule.getTestId());
+
+
+        this.buildQuestion(objParseModule.getQuestionID());
+        this.testList.className = 'hidden';
+        Utils.removeClass(this.hidden, 'hidden');
+    }
+};
+
 QuestionModule.prototype.resetTest = function () {
     Utils.addClass(this.hidden, 'hidden');
     Utils.removeClass(this.testList, 'hidden');
     Utils.addClass(this.testList, 'testList');
     Utils.removeClass(this.skipAnswerButton, 'hidden');
     Utils.resetFlagsANDanswers(this);
-    Utils.clearLocalStorage(app.localStorage.JSONppdLocalStorage);
 };
 
-QuestionModule.prototype.setFlagPassedTest = function () {
-    var indexTest = quizData.indexOf(quizData[this.indexActiveTest]);
-    var passedTest = this.listTestName.getElementsByTagName('A')[indexTest];
-    passedTest.innerText += " + ";
+QuestionModule.prototype.setFlagPassedTestLocalStorage = function (objParseModule) {
+    objParseModule.parseStorage();
+    objParseModule.setPassedTests(this.indexActiveTest);
+    objParseModule.stringifyStorage();
+};
+
+QuestionModule.prototype.setFlagPassedTest = function (objParseModule) {
+    var arrayTest = objParseModule.getPassedTests();
+    if (arrayTest) {
+        for (var i = 0; i < arrayTest.length; ++i) {
+            var passedTest = this.listTestName.getElementsByTagName('A')[i];
+            passedTest.parentNode.lastChild.innerHTML = '&#10004'
+        }
+
+    }
+
 };
