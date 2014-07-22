@@ -41,8 +41,7 @@ QuestionModule.prototype.listTestEvent = function (evt) {
     if (target.tagName.toUpperCase() === 'A') {
         this.setIndexActiveTest(target.getAttribute('data-id-question'));
         app.objStatistics.testWidget(target.getAttribute('data-id-question'));
-        //this.buildQuestion(0);
-        this.testList.className = 'hidden';
+        Utils.addClass(this.testList,'hidden');
         Utils.removeClass(this.hidden, 'hidden');
     }
 };
@@ -64,6 +63,7 @@ QuestionModule.prototype.repeatTest = function (evt) {
     Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
     Utils.JSONppdLocalStorageRepeat();
     app.objStatistics.testWidget(this.indexActiveTest);
+    Router.clearHash();
     Router.setRouter(this.indexActiveTest, 0);
 };
 
@@ -169,14 +169,11 @@ QuestionModule.prototype.setAnsweredQuestion = function () {
 
 QuestionModule.prototype.nextBuildQuestion = function () {
     var id = this.getNextActiveQuestionIndex(this.activeQuestionIndex);
-    Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
-
     Router.setRouter(this.indexActiveTest, id);
-//    this.buildQuestion(id);
-//    //=========================================
-//    app.objParseModule.setQuestionID(id);
-//    app.objParseModule.stringifyStorage();
+};
 
+QuestionModule.prototype.clickSkipButton = function () {
+    this.nextBuildQuestion();
 };
 
 QuestionModule.prototype.reset = function () {
@@ -185,13 +182,6 @@ QuestionModule.prototype.reset = function () {
     this.setFlagPassedTest(app.objParseModule);
     this.resetTest();
 };
-
-QuestionModule.prototype.clickSkipButton = function () {
-    var id = this.getNextActiveQuestionIndex(this.activeQuestionIndex);
-    Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
-    Router.setRouter(this.indexActiveTest, id);
-};
-
 
 QuestionModule.prototype.nextQuestion = function (evt) {
     if (this.countAnsweredQuestion < quizData[this.indexActiveTest].questions.length) {
@@ -263,7 +253,6 @@ QuestionModule.prototype.addEventListenerClosedWindows = function () {
         return false;
     });
 };
-
 
 QuestionModule.prototype.createListTest = function () {
     var ul = document.createElement('UL');
@@ -347,7 +336,5 @@ QuestionModule.prototype.setFlagPassedTest = function (objParseModule) {
             var passedTest = this.listTestName.getElementsByTagName('A')[i];
             passedTest.parentNode.lastChild.innerHTML = '&#10004'
         }
-
     }
-
 };
