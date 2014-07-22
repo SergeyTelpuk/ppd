@@ -10,6 +10,7 @@ QuizzApp.prototype.init = function () {
     this.objParseModule = new ParseModule();
 
     this.objQuestion = new QuestionModule(wrapper);
+
     this.objStatistics = new Statistics(wrapper);
 
     this.objQuestion.createListTest();

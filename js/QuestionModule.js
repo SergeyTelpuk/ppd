@@ -41,7 +41,7 @@ QuestionModule.prototype.listTestEvent = function (evt) {
     if (target.tagName.toUpperCase() === 'A') {
         this.setIndexActiveTest(target.getAttribute('data-id-question'));
         app.objStatistics.testWidget(target.getAttribute('data-id-question'));
-        this.buildQuestion(0);
+        //this.buildQuestion(0);
         this.testList.className = 'hidden';
         Utils.removeClass(this.hidden, 'hidden');
     }
@@ -64,7 +64,7 @@ QuestionModule.prototype.repeatTest = function (evt) {
     Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
     Utils.JSONppdLocalStorageRepeat();
     app.objStatistics.testWidget(this.indexActiveTest);
-    this.buildQuestion(0);
+    Router.setRouter(this.indexActiveTest, 0);
 };
 
 QuestionModule.prototype.getContentLI = function (id, listAnswers) {
@@ -170,10 +170,12 @@ QuestionModule.prototype.setAnsweredQuestion = function () {
 QuestionModule.prototype.nextBuildQuestion = function () {
     var id = this.getNextActiveQuestionIndex(this.activeQuestionIndex);
     Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
-    this.buildQuestion(id);
-    //=========================================
-    app.objParseModule.setQuestionID(id);
-    app.objParseModule.stringifyStorage();
+
+    Router.setRouter(this.indexActiveTest, id);
+//    this.buildQuestion(id);
+//    //=========================================
+//    app.objParseModule.setQuestionID(id);
+//    app.objParseModule.stringifyStorage();
 
 };
 
@@ -187,11 +189,9 @@ QuestionModule.prototype.reset = function () {
 QuestionModule.prototype.clickSkipButton = function () {
     var id = this.getNextActiveQuestionIndex(this.activeQuestionIndex);
     Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
-    this.buildQuestion(id);
-    //============================
-    app.objParseModule.setQuestionID(id);
-    app.objParseModule.stringifyStorage();
+    Router.setRouter(this.indexActiveTest, id);
 };
+
 
 QuestionModule.prototype.nextQuestion = function (evt) {
     if (this.countAnsweredQuestion < quizData[this.indexActiveTest].questions.length) {
@@ -213,6 +213,7 @@ QuestionModule.prototype.nextQuestion = function (evt) {
     } else {
         Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
         Utils.addClass(this.floatWindows, 'hidden');
+        Router.clearHash();
         this.reset();
     }
 };
@@ -222,7 +223,9 @@ QuestionModule.prototype.closedTest = function () {
     Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
     Utils.addClass(this.floatWindows, 'hidden');
     Utils.JSONppdLocalStorageReset();
+    Router.clearHash();
     this.resetTest();
+
 
 };
 
@@ -239,7 +242,6 @@ QuestionModule.prototype.addEventListenerExitTest = function () {
 QuestionModule.prototype.addEventListenerUL = function (ul) {
     var self = this;
     ul.addEventListener('click', function (evt) {
-        evt.preventDefault();
         self.listTestEvent(evt);
         return false;
     });
@@ -273,7 +275,7 @@ QuestionModule.prototype.createListTest = function () {
         var li = document.createElement('LI');
         var a = document.createElement('A');
         var span = document.createElement('SPAN')
-        a.setAttribute("href", '');
+        a.setAttribute("href", '#test/' + (parseInt(testId, 10) + 1) + '/1');
         a.setAttribute("data-id-question", testId);
         a.appendChild(text);
         li.appendChild(a);
@@ -288,6 +290,8 @@ QuestionModule.prototype.createListTest = function () {
     this.addEventListenerButton();
 
     this.addEventListenerClosedWindows();
+
+    Router.addEventListenerHash();
 };
 
 QuestionModule.prototype.buildQuestionIFexit = function (objParseModule, objStatistics) {
