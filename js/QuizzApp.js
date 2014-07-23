@@ -2,6 +2,7 @@ function QuizzApp() {
     this.objStatistics;
     this.objQuestion;
     this.objParseModule;
+    this.objRouter;
 }
 
 QuizzApp.prototype.init = function () {
@@ -12,6 +13,8 @@ QuizzApp.prototype.init = function () {
     this.objQuestion = new QuestionModule(wrapper);
 
     this.objStatistics = new Statistics(wrapper);
+
+    this.objRouter = new Router(this.objQuestion, this.objParseModule, this.objStatistics);
 
     this.objQuestion.createListTest();
 

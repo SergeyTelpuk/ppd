@@ -1,98 +1,102 @@
-var Router = {
-    "activeTestID": null,
-    "activeQuestionID": null,
-    "flagRouterHash": true
+function Router(objQuestion, objParseModule, objStatistics) {
+    this.activeTestID =  null;
+    this.activeQuestionID = null;
+    this.flagRouterHash = true;
+    this.objQuestion = objQuestion;
+    this.objParseModule = objParseModule;
+    this.objStatistics = objStatistics;
 };
 
-Router.setActiveTestID = function (test) {
-    Router.activeTestID = test;
+Router.prototype.setActiveTestID = function (test) {
+    this.activeTestID = test;
 };
 
-Router.setActiveQuestionID = function (question) {
-    Router.activeQuestionID = question;
+Router.prototype.setActiveQuestionID = function (question) {
+    this.activeQuestionID = question;
 };
 
-Router.getActiveTestID = function () {
-    return Router.activeTestID;
+Router.prototype.getActiveTestID = function () {
+    return this.activeTestID;
 };
 
-Router.getActiveQuestionID = function () {
-    return Router.activeQuestionID;
+Router.prototype.getActiveQuestionID = function () {
+    return this.activeQuestionID;
 };
 
-Router.buildQuestion = function (activeTestID, activeQuestionID) {
-
-    if (app.objQuestion.listAnswers.firstChild) {
-        Utils.deleteOptionsQuestion(app.objQuestion.listAnswers, app.objQuestion.listAnswers.firstChild);
+Router.prototype.buildQuestion = function (activeTestID, activeQuestionID) {
+    if (this.objQuestion.listAnswers.firstChild) {
+        Utils.deleteOptionsQuestion(this.objQuestion.listAnswers, this.objQuestion.listAnswers.firstChild);
     }
 
-    app.objStatistics.testWidget(activeTestID);
+    this.objStatistics.testWidget(activeTestID);
 
-    app.objQuestion.setIndexActiveTest(activeTestID);
-    app.objQuestion.buildQuestion(activeQuestionID);
-    app.objParseModule.setQuestionID(activeQuestionID);
-    app.objParseModule.stringifyStorage();
+    this.objQuestion.setIndexActiveTest(activeTestID);
+    this.objQuestion.buildQuestion(activeQuestionID);
+    this.objParseModule.setQuestionID(activeQuestionID);
+    this.objParseModule.stringifyStorage();
 };
 
-Router.checkNextTest = function (test) {
-    if (Router.activeTestID !== test && Router.activeTestID !== null) {
-        Utils.resetFlagsANDanswers(app.objQuestion);
+Router.prototype.checkNextTest = function (test) {
+    if (this.getActiveTestID() !== test && this.getActiveTestID() !== null) {
+        Utils.resetFlagsANDanswers(this.objQuestion);
         Utils.JSONppdLocalStorageANDRightdWrongReset();
-        if (app.objQuestion.skipAnswerButton.classList.contains('hidden')) {
-            Utils.removeClass(app.objQuestion.skipAnswerButton, 'hidden');
+        if (this.objQuestion.skipAnswerButton.classList.contains('hidden')) {
+            Utils.removeClass(this.objQuestion.skipAnswerButton, 'hidden');
         }
     }
 };
 
-Router.floatWindows = function () {
-    var floatWindows = app.objQuestion.getIndexActiveTest();
-    app.objQuestion.wrongContent.innerHTML = '<span class="wrong">Нет такого теста с таким вопросом!!!</span>' +
+Router.prototype.floatWindows = function () {
+    var floatWindows = this.objQuestion.getIndexActiveTest();
+    this.objQuestion.wrongContent.innerHTML = '<span class="wrong">Нет такого теста с таким вопросом!!!</span>' +
         '<p class="routerWrong">При закрытии окна вы будите отправлены на следующий неотвеченный вопрос!</p>';
     Utils.removeClass(floatWindows, 'hidden');
 };
 
-Router.checkFlagHash = function () {
-    if (Router.flagRouterHash) {
-        location.hash = 'test/' + (parseInt(Router.getActiveTestID(), 10) + 1) + '/' + (parseInt(Router.getActiveQuestionID(), 10) + 1);
+Router.prototype.checkFlagHash = function () {
+    if (this.flagRouterHash) {
+        location.hash = 'test/' + (parseInt(this.getActiveTestID(), 10) + 1) + '/' + (parseInt(this.getActiveQuestionID(), 10) + 1);
     } else {
-        Router.buildQuestion(Router.getActiveTestID(), Router.getActiveQuestionID());
+        this.buildQuestion(this.getActiveTestID(), this.getActiveQuestionID());
     }
 
 };
 
-Router.getFlagRouterHash = function () {
-    return  Router.flagRouterHash;
+Router.prototype.getFlagRouterHash = function () {
+    return  this.flagRouterHash;
 }
 
 
-Router.buildQuestionHash = function (evt) {
+Router.prototype.buildQuestionHash = function (evt) {
     var routers = location.hash.split('/');
-
     if (/^\d{1,2}$/.test(routers[1]) && /^\d{1,2}$/.test(routers[2])) {
 
-        Router.checkNextTest((parseInt(routers[1], 10) - 1));
+        this.checkNextTest((parseInt(routers[1], 10) - 1));
 
-        Router.setActiveTestID((parseInt(routers[1], 10) - 1));
-        Router.setActiveQuestionID((parseInt(routers[2], 10) - 1));
+        this.setActiveTestID((parseInt(routers[1], 10) - 1));
+        this.setActiveQuestionID((parseInt(routers[2], 10) - 1));
 
-        Router.buildQuestion(Router.getActiveTestID(), Router.getActiveQuestionID());
+        this.buildQuestion(this.getActiveTestID(), this.getActiveQuestionID());
     }
 
 };
 
-Router.clearHash = function(){
+Router.prototype.clearHash = function(){
     location.hash = ''
 };
 
-Router.setRouter = function (idTest, idQuestion) {
-    Router.setActiveTestID(idTest);
-    Router.setActiveQuestionID(idQuestion);
-    Router.checkFlagHash();
+Router.prototype.setRouter = function (idTest, idQuestion) {
+    this.setActiveTestID(idTest);
+    this.setActiveQuestionID(idQuestion);
+    this.checkFlagHash();
 };
 
-Router.addEventListenerHash = function () {
-    if (Router.flagRouterHash) {
-        window.addEventListener('hashchange', this.buildQuestionHash);
+Router.prototype.addEventListenerHash = function () {
+    if (this.flagRouterHash) {
+        var self = this;
+        window.addEventListener('hashchange', function(evt){
+            self.buildQuestionHash();
+            return false;});
     }
 
 };

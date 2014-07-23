@@ -23,7 +23,6 @@ function QuestionModule(appWrapper) {
 }
 
 QuestionModule.prototype.getIndexActiveTest = function(){
-//    return  this.floatWindows;
     return this.indexActiveTest;
 };
 
@@ -41,7 +40,7 @@ QuestionModule.prototype.setCountAnsweredQuestion = function (countAnsweredQuest
 
 
 QuestionModule.prototype.buildOneQuestion = function(){
-    if(!Router.getFlagRouterHash()){
+    if(!app.objRouter.getFlagRouterHash()){
         this.buildQuestion(0);
     }else{
         location.hash = 'test/' + (parseInt(this.getIndexActiveTest(),10) + 1) + '/' + 1;
@@ -77,8 +76,8 @@ QuestionModule.prototype.repeatTest = function (evt) {
     Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
     Utils.JSONppdLocalStorageRepeat();
     app.objStatistics.testWidget(this.indexActiveTest);
-    Router.clearHash();
-    Router.setRouter(this.indexActiveTest, 0);
+    app.objRouter.clearHash();
+    app.objRouter.setRouter(this.indexActiveTest, 0);
 };
 
 QuestionModule.prototype.getContentLI = function (id, listAnswers) {
@@ -183,7 +182,7 @@ QuestionModule.prototype.setAnsweredQuestion = function () {
 
 QuestionModule.prototype.nextBuildQuestion = function () {
     var id = this.getNextActiveQuestionIndex(this.activeQuestionIndex);
-    Router.setRouter(this.indexActiveTest, id);
+    app.objRouter.setRouter(this.indexActiveTest, id);
 };
 
 QuestionModule.prototype.clickSkipButton = function () {
@@ -217,7 +216,7 @@ QuestionModule.prototype.nextQuestion = function (evt) {
     } else {
         Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
         Utils.addClass(this.floatWindows, 'hidden');
-        Router.clearHash();
+        app.objRouter.clearHash();
         this.reset();
     }
 };
@@ -227,7 +226,7 @@ QuestionModule.prototype.closedTest = function () {
     Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
     Utils.addClass(this.floatWindows, 'hidden');
     Utils.JSONppdLocalStorageReset();
-    Router.clearHash();
+    app.objRouter.clearHash();
     this.resetTest();
 
 
@@ -295,7 +294,7 @@ QuestionModule.prototype.createListTest = function () {
 
     this.addEventListenerClosedWindows();
 
-    Router.addEventListenerHash();
+    app.objRouter.addEventListenerHash();
 
 };
 
