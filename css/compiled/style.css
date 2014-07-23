@@ -211,9 +211,20 @@ ul {
   position: absolute;
   text-align: center;
 }
+footer {
+  background-color: #333;
+  width: 100%;
+  bottom: 0;
+  position: relative;
+}
 .wrongContent {
   padding-top: 50px;
   line-height: 200%;
+}
+.routerWrong {
+  color: #ff5f08;
+  text-align: center;
+  line-height: 1.3em;
 }
 .wrongContent .wrong {
   font-size: 2em;

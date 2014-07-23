@@ -26,14 +26,14 @@ Utils.JSONppdLocalStorageANDRightdWrongReset = function () {
 
 Utils.JSONppdLocalStorageRepeat = function () {
     app.objParseModule.JSONppdLocalStorage.questionID = 0;
-    this.JSONppdLocalStorageANDRightdWrongReset();
+    Utils.JSONppdLocalStorageANDRightdWrongReset();
     app.objParseModule.stringifyStorage();
 };
 
 Utils.JSONppdLocalStorageReset = function () {
     app.objParseModule.JSONppdLocalStorage.testID = null;
     app.objParseModule.JSONppdLocalStorage.questionID = 0;
-    this.JSONppdLocalStorageANDRightdWrongReset();
+    Utils.JSONppdLocalStorageANDRightdWrongReset();
     app.objParseModule.stringifyStorage();
 };
 

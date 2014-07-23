@@ -22,6 +22,11 @@ function QuestionModule(appWrapper) {
     this.skipAnswerButton = this.appWrapper.getElementsByClassName('skipAnswerButton')[0];
 }
 
+QuestionModule.prototype.getIndexActiveTest = function(){
+//    return  this.floatWindows;
+    return this.indexActiveTest;
+};
+
 QuestionModule.prototype.setIndexActiveTest = function (indexActive) {
     this.indexActiveTest = indexActive;
 
@@ -35,11 +40,20 @@ QuestionModule.prototype.setCountAnsweredQuestion = function (countAnsweredQuest
 };
 
 
+QuestionModule.prototype.buildOneQuestion = function(){
+    if(!Router.getFlagRouterHash()){
+        this.buildQuestion(0);
+    }else{
+        location.hash = 'test/' + (parseInt(this.getIndexActiveTest(),10) + 1) + '/' + 1;
+    }
+};
+
 QuestionModule.prototype.listTestEvent = function (evt) {
     var target = evt.target;
 
     if (target.tagName.toUpperCase() === 'A') {
         this.setIndexActiveTest(target.getAttribute('data-id-question'));
+        this.buildOneQuestion();
         app.objStatistics.testWidget(target.getAttribute('data-id-question'));
         Utils.addClass(this.testList,'hidden');
         Utils.removeClass(this.hidden, 'hidden');
@@ -232,6 +246,7 @@ QuestionModule.prototype.addEventListenerExitTest = function () {
 QuestionModule.prototype.addEventListenerUL = function (ul) {
     var self = this;
     ul.addEventListener('click', function (evt) {
+        evt.preventDefault();
         self.listTestEvent(evt);
         return false;
     });
@@ -264,7 +279,7 @@ QuestionModule.prototype.createListTest = function () {
         var li = document.createElement('LI');
         var a = document.createElement('A');
         var span = document.createElement('SPAN')
-        a.setAttribute("href", '#test/' + (parseInt(testId, 10) + 1) + '/1');
+        a.setAttribute("href", '');
         a.setAttribute("data-id-question", testId);
         a.appendChild(text);
         li.appendChild(a);
@@ -281,6 +296,7 @@ QuestionModule.prototype.createListTest = function () {
     this.addEventListenerClosedWindows();
 
     Router.addEventListenerHash();
+
 };
 
 QuestionModule.prototype.buildQuestionIFexit = function (objParseModule, objStatistics) {
