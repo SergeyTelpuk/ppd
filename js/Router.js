@@ -2,6 +2,7 @@ function Router(objQuestion, objParseModule, objStatistics) {
     this.activeTestID =  null;
     this.activeQuestionID = null;
     this.flagRouterHash = true;
+
     this.objQuestion = objQuestion;
     this.objParseModule = objParseModule;
     this.objStatistics = objStatistics;
@@ -46,11 +47,16 @@ Router.prototype.checkNextTest = function (test) {
     }
 };
 
-Router.prototype.floatWindows = function () {
-    var floatWindows = this.objQuestion.getIndexActiveTest();
-    this.objQuestion.wrongContent.innerHTML = '<span class="wrong">Нет такого теста с таким вопросом!!!</span>' +
-        '<p class="routerWrong">При закрытии окна вы будите отправлены на следующий неотвеченный вопрос!</p>';
-    Utils.removeClass(floatWindows, 'hidden');
+Router.prototype.floatWindowsQuestion = function () {
+    this.objQuestion.wrongContent.innerHTML = '<span class="wrong">Нет такого вопроса!!!</span>' +
+        '<p class="routerWrong">При закрытии окна вы будите отправлены на следующий неотвеченный текущего теста вопрос!</p>';
+    Utils.removeClass(this.objQuestion.floatWindows, 'hidden');
+};
+
+Router.prototype.floatWindowsTest = function () {
+    this.objQuestion.wrongContent.innerHTML = '<span class="wrong">Нет такого теста!!!</span>' +
+        '<p class="routerWrong">При закрытии окна вы будите отправлены на следующий неотвеченный вопрос текущего теста!</p>';
+    Utils.removeClass(this.objQuestion.floatWindows, 'hidden');
 };
 
 Router.prototype.checkFlagHash = function () {
@@ -66,17 +72,51 @@ Router.prototype.getFlagRouterHash = function () {
     return  this.flagRouterHash;
 }
 
+Router.prototype.intervalQuestionInclude = function(testID ,questionID){
+    if(quizData[testID].questions.length <= questionID){
+        return false;
+    }
+    return true;
+};
+
+Router.prototype.intervalTestInclude = function(testID){
+    if(quizData.length <= testID){
+        return false;
+    }
+    return true;
+};
+
+Router.prototype.checkPassedQuestion = function(testID, questionID){
+        if(quizData[testID].questions[questionID].answeredQuestion === true){
+            Utils.addClass(this.objQuestion.answerButton, 'hidden');
+        }else if(this.objQuestion.answerButton.classList.contains('hidden')){
+            Utils.removeClass(this.objQuestion.answerButton ,'hidden');
+        }
+};
 
 Router.prototype.buildQuestionHash = function (evt) {
     var routers = location.hash.split('/');
-    if (/^\d{1,2}$/.test(routers[1]) && /^\d{1,2}$/.test(routers[2])) {
+    var testID = parseInt(routers[1], 10) - 1;
+    var questionID = parseInt(routers[2], 10) - 1;
 
-        this.checkNextTest((parseInt(routers[1], 10) - 1));
+    if (!isNaN(testID)){
 
-        this.setActiveTestID((parseInt(routers[1], 10) - 1));
-        this.setActiveQuestionID((parseInt(routers[2], 10) - 1));
+        if (/^\d{1,2}$/.test(testID) && this.intervalTestInclude(testID)) {
+            this.checkNextTest(testID);
+            this.setActiveTestID(testID);
 
-        this.buildQuestion(this.getActiveTestID(), this.getActiveQuestionID());
+            if (/^\d{1,2}$/.test(questionID) && this.intervalQuestionInclude(testID, questionID)) {
+                this.setActiveQuestionID(questionID);
+                this.buildQuestion(this.getActiveTestID(), this.getActiveQuestionID());
+                this.checkPassedQuestion(testID, questionID);
+            } else {
+                this.objQuestion.setIndexActiveTest(testID);
+                this.floatWindowsQuestion();
+            }
+        } else {
+            this.floatWindowsTest();
+
+        }
     }
 
 };

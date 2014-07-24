@@ -20,6 +20,7 @@ function QuestionModule(appWrapper) {
     this.button = this.appWrapper.getElementsByClassName('button')[0];
     this.listAnswers = this.appWrapper.getElementsByClassName('listAnswers')[0];
     this.skipAnswerButton = this.appWrapper.getElementsByClassName('skipAnswerButton')[0];
+    this.answerButton = document.getElementsByClassName('answerButton')[0];
 }
 
 QuestionModule.prototype.getIndexActiveTest = function(){
