@@ -7,20 +7,20 @@ function QuestionModule(appWrapper) {
     this.countAnsweredQuestion = 0;
 
     this.img = null;
-    this.exitTest = this.appWrapper.getElementsByClassName('exitTest')[0];
-    this.listTestName = this.appWrapper.getElementsByClassName('namesTest')[0];
-    this.hidden = this.appWrapper.getElementsByClassName('hidden')[0];
-    this.floatWindows = this.appWrapper.getElementsByClassName('hidden')[1];
-    this.closedWindows = this.appWrapper.getElementsByClassName('closed')[0];
-    this.wrongContent = this.appWrapper.getElementsByClassName('wrongContent')[0];
-    this.testList = this.appWrapper.getElementsByClassName('testList')[0];
-    this.activeQuestions = this.appWrapper.getElementsByClassName('activeQuestions')[0];
-    this.contentQuestions = this.appWrapper.getElementsByClassName('content')[0];
-    this.imgQuestions = this.appWrapper.getElementsByClassName('imgQuestions')[0];
-    this.button = this.appWrapper.getElementsByClassName('button')[0];
-    this.listAnswers = this.appWrapper.getElementsByClassName('listAnswers')[0];
-    this.skipAnswerButton = this.appWrapper.getElementsByClassName('skipAnswerButton')[0];
-    this.answerButton = document.getElementsByClassName('answerButton')[0];
+    this.exitTest = $(".exitTest", this.appWrapper);
+    this.listTestName = $(this.appWrapper+' .namesTest')[0];
+    this.hidden = $(this.appWrapper+' .hidden')[0];
+    this.floatWindows = $(this.appWrapper+' .hidden')[1];
+    this.closedWindows = $(this.appWrapper+' .closed')[0];
+    this.wrongContent = $(this.appWrapper+' .wrongContent')[0];
+    this.testList = $(this.appWrapper+' .testList')[0];
+    this.activeQuestions = $(this.appWrapper+' .activeQuestions')[0];
+    this.contentQuestions = $(this.appWrapper+' .content')[0];
+    this.imgQuestions = $(this.appWrapper+' .imgQuestions')[0];
+    this.button = $(this.appWrapper+' .button')[0];
+    this.listAnswers = $(this.appWrapper+' .listAnswers')[0];
+    this.skipAnswerButton = $(this.appWrapper+' .skipAnswerButton')[0];
+    this.answerButton = $(this.appWrapper+' .answerButton')[0];
 }
 
 QuestionModule.prototype.getIndexActiveTest = function(){
@@ -245,7 +245,7 @@ QuestionModule.prototype.addEventListenerExitTest = function () {
 
 QuestionModule.prototype.addEventListenerUL = function (ul) {
     var self = this;
-    ul.addEventListener('click', function (evt) {
+    $(ul).bind('click', function (evt) {
         evt.preventDefault();
         self.listTestEvent(evt);
         return false;
@@ -270,21 +270,11 @@ QuestionModule.prototype.addEventListenerClosedWindows = function () {
 };
 
 QuestionModule.prototype.createListTest = function () {
-    var ul = document.createElement('UL');
-
-    this.listTestName.appendChild(ul);
+    this.$listTestName.append($('<ul/>'));
 
     for (var testId in quizData) {
-        var text = document.createTextNode(quizData[testId].title);
-        var li = document.createElement('LI');
-        var a = document.createElement('A');
-        var span = document.createElement('SPAN')
-        a.setAttribute("href", '');
-        a.setAttribute("data-id-question", testId);
-        a.appendChild(text);
-        li.appendChild(a);
-        li.appendChild(span);
-        ul.appendChild(li);
+        var li = $('<li>').append('<a href="" data-id-question =\''+testId+'\'>'+quizData[testId].title+'</a>').append('<span>');
+        this.$listTestName.append(li);
     }
 
     this.addEventListenerUL(ul);

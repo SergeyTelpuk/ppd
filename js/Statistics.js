@@ -3,10 +3,10 @@ function Statistics(appWrapper) {
     this.rightQuestions = 0;
     this.wrongQuestions = 0;
 
-    this.titleTest = this.appWrapper.getElementsByClassName('titleTest')[0];
-    this.question = this.appWrapper.getElementsByClassName('countQuestions')[0];
-    this.countRightQuestions = this.appWrapper.getElementsByClassName('right')[0];
-    this.countWrongQuestions = this.appWrapper.getElementsByClassName('wrong')[0];
+    this.titleTest = $(this.appWrapper+' .titleTest')[0];
+    this.question = $(this.appWrapper+' .countQuestions')[0];
+    this.countRightQuestions = $(this.appWrapper+' .right')[0];
+    this.countWrongQuestions = $(this.appWrapper +' .wrong')[0];
 }
 
 Statistics.prototype.showRightQuestions = function (text) {

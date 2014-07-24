@@ -87,11 +87,11 @@ Router.prototype.intervalTestInclude = function(testID){
 };
 
 Router.prototype.checkPassedQuestion = function(testID, questionID){
-        if(quizData[testID].questions[questionID].answeredQuestion === true){
-            Utils.addClass(this.objQuestion.answerButton, 'hidden');
-        }else if(this.objQuestion.answerButton.classList.contains('hidden')){
-            Utils.removeClass(this.objQuestion.answerButton ,'hidden');
-        }
+    if(quizData[testID].questions[questionID].answeredQuestion === true){
+        Utils.addClass(this.objQuestion.answerButton, 'hidden');
+    }else if(this.objQuestion.answerButton.classList.contains('hidden')){
+        Utils.removeClass(this.objQuestion.answerButton ,'hidden');
+    }
 };
 
 Router.prototype.buildQuestionHash = function (evt) {
@@ -115,7 +115,6 @@ Router.prototype.buildQuestionHash = function (evt) {
             }
         } else {
             this.floatWindowsTest();
-
         }
     }
 
