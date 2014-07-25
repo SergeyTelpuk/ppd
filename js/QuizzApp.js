@@ -6,13 +6,13 @@ function QuizzApp() {
 }
 
 QuizzApp.prototype.init = function () {
-    //var wrapper = $('appWrapper')[0];
+    var $wrapper = $('.appWrapper');
 
     this.objParseModule = new ParseModule();
 
-    this.objQuestion = new QuestionModule('.appWrapper');
+    this.objQuestion = new QuestionModule($wrapper);
 
-    this.objStatistics = new Statistics('.appWrapper');
+    this.objStatistics = new Statistics($wrapper);
 
     this.objRouter = new Router(this.objQuestion, this.objParseModule, this.objStatistics);
 

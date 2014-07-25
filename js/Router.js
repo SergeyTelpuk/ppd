@@ -25,9 +25,7 @@ Router.prototype.getActiveQuestionID = function () {
 };
 
 Router.prototype.buildQuestion = function (activeTestID, activeQuestionID) {
-    if (this.objQuestion.listAnswers.firstChild) {
-        Utils.deleteOptionsQuestion(this.objQuestion.listAnswers, this.objQuestion.listAnswers.firstChild);
-    }
+    this.objQuestion.$listAnswers.empty();
 
     this.objStatistics.testWidget(activeTestID);
 
@@ -41,22 +39,20 @@ Router.prototype.checkNextTest = function (test) {
     if (this.getActiveTestID() !== test && this.getActiveTestID() !== null) {
         Utils.resetFlagsANDanswers(this.objQuestion);
         Utils.JSONppdLocalStorageANDRightdWrongReset();
-        if (this.objQuestion.skipAnswerButton.classList.contains('hidden')) {
-            Utils.removeClass(this.objQuestion.skipAnswerButton, 'hidden');
-        }
+        this.objQuestion.$skipAnswerButton.removeClass('hidden');
     }
 };
 
 Router.prototype.floatWindowsQuestion = function () {
-    this.objQuestion.wrongContent.innerHTML = '<span class="wrong">Нет такого вопроса!!!</span>' +
-        '<p class="routerWrong">При закрытии окна вы будите отправлены на следующий неотвеченный текущего теста вопрос!</p>';
-    Utils.removeClass(this.objQuestion.floatWindows, 'hidden');
+    this.objQuestion.$wrongContent.html('<span class="wrong">Нет такого вопроса!!!</span>' +
+        '<p class="routerWrong">При закрытии окна вы будите отправлены на следующий неотвеченный текущего теста вопрос!</p>');
+    this.objQuestion.$floatWindows.removeClass('hidden');
 };
 
 Router.prototype.floatWindowsTest = function () {
-    this.objQuestion.wrongContent.innerHTML = '<span class="wrong">Нет такого теста!!!</span>' +
-        '<p class="routerWrong">При закрытии окна вы будите отправлены на следующий неотвеченный вопрос текущего теста!</p>';
-    Utils.removeClass(this.objQuestion.floatWindows, 'hidden');
+    this.objQuestion.$wrongContent.html('<span class="wrong">Нет такого теста!!!</span>' +
+        '<p class="routerWrong">При закрытии окна вы будите отправлены на следующий неотвеченный вопрос текущего теста!</p>');
+    this.objQuestion.$floatWindows.removeClass('hidden');
 };
 
 Router.prototype.checkFlagHash = function () {
@@ -87,24 +83,21 @@ Router.prototype.intervalTestInclude = function(testID){
 };
 
 Router.prototype.checkPassedQuestion = function(testID, questionID){
-    if(quizData[testID].questions[questionID].answeredQuestion === true){
-        Utils.addClass(this.objQuestion.answerButton, 'hidden');
-    }else if(this.objQuestion.answerButton.classList.contains('hidden')){
-        Utils.removeClass(this.objQuestion.answerButton ,'hidden');
-    }
+        if(quizData[testID].questions[questionID].answeredQuestion === true){
+           this.objQuestion.$answerButton.addClass('hidden');
+        }else{
+           this.objQuestion.$answerButton.removeClass('hidden');
+        }
 };
 
-Router.prototype.buildQuestionHash = function (evt) {
+Router.prototype.buildQuestionHash = function () {
     var routers = location.hash.split('/');
     var testID = parseInt(routers[1], 10) - 1;
     var questionID = parseInt(routers[2], 10) - 1;
-
     if (!isNaN(testID)){
-
-        if (/^\d{1,2}$/.test(testID) && this.intervalTestInclude(testID)) {
+        if (/^\d{1,2}$/.test(testID) && testID >= 0 && this.intervalTestInclude(testID)) {
             this.checkNextTest(testID);
             this.setActiveTestID(testID);
-
             if (/^\d{1,2}$/.test(questionID) && this.intervalQuestionInclude(testID, questionID)) {
                 this.setActiveQuestionID(questionID);
                 this.buildQuestion(this.getActiveTestID(), this.getActiveQuestionID());
@@ -117,7 +110,6 @@ Router.prototype.buildQuestionHash = function (evt) {
             this.floatWindowsTest();
         }
     }
-
 };
 
 Router.prototype.clearHash = function(){
@@ -133,7 +125,7 @@ Router.prototype.setRouter = function (idTest, idQuestion) {
 Router.prototype.addEventListenerHash = function () {
     if (this.flagRouterHash) {
         var self = this;
-        window.addEventListener('hashchange', function(evt){
+        $(window).on('hashchange', function(){
             self.buildQuestionHash();
             return false;});
     }

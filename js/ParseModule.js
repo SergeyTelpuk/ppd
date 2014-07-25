@@ -8,6 +8,10 @@ function ParseModule() {
     }
 };
 
+ParseModule.prototype.resetTestPassed = function(){
+    this.JSONppdLocalStorage.passedTests = [];
+};
+
 ParseModule.prototype.setTestId = function (testId) {
     this.JSONppdLocalStorage.testID = testId;
 };

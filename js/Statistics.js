@@ -1,20 +1,21 @@
 function Statistics(appWrapper) {
-    this.appWrapper = appWrapper;
+    this.$appWrapper = appWrapper;
     this.rightQuestions = 0;
     this.wrongQuestions = 0;
 
-    this.titleTest = $(this.appWrapper+' .titleTest')[0];
-    this.question = $(this.appWrapper+' .countQuestions')[0];
-    this.countRightQuestions = $(this.appWrapper+' .right')[0];
-    this.countWrongQuestions = $(this.appWrapper +' .wrong')[0];
+    this.$titleTest = $('.titleTest', this.$appWrapper);
+    this.$countQuestions =  $('.countQuestions', this.$appWrapper);
+
+    this.$countRightQuestions = $('.right', this.$appWrapper);
+    this.$countWrongQuestions = $('.wrong',this.$appWrapper);
 }
 
 Statistics.prototype.showRightQuestions = function (text) {
-    this.countRightQuestions.innerText = text;
+    this.$countRightQuestions.text(text);
 };
 
 Statistics.prototype.showWrongQuestions = function (text) {
-    this.countWrongQuestions.innerText = text;
+    this.$countWrongQuestions.text(text);
 };
 
 Statistics.prototype.setRightQuestions = function(count){
@@ -27,8 +28,8 @@ Statistics.prototype.setWrongQuestions = function(count){
 
 
 Statistics.prototype.testWidget = function (indexActive) {
-    this.titleTest.innerText = quizData[indexActive].title;
-    this.question.innerText = quizData[indexActive].questions.length;
+    this.$titleTest.text(quizData[indexActive].title);
+    this.$countQuestions.text(quizData[indexActive].questions.length);
     this.showRightQuestions(this.rightQuestions);
     this.showWrongQuestions(this.wrongQuestions);
 };

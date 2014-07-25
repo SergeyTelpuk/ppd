@@ -1,26 +1,27 @@
 function QuestionModule(appWrapper) {
-
-    this.appWrapper = appWrapper;
+    this.$appWrapper = appWrapper;
 
     this.activeQuestionIndex = 0;
     this.indexActiveTest = 0;
     this.countAnsweredQuestion = 0;
 
-    this.img = null;
-    this.exitTest = $(".exitTest", this.appWrapper);
-    this.listTestName = $(this.appWrapper+' .namesTest')[0];
-    this.hidden = $(this.appWrapper+' .hidden')[0];
-    this.floatWindows = $(this.appWrapper+' .hidden')[1];
-    this.closedWindows = $(this.appWrapper+' .closed')[0];
-    this.wrongContent = $(this.appWrapper+' .wrongContent')[0];
-    this.testList = $(this.appWrapper+' .testList')[0];
-    this.activeQuestions = $(this.appWrapper+' .activeQuestions')[0];
-    this.contentQuestions = $(this.appWrapper+' .content')[0];
-    this.imgQuestions = $(this.appWrapper+' .imgQuestions')[0];
-    this.button = $(this.appWrapper+' .button')[0];
-    this.listAnswers = $(this.appWrapper+' .listAnswers')[0];
-    this.skipAnswerButton = $(this.appWrapper+' .skipAnswerButton')[0];
-    this.answerButton = $(this.appWrapper+' .answerButton')[0];
+    this.$img = null;
+
+    this.$resetTestPassed = $('.resetTestPassed', this.$appWrapper);
+    this.$exitTest = $('.exitTest' ,this.$appWrapper);
+    this.$listTestName = $('.namesTest', this.$appWrapper);
+    this.$hidden = $('.hidden', this.$appWrapper).eq(0);
+    this.$floatWindows = $('.hidden' ,this.$appWrapper).eq(1);
+    this.$closedWindows = $('.closed', this.$appWrapper);
+    this.$wrongContent = $('.wrongContent', this.$appWrapper);
+    this.$testList = $('.testList', this.$appWrapper);
+    this.$activeQuestions = $('.activeQuestions', this.$appWrapper);
+    this.$contentQuestions = $('.content', this.$appWrapper);
+    this.$imgQuestions = $('.imgQuestions', this.$appWrapper);
+    this.$button = $('.button', this.$appWrapper);
+    this.$listAnswers = $('.listAnswers', this.$appWrapper);
+    this.$skipAnswerButton = $('.skipAnswerButton', this.$appWrapper);
+    this.$answerButton = $('.answerButton', this.$appWrapper);
 }
 
 QuestionModule.prototype.getIndexActiveTest = function(){
@@ -55,8 +56,8 @@ QuestionModule.prototype.listTestEvent = function (evt) {
         this.setIndexActiveTest(target.getAttribute('data-id-question'));
         this.buildOneQuestion();
         app.objStatistics.testWidget(target.getAttribute('data-id-question'));
-        Utils.addClass(this.testList,'hidden');
-        Utils.removeClass(this.hidden, 'hidden');
+        this.$testList.addClass('hidden');
+        this.$hidden.removeClass('hidden');
     }
 };
 
@@ -72,9 +73,11 @@ QuestionModule.prototype.buttonTestEvent = function (evt) {
 
 QuestionModule.prototype.repeatTest = function (evt) {
     Utils.resetFlagsANDanswers(this);
-    Utils.addClass(this.floatWindows, 'hidden');
-    Utils.removeClass(this.skipAnswerButton, 'hidden');
-    Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
+    this.$floatWindows.addClass('hidden');
+
+    this.$skipAnswerButton.removeClass('hidden');
+
+    this.$listAnswers.empty();
     Utils.JSONppdLocalStorageRepeat();
     app.objStatistics.testWidget(this.indexActiveTest);
     app.objRouter.clearHash();
@@ -82,58 +85,44 @@ QuestionModule.prototype.repeatTest = function (evt) {
 };
 
 QuestionModule.prototype.getContentLI = function (id, listAnswers) {
-    var li = document.createElement('LI');
-    var input = document.createElement('INPUT');
-    var textAnswers = document.createTextNode(listAnswers);
-    input.setAttribute('type', 'radio');
-    input.setAttribute('name', 'answer');
-    input.setAttribute('value', id);
     if (parseInt(id, 10) === 0) {
-        input.setAttribute('checked', 'true');
+        return $('<li><input type="radio" name="answer" value="'+id+'" checked=true >'+listAnswers+'</li>');
     }
-    li.appendChild(textAnswers);
-    li.appendChild(input);
-    li.appendChild(textAnswers);
-    return li;
+    return  $('<li><input type="radio" name="answer" value="'+id+'" >'+listAnswers+'</li>');
 };
 
 QuestionModule.prototype.getContentUL = function (listAnswers) {
-    var ul = document.createElement('UL');
+    var $ul = $('<ul/>');
     for (var id = 0; id < listAnswers.length; ++id) {
-        var li = this.getContentLI(id, listAnswers[id]);
-        ul.appendChild(li);
+        $ul.append(this.getContentLI(id, listAnswers[id]));
     }
-    return ul;
+    return $ul;
 };
 
 QuestionModule.prototype.buildQuestion = function (indexActive) {
     this.activeQuestionIndex = indexActive;
-    this.activeQuestions.innerText = this.activeQuestionIndex + 1;
-    this.contentQuestions.innerText = quizData[this.indexActiveTest].questions[this.activeQuestionIndex].question;
+    this.$activeQuestions.text(this.activeQuestionIndex + 1);
+    this.$contentQuestions.text(quizData[this.indexActiveTest].questions[this.activeQuestionIndex].question);
 
     try {
-        if (this.img === null && quizData[this.indexActiveTest].questions[this.activeQuestionIndex].questionImg) {
-            this.img = document.createElement('IMG');
-            this.img.src = quizData[this.indexActiveTest].questions[this.activeQuestionIndex].questionImg;
-            this.imgQuestions.appendChild(this.img);
+        if (this.$img === null && quizData[this.indexActiveTest].questions[this.activeQuestionIndex].questionImg) {
+            this.$img = $('<img/>').attr('src', quizData[this.indexActiveTest].questions[this.activeQuestionIndex].questionImg);
+            this.$imgQuestions.append(this.$img);
         } else if (quizData[this.indexActiveTest].questions[this.activeQuestionIndex].questionImg) {
-            this.img.src = quizData[this.indexActiveTest].questions[this.activeQuestionIndex].questionImg;
-            if (this.img.className === 'hidden') {
-                Utils.removeClass(this.img, 'hidden');
-            }
-        } else if (!quizData[this.indexActiveTest].questions[this.activeQuestionIndex].questionImg && this.img) {
-            Utils.addClass(this.img, 'hidden');
+            this.$img.attr('src',  quizData[this.indexActiveTest].questions[this.activeQuestionIndex].questionImg);
+            this.$img.removeClass('hidden');
+        } else if (!quizData[this.indexActiveTest].questions[this.activeQuestionIndex].questionImg && this.$img) {
+            this.$img.addClass('hidden');
         }
     } catch (e) {
         console.log(e.message);
     }
-
-    this.listAnswers.appendChild(this.getContentUL(quizData[this.indexActiveTest].questions[this.activeQuestionIndex].answers));
+    this.$listAnswers.append(this.getContentUL(quizData[this.indexActiveTest].questions[this.activeQuestionIndex].answers));
 };
 
 QuestionModule.prototype.hiddenButtonSkip = function () {
     if (this.countAnsweredQuestion === quizData[this.indexActiveTest].questions.length - 1) {
-        Utils.addClass(this.skipAnswerButton, 'hidden');
+        this.$skipAnswerButton.addClass('hidden');
     }
 };
 
@@ -149,31 +138,28 @@ QuestionModule.prototype.getNextActiveQuestionIndex = function (idx) {
 };
 
 QuestionModule.prototype.clickNextButton = function () {
-    var inputListRadio = this.listAnswers.getElementsByTagName('input');
+    var $answerID = parseInt($('input:radio[name=answer]:checked').val(),10);
+
     this.setAnsweredQuestion();
 
-    for (var idInput = 0; idInput < inputListRadio.length; ++idInput) {
-        if (inputListRadio[idInput].checked) {
-            var answer = parseInt(inputListRadio[idInput].value, 10);
-            if ((++answer) === parseInt(quizData[this.indexActiveTest].questions[this.activeQuestionIndex].right, 10)) {
-                app.objStatistics.showRightQuestions(++app.objStatistics.rightQuestions);
-                app.objParseModule.setAnswerRightQuestLocalStorage(this.activeQuestionIndex);
-                this.nextQuestion();
-            } else {
-                app.objParseModule.setAnswerWrongQuestLocalStorage(this.activeQuestionIndex);
-                app.objStatistics.showWrongQuestions(++app.objStatistics.wrongQuestions);
-                this.setWrongContent();
-                Utils.removeClass(this.floatWindows, 'hidden');
-            }
-        }
+    if ((++$answerID) === parseInt(quizData[this.indexActiveTest].questions[this.activeQuestionIndex].right, 10)) {
+        app.objStatistics.showRightQuestions(++app.objStatistics.rightQuestions);
+        app.objParseModule.setAnswerRightQuestLocalStorage(this.activeQuestionIndex);
+        this.nextQuestion();
+    } else {
+        app.objParseModule.setAnswerWrongQuestLocalStorage(this.activeQuestionIndex);
+        app.objStatistics.showWrongQuestions(++app.objStatistics.wrongQuestions);
+        this.setWrongContent();
+        this.$floatWindows.removeClass('hidden');
     }
+
     app.objParseModule.stringifyStorage();
 };
 
 QuestionModule.prototype.setWrongContent = function () {
-    this.wrongContent.innerHTML = '<p class="wrong">Вы ответили не правильно!</p>' +
+    this.$wrongContent.html('<p class="wrong">Вы ответили не правильно!</p>' +
         '<p>Правильный ответ:<br><span class="right">' + quizData[this.indexActiveTest].questions[this.activeQuestionIndex].answers[quizData[this.indexActiveTest].questions[this.activeQuestionIndex].right - 1] +
-        '</span></p>';
+        '</span></p>');
 };
 
 QuestionModule.prototype.setAnsweredQuestion = function () {
@@ -197,26 +183,26 @@ QuestionModule.prototype.reset = function () {
     this.resetTest();
 };
 
-QuestionModule.prototype.nextQuestion = function (evt) {
+QuestionModule.prototype.nextQuestion = function () {
     if (this.countAnsweredQuestion < quizData[this.indexActiveTest].questions.length) {
-        Utils.addClass(this.floatWindows, 'hidden');
+        this.$floatWindows.addClass('hidden');
         this.nextBuildQuestion();
     } else if (this.countAnsweredQuestion === quizData[this.indexActiveTest].questions.length) {
         var self = this;
 
-        this.wrongContent.innerHTML = app.objStatistics.getWrongWindowsStatic();
+        this.$wrongContent.html(app.objStatistics.getWrongWindowsStatic());
 
-        if (this.appWrapper.getElementsByClassName('repeat')[0]) {
-            this.appWrapper.getElementsByClassName('repeat')[0].addEventListener('click', function (evt) {
+        if ($('.repeat').length) {
+            $('.repeat', this.$appWrapper).on('click', function (evt) {
                 self.repeatTest(evt)
                 return false;
             });
         }
-        Utils.removeClass(this.floatWindows, 'hidden');
+        this.$floatWindows.removeClass('hidden');
         ++this.countAnsweredQuestion;
     } else {
-        Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
-        Utils.addClass(this.floatWindows, 'hidden');
+        this.$listAnswers.empty();
+        this.$floatWindows.addClass('hidden');
         app.objRouter.clearHash();
         this.reset();
     }
@@ -224,8 +210,8 @@ QuestionModule.prototype.nextQuestion = function (evt) {
 
 
 QuestionModule.prototype.closedTest = function () {
-    Utils.deleteOptionsQuestion(this.listAnswers, this.listAnswers.firstChild);
-    Utils.addClass(this.floatWindows, 'hidden');
+    this.$listAnswers.empty();
+    this.$floatWindows.addClass('hidden');
     Utils.JSONppdLocalStorageReset();
     app.objRouter.clearHash();
     this.resetTest();
@@ -235,17 +221,17 @@ QuestionModule.prototype.closedTest = function () {
 
 QuestionModule.prototype.addEventListenerExitTest = function () {
     var self = this;
-    self.exitTest.addEventListener('click', function (evt) {
+    self.$exitTest.on('click', function (evt) {
         evt.preventDefault();
-        self.closedTest(evt);
+        self.closedTest();
         return false;
     });
 };
 
 
-QuestionModule.prototype.addEventListenerUL = function (ul) {
+QuestionModule.prototype.addEventListenerUL = function ($ul) {
     var self = this;
-    $(ul).bind('click', function (evt) {
+    $ul.on('click', function (evt) {
         evt.preventDefault();
         self.listTestEvent(evt);
         return false;
@@ -254,7 +240,7 @@ QuestionModule.prototype.addEventListenerUL = function (ul) {
 
 QuestionModule.prototype.addEventListenerButton = function () {
     var self = this;
-    self.button.addEventListener('click', function (evt) {
+    self.$button.on('click', function (evt) {
         self.buttonTestEvent(evt);
         return false;
     });
@@ -263,27 +249,48 @@ QuestionModule.prototype.addEventListenerButton = function () {
 QuestionModule.prototype.addEventListenerClosedWindows = function () {
     var self = this;
 
-    self.closedWindows.addEventListener('click', function (evt) {
+    self.$closedWindows.on('click', function (evt) {
         self.nextQuestion(evt);
         return false;
     });
 };
 
+QuestionModule.prototype.resetTestPassed = function(){
+    app.objParseModule.resetTestPassed();
+    app.objParseModule.stringifyStorage();
+    this.setFlagPassedTest(app.objParseModule);
+};
+
+QuestionModule.prototype.addEventListenerResetPassedTest = function(){
+    var self = this;
+    self.$resetTestPassed.on('click', function(){
+        self.resetTestPassed();
+        return false;
+    });
+};
+
 QuestionModule.prototype.createListTest = function () {
-    this.$listTestName.append($('<ul/>'));
+    var $ul = $('<ul/>');
 
     for (var testId in quizData) {
-        var li = $('<li>').append('<a href="" data-id-question =\''+testId+'\'>'+quizData[testId].title+'</a>').append('<span>');
-        this.$listTestName.append(li);
+        var $li = $('<li>' +
+            '<a href="" data-id-question ='+testId+'>'+quizData[testId].title+'</a>'+
+            '<span></span>' +
+            '</li>');
+        $ul.append($li);
     }
 
-    this.addEventListenerUL(ul);
+    this.$listTestName.append($ul);
+
+    this.addEventListenerUL($ul);
 
     this.addEventListenerExitTest();
 
     this.addEventListenerButton();
 
     this.addEventListenerClosedWindows();
+
+    this.addEventListenerResetPassedTest();
 
     app.objRouter.addEventListenerHash();
 
@@ -314,18 +321,19 @@ QuestionModule.prototype.buildQuestionIFexit = function (objParseModule, objStat
         objStatistics.setWrongQuestions(objParseModule.getAnsweredWrongQuestion().length);
         objStatistics.testWidget(objParseModule.getTestId());
 
-
         this.buildQuestion(objParseModule.getQuestionID());
-        this.testList.className = 'hidden';
-        Utils.removeClass(this.hidden, 'hidden');
+
+        this.$testList.addClass('hidden');
+        this.$hidden.removeClass('hidden');
     }
 };
 
 QuestionModule.prototype.resetTest = function () {
-    Utils.addClass(this.hidden, 'hidden');
-    Utils.removeClass(this.testList, 'hidden');
-    Utils.addClass(this.testList, 'testList');
-    Utils.removeClass(this.skipAnswerButton, 'hidden');
+    this.$hidden.addClass('hidden');
+    this.$testList.removeClass('hidden');
+
+    this.$testList.addClass('testList');
+    this.$skipAnswerButton.removeClass('hidden');
     Utils.resetFlagsANDanswers(this);
 };
 
@@ -337,10 +345,13 @@ QuestionModule.prototype.setFlagPassedTestLocalStorage = function (objParseModul
 
 QuestionModule.prototype.setFlagPassedTest = function (objParseModule) {
     var arrayTest = objParseModule.getPassedTests();
-    if (arrayTest) {
-        for (var i = 0; i < arrayTest.length; ++i) {
-            var passedTest = this.listTestName.getElementsByTagName('A')[i];
-            passedTest.parentNode.lastChild.innerHTML = '&#10004'
-        }
+    var $passedTest =  $('span' ,this.$listTestName);
+
+    for (var i = 0; i < $passedTest.length; ++i) {
+        $passedTest.eq(i).html('');
+    }
+
+    for (var i = 0; i < arrayTest.length; ++i) {
+        $passedTest.eq(i).html('&#10004');
     }
 };

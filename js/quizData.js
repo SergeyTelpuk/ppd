@@ -1,6 +1,6 @@
 var quizData = [
     {
-        "title": "Зачет по теме №1",
+        "title": "Зачет по теме №1 ",
         "description": "Главы 1–6",
         "questions": [
             {
@@ -196,7 +196,7 @@ var quizData = [
         ]
     },
     {
-        "title": "Зачет по теме №2",
+        "title": "Зачет по теме №2 ",
         "description": "Дорожные знаки и разметка. Приложения 2, 3",
         "questions": [
             {
