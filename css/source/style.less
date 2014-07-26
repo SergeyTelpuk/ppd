@@ -44,17 +44,10 @@ body{
   background: #ffffff;
   box-shadow:0px 5px 10px #1c1c1c;
 }
-header h3{
-  font-size: 1.2em;
-  padding-bottom: 10px
-}
+
 .testList{
   margin: 0 auto;
-  width: 190px;
-  color: #6fc7cc;
-  padding-left: 30px;
-  padding-bottom: 10px;
-
+  text-align: center;
 }
 button.answerButton{
   color: #d2cc00;
@@ -97,8 +90,17 @@ ul{
   list-style-type: decimal;
 }
 
+.namesTest{
+  background-color: cadetblue;
+}
+
 .namesTest ul{
   list-style-type: none;
+}
+
+.namesTest ul a{
+  color: #ffffff;
+  font-size: 1.3em;
 }
 
 .right{
@@ -168,9 +170,46 @@ footer {
   top: 0;
   left: 0;
 }
+
+header {
+  text-align: center;
+  background: #2c3e50;
+  color: #fff;
+}
+
+.testList header p{
+  position: absolute;
+  left: 70%;
+};
+.testList header p:hover{
+  font-size: 1.2em;
+  cursor: pointer;
+};
+
+.testList header h1{
+  font-size: 1.5em;
+}
+
+.testList header h1,
+.testList header p {
+  display: inline-block;
+}
+.exitTest a{
+  text-align: center;
+  width: 150px;
+  color: blue;
+  padding: 3px;
+  border: 1px solid blue;
+  top: 35%;
+  position: absolute;
+  left: 70%;
+}
+
+.exitTest a:hover{
+    font-size: 1.1em;
+}
 .questions{
   width: 80%;
-
 }
 
 
