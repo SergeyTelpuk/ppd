@@ -16,7 +16,7 @@ QuizzApp.prototype.init = function (jQuery) {
 
     this.objStatistics = new Statistics($wrapper, jQuery);
 
-    this.objRouter = new Router(this.objQuestion, this.objParseModule, this.objStatistics);
+    this.objRouter = new Router(this.objQuestion, this.objParseModule, this.objStatistics, jQuery);
 
     this.objQuestion.createListTest();
 

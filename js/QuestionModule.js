@@ -42,9 +42,12 @@ QuestionModule.prototype.setCountAnsweredQuestion = function (countAnsweredQuest
     this.countAnsweredQuestion = countAnsweredQuestion;
 };
 
+QuestionModule.prototype.getCountQuestion = function () {
+    return quizData[this.getIndexActiveTest()].questions.length;
+};
 
 QuestionModule.prototype.buildOneQuestion = function(){
-    if(!app.objRouter.getFlagRouterHash()){
+    if(!this.QuizzApp.objRouter.getFlagRouterHash()){
         this.buildQuestion(0);
     }else{
         location.hash = 'test/' + (parseInt(this.getIndexActiveTest(),10) + 1) + '/' + 1;
@@ -341,6 +344,7 @@ QuestionModule.prototype.buildQuestionIFexit = function (objParseModule, objStat
         objStatistics.changeRightQuestions(objParseModule.getAnsweredRightQuestion().length);
         objStatistics.changeWrongQuestions(objParseModule.getAnsweredWrongQuestion().length);
         objStatistics.changeActiveQuestion(objParseModule.getQuestionID());
+        objStatistics.changeCountQuestion(this.getCountQuestion());
 
         this.buildQuestion(objParseModule.getQuestionID());
 

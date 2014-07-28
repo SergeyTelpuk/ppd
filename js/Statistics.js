@@ -32,6 +32,14 @@ Statistics.prototype.changeActiveQuestion = function (index) {
     this.$activeQuestions.text(index+1);
 };
 
+Statistics.prototype.changeActiveQuestion = function (index) {
+    this.$activeQuestions.text(index+1);
+};
+
+Statistics.prototype.changeCountQuestion = function(count){
+  this.$('.countQuestions').text(count)
+};
+
 Statistics.prototype.getWrongWindowsStatic = function () {
     if (parseInt(this.$countWrong.text(),10) > (parseInt(this.$countRight.text(),10) + parseInt(this.$countWrong.text(),10)) / 2) {
         return '<p class="wrong">Ваша статистика!</p>' +

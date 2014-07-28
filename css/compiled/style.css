@@ -188,11 +188,12 @@ ul {
   color: red;
 }
 .widget {
+  box-shadow: 0px 5px 10px #1c1c1c;
   background-color: #f5f5f5;
-  padding-left: 8px;
+  padding: 8px;
   width: 150px;
-  position: absolute;
-  left: 70%;
+  position: relative;
+  float: right;
 }
 .closed {
   color: green;
@@ -240,37 +241,45 @@ footer {
   top: 0;
   left: 0;
 }
-header {
+div.testList header {
   text-align: center;
   background: #2c3e50;
   color: #fff;
 }
-.testList header p {
+div.testList header p {
   position: absolute;
   left: 70%;
 }
-.testList header p:hover {
+div.testList header p:hover {
   font-size: 1.2em;
   cursor: pointer;
 }
-.testList header h1 {
+div.testList header h1 {
   font-size: 1.5em;
 }
-.testList header h1,
-.testList header p {
+div.testList header h1,
+div.testList header p {
   display: inline-block;
 }
-.exitTest a {
+aside.widget header {
+  padding: 1px;
   text-align: center;
-  width: 150px;
+  background-color: #2c3e50;
+  color: white;
+}
+.exitTest {
+  box-shadow: 0px -5px 10px #1c1c1c;
+  text-align: center;
+  cursor: pointer;
   color: blue;
-  padding: 3px;
+  padding: 1px;
+  background-color: #f0ffc3;
   border: 1px solid blue;
   margin-top: 25%;
-  position: relative;
 }
-.exitTest a:hover {
-  font-size: 1.1em;
+.exitTest:hover {
+  border: 2px solid blue;
+  font-size: 1.07em;
 }
 .questions {
   width: 80%;

@@ -1,4 +1,6 @@
-function Router(objQuestion, objParseModule, objStatistics) {
+function Router(objQuestion, objParseModule, objStatistics, $) {
+    this.$ = $;
+
     this.activeTestID =  null;
     this.activeQuestionID = null;
     this.flagRouterHash = true;
@@ -20,13 +22,17 @@ Router.prototype.getActiveTestID = function () {
     return this.activeTestID;
 };
 
+Router.prototype.getCountQuestion = function (activeTestID) {
+    return quizData[activeTestID].questions.length;
+};
+
 Router.prototype.getActiveQuestionID = function () {
     return this.activeQuestionID;
 };
 
 Router.prototype.buildQuestion = function (activeTestID, activeQuestionID) {
     this.objQuestion.$listAnswers.empty();
-
+    this.objStatistics.changeCountQuestion(this.getCountQuestion(activeTestID))
     this.objStatistics.changeActiveQuestion(activeQuestionID);
 
     this.objQuestion.setIndexActiveTest(activeTestID);
@@ -125,7 +131,7 @@ Router.prototype.setRouter = function (idTest, idQuestion) {
 Router.prototype.addEventListenerHash = function () {
     if (this.flagRouterHash) {
         var self = this;
-        $(window).on('hashchange', function(){
+        this.$(window).on('hashchange', function(){
             self.buildQuestionHash();
             return false;});
     }

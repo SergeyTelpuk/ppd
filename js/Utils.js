@@ -2,10 +2,11 @@ var Utils = {};
 
 Utils.resetFlagsANDanswers = function (thisObj) {
     thisObj.activeQuestionIndex = thisObj.countAnsweredQuestion = 0;
-    app.objStatistics.changeRightQuestions(0);
-    app.objStatistics.changeWrongQuestions(0);
-    for (var id in quizData[thisObj.indexActiveTest].questions) {
-        quizData[thisObj.indexActiveTest].questions[id].answeredQuestion = false;
+    thisObj.QuizzApp.objStatistics.changeRightQuestions(0);
+    thisObj.QuizzApp.objStatistics.changeWrongQuestions(0);
+    thisObj.QuizzApp.objStatistics.changeActiveQuestion(0);
+    for (var id in quizData[thisObj.getIndexActiveTest()].questions) {
+        quizData[thisObj.getIndexActiveTest()].questions[id].answeredQuestion = false;
     }
 };
 Utils.JSONppdLocalStorageANDRightdWrongReset = function () {
