@@ -27,7 +27,7 @@ Router.prototype.getActiveQuestionID = function () {
 Router.prototype.buildQuestion = function (activeTestID, activeQuestionID) {
     this.objQuestion.$listAnswers.empty();
 
-    this.objStatistics.testWidget(activeTestID);
+    this.objStatistics.changeActiveQuestion(activeQuestionID);
 
     this.objQuestion.setIndexActiveTest(activeTestID);
     this.objQuestion.buildQuestion(activeQuestionID);

@@ -1,49 +1,47 @@
-function Statistics(appWrapper) {
+function Statistics(appWrapper, $) {
+    this.$ = $;
+
     this.$appWrapper = appWrapper;
-    this.rightQuestions = 0;
-    this.wrongQuestions = 0;
 
-    this.$titleTest = $('.titleTest', this.$appWrapper);
-    this.$countQuestions =  $('.countQuestions', this.$appWrapper);
+    this.$countWrong = this.$('.wrong', this.$appWrapper);
+    this.$countRight = this.$('.right', this.$appWrapper);
 
-    this.$countRightQuestions = $('.right', this.$appWrapper);
-    this.$countWrongQuestions = $('.wrong',this.$appWrapper);
+    this.$activeQuestions = this.$('.activeQuestions',  this.$appWrapper);
+
 }
 
-Statistics.prototype.showRightQuestions = function (text) {
-    this.$countRightQuestions.text(text);
+Statistics.prototype.changeWrongQuestions = function (count) {
+    if(count === null){
+        this.$countWrong.text(parseInt(this.$countWrong.text(), 10) + 1)
+    }else{
+        this.$countWrong.text(count)
+    }
+
 };
 
-Statistics.prototype.showWrongQuestions = function (text) {
-    this.$countWrongQuestions.text(text);
+Statistics.prototype.changeRightQuestions = function (count) {
+    if(count === null){
+        this.$countRight.text(parseInt(this.$countRight.text(), 10) + 1);
+    }else{
+        this.$countRight.text(count);
+    }
+
 };
 
-Statistics.prototype.setRightQuestions = function(count){
-    this.rightQuestions = count;
-};
-
-Statistics.prototype.setWrongQuestions = function(count){
-    this.wrongQuestions = count;
-};
-
-
-Statistics.prototype.testWidget = function (indexActive) {
-    this.$titleTest.text(quizData[indexActive].title);
-    this.$countQuestions.text(quizData[indexActive].questions.length);
-    this.showRightQuestions(this.rightQuestions);
-    this.showWrongQuestions(this.wrongQuestions);
+Statistics.prototype.changeActiveQuestion = function (index) {
+    this.$activeQuestions.text(index+1);
 };
 
 Statistics.prototype.getWrongWindowsStatic = function () {
-    if (this.wrongQuestions > (this.rightQuestions + this.wrongQuestions) / 2) {
+    if (parseInt(this.$countWrong.text(),10) > (parseInt(this.$countRight.text(),10) + parseInt(this.$countWrong.text(),10)) / 2) {
         return '<p class="wrong">Ваша статистика!</p>' +
-            '<p>правильных: ' + '<span class="right">' + this.rightQuestions + '</span><br>' +
-            '<span class="wrong">неправильных: ' + this.wrongQuestions + '</span></p>' +
+            '<p>правильных: ' + '<span class="right">' +parseInt(this.$countRight.text(),10) + '</span><br>' +
+            '<span class="wrong">неправильных: ' + parseInt(this.$countWrong.text(),10) + '</span></p>' +
             '<span class="wrong"><button class="repeat">Повторить</button></span>';
     } else {
         return '<p class="wrong">Ваша статистика!</p>' +
-            '<p>правильных: ' + '<span class="right">' + this.rightQuestions + '</span><br>' +
-            '<span class="wrong">неправильных: ' + this.wrongQuestions + '</span></p>' +
+            '<p>правильных: ' + '<span class="right">' + parseInt(this.$countRight.text(),10) + '</span><br>' +
+            '<span class="wrong">неправильных: ' + parseInt(this.$countWrong.text(),10) + '</span></p>' +
             '<span class="right">Вы молодец!!!<span>';
     }
 

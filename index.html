@@ -19,18 +19,8 @@
     </div>
     <div class="hidden">
         <div class='contentQuestions'>
-                <section class="widget">
-                    <header>Ваша статистика</header>
-                    <p>Всех вопросов: <span class="countQuestions"></span></p>
-
-                    <p>активный: <span class="activeQuestions"></span></p>
-
-                    <p>правильных: <span class="right"></span></p>
-
-                    <p>неправильных: <span class="wrong"></span></p>
-                </section>
+             <aside class="widget"></aside>
             <div class="questions">
-                <div class="exitTest"><a href="">Список тестов</a></div>
                 <div class="titleTest"></div>
                 <div class="content"></div>
                 <figure class="imgQuestions"></figure>
@@ -42,6 +32,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
     <div class="hidden">
@@ -54,6 +45,47 @@
 </div>
 </body>
 <script type="text/javascript" src="js/jquery-2.1.1.js"></script>
+<script type="text/javascript" src="js/handlebars-v1.3.0.js"></script>
+<script id="testListTitleTemplate" type="text/x-handlebars-template">
+    <ul>
+        {{#each list}}
+        <li><a href="" data-id-question='{{@index}}' >{{this.title}}</a><span></span></li>
+        {{/each}}
+    </ul>
+</script>
+<script id="widgetTemplate" type="text/x-handlebars-template">
+    <header>Ваша статистика</header>
+    <p>Всех вопросов: <span class='countQuestions'>{{{countQuestions}}}</span></p>
+    <p>активный: <span class='activeQuestions'>{{{activeQuestions}}}</span></p>
+    <p>правильных: <span class='right'>{{{countRight}}}</span></p>
+    <p>неправильных: <span class='wrong'>{{{countWrong}}}</span></p>
+    <p class="exitTest"><a href="">Список тестов</a></p>
+</script>
+
+<script id="questionTemplate" type="text/x-handlebars-template">
+    <section class="questions">
+        <header class="questionText">{{question}}</header>
+        <article>
+            {{#if questionImg}}
+            <figure>
+                <p><img src="img/{{questionImg}}" alt="" /></p>
+                <figcaption>Польский костел</figcaption>
+            </figure>
+            {{/if}}
+            <div class="answers">
+                <div class="listAnswers">
+                    {{#each listAnswer}}
+                    <div data-answers="{{@index}}"></div>
+                    {{/each}}
+                </div>
+                <div class="button">
+                    <button class="skipAnswerButton">пропустить</button>
+                </div>
+            </div>
+        </article>
+    </section>
+</script>
+
 <script type="text/javascript" src="js/quizData.js"></script>
 <script type="text/javascript" src="js/Router.js"></script>
 <script type="text/javascript" src="js/ParseModule.js"></script>

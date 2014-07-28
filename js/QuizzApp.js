@@ -5,14 +5,16 @@ function QuizzApp() {
     this.objRouter;
 }
 
-QuizzApp.prototype.init = function () {
-    var $wrapper = $('.appWrapper');
+QuizzApp.prototype.init = function (jQuery) {
+    var $wrapper = jQuery('.appWrapper');
 
     this.objParseModule = new ParseModule();
 
-    this.objQuestion = new QuestionModule($wrapper);
+    this.objQuestion = new QuestionModule($wrapper, this, jQuery);
 
-    this.objStatistics = new Statistics($wrapper);
+    this.objQuestion.buildTestWidget();
+
+    this.objStatistics = new Statistics($wrapper, jQuery);
 
     this.objRouter = new Router(this.objQuestion, this.objParseModule, this.objStatistics);
 
@@ -26,6 +28,6 @@ QuizzApp.prototype.init = function () {
 };
 
 var app = new QuizzApp();
-app.init();
+app.init(jQuery);
 
 

@@ -2,7 +2,8 @@ var Utils = {};
 
 Utils.resetFlagsANDanswers = function (thisObj) {
     thisObj.activeQuestionIndex = thisObj.countAnsweredQuestion = 0;
-    app.objStatistics.rightQuestions = app.objStatistics.wrongQuestions = 0;
+    app.objStatistics.changeRightQuestions(0);
+    app.objStatistics.changeWrongQuestions(0);
     for (var id in quizData[thisObj.indexActiveTest].questions) {
         quizData[thisObj.indexActiveTest].questions[id].answeredQuestion = false;
     }

@@ -1,5 +1,7 @@
-function QuestionModule(appWrapper) {
+function QuestionModule(appWrapper, QuizzApp, $) {
+    this.$ = $;
     this.$appWrapper = appWrapper;
+    this.QuizzApp = QuizzApp;
 
     this.activeQuestionIndex = 0;
     this.indexActiveTest = 0;
@@ -7,21 +9,21 @@ function QuestionModule(appWrapper) {
 
     this.$img = null;
 
-    this.$resetTestPassed = $('.resetTestPassed', this.$appWrapper);
-    this.$exitTest = $('.exitTest' ,this.$appWrapper);
-    this.$listTestName = $('.namesTest', this.$appWrapper);
-    this.$hidden = $('.hidden', this.$appWrapper).eq(0);
-    this.$floatWindows = $('.hidden' ,this.$appWrapper).eq(1);
-    this.$closedWindows = $('.closed', this.$appWrapper);
-    this.$wrongContent = $('.wrongContent', this.$appWrapper);
-    this.$testList = $('.testList', this.$appWrapper);
-    this.$activeQuestions = $('.activeQuestions', this.$appWrapper);
-    this.$contentQuestions = $('.content', this.$appWrapper);
-    this.$imgQuestions = $('.imgQuestions', this.$appWrapper);
-    this.$button = $('.button', this.$appWrapper);
-    this.$listAnswers = $('.listAnswers', this.$appWrapper);
-    this.$skipAnswerButton = $('.skipAnswerButton', this.$appWrapper);
-    this.$answerButton = $('.answerButton', this.$appWrapper);
+    this.$widget = this.$('.widget', this.$appWrapper);
+
+    this.$resetTestPassed = this.$('.resetTestPassed', this.$appWrapper);
+    this.$listTestName = this.$('.namesTest', this.$appWrapper);
+    this.$hidden = this.$('.hidden', this.$appWrapper).eq(0);
+    this.$floatWindows = this.$('.hidden' ,this.$appWrapper).eq(1);
+    this.$closedWindows = this.$('.closed', this.$appWrapper);
+    this.$wrongContent = this.$('.wrongContent', this.$appWrapper);
+    this.$testList = this.$('.testList', this.$appWrapper);
+    this.$contentQuestions = this.$('.content', this.$appWrapper);
+    this.$imgQuestions = this.$('.imgQuestions', this.$appWrapper);
+    this.$button = this.$('.button', this.$appWrapper);
+    this.$listAnswers = this.$('.listAnswers', this.$appWrapper);
+    this.$skipAnswerButton = this.$('.skipAnswerButton', this.$appWrapper);
+    this.$answerButton = this.$('.answerButton', this.$appWrapper);
 }
 
 QuestionModule.prototype.getIndexActiveTest = function(){
@@ -31,8 +33,8 @@ QuestionModule.prototype.getIndexActiveTest = function(){
 QuestionModule.prototype.setIndexActiveTest = function (indexActive) {
     this.indexActiveTest = indexActive;
 
-    app.objParseModule.setTestId(indexActive);
-    app.objParseModule.stringifyStorage();
+    this.QuizzApp.objParseModule.setTestId(indexActive);
+    this.QuizzApp.objParseModule.stringifyStorage();
 
 };
 
@@ -55,7 +57,6 @@ QuestionModule.prototype.listTestEvent = function (evt) {
     if (target.tagName.toUpperCase() === 'A') {
         this.setIndexActiveTest(target.getAttribute('data-id-question'));
         this.buildOneQuestion();
-        app.objStatistics.testWidget(target.getAttribute('data-id-question'));
         this.$testList.addClass('hidden');
         this.$hidden.removeClass('hidden');
     }
@@ -76,48 +77,63 @@ QuestionModule.prototype.repeatTest = function (evt) {
     this.$floatWindows.addClass('hidden');
 
     this.$skipAnswerButton.removeClass('hidden');
-
     this.$listAnswers.empty();
     Utils.JSONppdLocalStorageRepeat();
-    app.objStatistics.testWidget(this.indexActiveTest);
-    app.objRouter.clearHash();
-    app.objRouter.setRouter(this.indexActiveTest, 0);
+    this.QuizzApp.objRouter.clearHash();
+    this.QuizzApp.objRouter.setRouter(this.getIndexActiveTest(), this.getActiveQuestionIndex());
 };
 
 QuestionModule.prototype.getContentLI = function (id, listAnswers) {
     if (parseInt(id, 10) === 0) {
-        return $('<li><input type="radio" name="answer" value="'+id+'" checked=true >'+listAnswers+'</li>');
+        return this.$('<li><input type="radio" name="answer" value="'+id+'" checked=true >'+listAnswers+'</li>');
     }
-    return  $('<li><input type="radio" name="answer" value="'+id+'" >'+listAnswers+'</li>');
+    return  this.$('<li><input type="radio" name="answer" value="'+id+'" >'+listAnswers+'</li>');
 };
 
 QuestionModule.prototype.getContentUL = function (listAnswers) {
-    var $ul = $('<ul/>');
+    var $ul = this.$('<ul/>');
     for (var id = 0; id < listAnswers.length; ++id) {
         $ul.append(this.getContentLI(id, listAnswers[id]));
     }
     return $ul;
 };
 
-QuestionModule.prototype.buildQuestion = function (indexActive) {
-    this.activeQuestionIndex = indexActive;
-    this.$activeQuestions.text(this.activeQuestionIndex + 1);
-    this.$contentQuestions.text(quizData[this.indexActiveTest].questions[this.activeQuestionIndex].question);
+QuestionModule.prototype.getActiveQuestionIndex = function(){
+    return  parseInt(this.activeQuestionIndex,10);
+};
+QuestionModule.prototype.setActiveQuestionIndex = function(indexActiveQuestion){
+    this.activeQuestionIndex = parseInt(indexActiveQuestion, 10);
+};
+
+
+QuestionModule.prototype.buildQuestion = function (indexActiveQuestion) {
+
+    this.setActiveQuestionIndex(indexActiveQuestion);
+
+//    var source = $.trim($('#questionTemplate').html());
+//    var template = Handlebars.compile(source);
+//    console.log(template);
+
+
+    //this.$activeQuestions.text(this.activeQuestionIndex + 1);
+
+    this.$contentQuestions.text(quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].question);
 
     try {
-        if (this.$img === null && quizData[this.indexActiveTest].questions[this.activeQuestionIndex].questionImg) {
-            this.$img = $('<img/>').attr('src', quizData[this.indexActiveTest].questions[this.activeQuestionIndex].questionImg);
+        if (this.$img === null && quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].questionImg) {
+            this.$img = this.$('<img/>').attr('src', quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].questionImg);
             this.$imgQuestions.append(this.$img);
-        } else if (quizData[this.indexActiveTest].questions[this.activeQuestionIndex].questionImg) {
-            this.$img.attr('src',  quizData[this.indexActiveTest].questions[this.activeQuestionIndex].questionImg);
+        } else if (quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].questionImg) {
+            this.$img.attr('src',  quizData[this.indexActiveTest].questions[this.getActiveQuestionIndex()].questionImg);
             this.$img.removeClass('hidden');
-        } else if (!quizData[this.indexActiveTest].questions[this.activeQuestionIndex].questionImg && this.$img) {
+        } else if (!quizData[this.indexActiveTest].questions[this.getActiveQuestionIndex()].questionImg && this.$img) {
             this.$img.addClass('hidden');
         }
     } catch (e) {
         console.log(e.message);
     }
-    this.$listAnswers.append(this.getContentUL(quizData[this.indexActiveTest].questions[this.activeQuestionIndex].answers));
+
+    this.$listAnswers.append(this.getContentUL(quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].answers));
 };
 
 QuestionModule.prototype.hiddenButtonSkip = function () {
@@ -138,22 +154,22 @@ QuestionModule.prototype.getNextActiveQuestionIndex = function (idx) {
 };
 
 QuestionModule.prototype.clickNextButton = function () {
-    var $answerID = parseInt($('input:radio[name=answer]:checked').val(),10);
+    var $answerID = parseInt(this.$('input:radio[name=answer]:checked').val(),10);
 
     this.setAnsweredQuestion();
 
     if ((++$answerID) === parseInt(quizData[this.indexActiveTest].questions[this.activeQuestionIndex].right, 10)) {
-        app.objStatistics.showRightQuestions(++app.objStatistics.rightQuestions);
-        app.objParseModule.setAnswerRightQuestLocalStorage(this.activeQuestionIndex);
+        this.QuizzApp.objStatistics.changeRightQuestions(null);
+        this.QuizzApp.objParseModule.setAnswerRightQuestLocalStorage(this.getActiveQuestionIndex());
         this.nextQuestion();
     } else {
-        app.objParseModule.setAnswerWrongQuestLocalStorage(this.activeQuestionIndex);
-        app.objStatistics.showWrongQuestions(++app.objStatistics.wrongQuestions);
+        this.QuizzApp.objParseModule.setAnswerWrongQuestLocalStorage(this.getActiveQuestionIndex());
+        this.QuizzApp.objStatistics.changeWrongQuestions(null);
         this.setWrongContent();
         this.$floatWindows.removeClass('hidden');
     }
 
-    app.objParseModule.stringifyStorage();
+    this.QuizzApp.objParseModule.stringifyStorage();
 };
 
 QuestionModule.prototype.setWrongContent = function () {
@@ -169,7 +185,7 @@ QuestionModule.prototype.setAnsweredQuestion = function () {
 
 QuestionModule.prototype.nextBuildQuestion = function () {
     var id = this.getNextActiveQuestionIndex(this.activeQuestionIndex);
-    app.objRouter.setRouter(this.indexActiveTest, id);
+    this.QuizzApp.objRouter.setRouter(this.indexActiveTest, id);
 };
 
 QuestionModule.prototype.clickSkipButton = function () {
@@ -178,8 +194,8 @@ QuestionModule.prototype.clickSkipButton = function () {
 
 QuestionModule.prototype.reset = function () {
     Utils.JSONppdLocalStorageReset();
-    this.setFlagPassedTestLocalStorage(app.objParseModule);
-    this.setFlagPassedTest(app.objParseModule);
+    this.setFlagPassedTestLocalStorage(this.QuizzApp.objParseModule);
+    this.setFlagPassedTest(this.QuizzApp.objParseModule);
     this.resetTest();
 };
 
@@ -190,10 +206,10 @@ QuestionModule.prototype.nextQuestion = function () {
     } else if (this.countAnsweredQuestion === quizData[this.indexActiveTest].questions.length) {
         var self = this;
 
-        this.$wrongContent.html(app.objStatistics.getWrongWindowsStatic());
+        this.$wrongContent.html(this.QuizzApp.objStatistics.getWrongWindowsStatic());
 
-        if ($('.repeat').length) {
-            $('.repeat', this.$appWrapper).on('click', function (evt) {
+        if (self.$('.repeat', this.$appWrapper).length) {
+            self.$('.repeat', this.$appWrapper).on('click', function (evt) {
                 self.repeatTest(evt)
                 return false;
             });
@@ -203,7 +219,7 @@ QuestionModule.prototype.nextQuestion = function () {
     } else {
         this.$listAnswers.empty();
         this.$floatWindows.addClass('hidden');
-        app.objRouter.clearHash();
+        this.QuizzApp.objRouter.clearHash();
         this.reset();
     }
 };
@@ -213,7 +229,7 @@ QuestionModule.prototype.closedTest = function () {
     this.$listAnswers.empty();
     this.$floatWindows.addClass('hidden');
     Utils.JSONppdLocalStorageReset();
-    app.objRouter.clearHash();
+    this.QuizzApp.objRouter.clearHash();
     this.resetTest();
 
 
@@ -221,7 +237,7 @@ QuestionModule.prototype.closedTest = function () {
 
 QuestionModule.prototype.addEventListenerExitTest = function () {
     var self = this;
-    self.$exitTest.on('click', function (evt) {
+    self.$('.exitTest', this.$appWrapper).on('click', function (evt) {
         evt.preventDefault();
         self.closedTest();
         return false;
@@ -256,9 +272,9 @@ QuestionModule.prototype.addEventListenerClosedWindows = function () {
 };
 
 QuestionModule.prototype.resetTestPassed = function(){
-    app.objParseModule.resetTestPassed();
-    app.objParseModule.stringifyStorage();
-    this.setFlagPassedTest(app.objParseModule);
+    this.QuizzApp.objParseModule.resetTestPassed();
+    this.QuizzApp.objParseModule.stringifyStorage();
+    this.setFlagPassedTest(this.QuizzApp.objParseModule);
 };
 
 QuestionModule.prototype.addEventListenerResetPassedTest = function(){
@@ -269,22 +285,25 @@ QuestionModule.prototype.addEventListenerResetPassedTest = function(){
     });
 };
 
+QuestionModule.prototype.buildTestWidget = function () {
+    var source = this.$.trim(this.$('#widgetTemplate').html());
+    var template = Handlebars.compile(source)
+    this.$widget.append(template({
+        countQuestions: 0,
+        activeQuestions: 0,
+        countRight: 0,
+        countWrong: 0
+    }));
+};
+
 QuestionModule.prototype.createListTest = function () {
-    var $ul = $('<ul/>');
+    var source = this.$.trim($('#testListTitleTemplate').html());
+    var template = Handlebars.compile(source);
+    var content = template({list: quizData});
+    this.$listTestName.append(content);
 
-    for (var testId in quizData) {
-        var $li = $('<li>' +
-            '<a href="" data-id-question ='+testId+'>'+quizData[testId].title+'</a>'+
-            '<span></span>' +
-            '</li>');
-        $ul.append($li);
-    }
+    this.addEventListenerUL(this.$listTestName.children('ul'));
 
-    this.$listTestName.append($ul);
-
-    this.addEventListenerUL($ul);
-
-    this.addEventListenerExitTest();
 
     this.addEventListenerButton();
 
@@ -292,7 +311,9 @@ QuestionModule.prototype.createListTest = function () {
 
     this.addEventListenerResetPassedTest();
 
-    app.objRouter.addEventListenerHash();
+    this.addEventListenerExitTest();
+
+    this.QuizzApp.objRouter.addEventListenerHash();
 
 };
 
@@ -317,9 +338,9 @@ QuestionModule.prototype.buildQuestionIFexit = function (objParseModule, objStat
         this.setIndexActiveTest(objParseModule.getTestId());
         this.hiddenButtonSkip();
 
-        objStatistics.setRightQuestions(objParseModule.getAnsweredRightQuestion().length);
-        objStatistics.setWrongQuestions(objParseModule.getAnsweredWrongQuestion().length);
-        objStatistics.testWidget(objParseModule.getTestId());
+        objStatistics.changeRightQuestions(objParseModule.getAnsweredRightQuestion().length);
+        objStatistics.changeWrongQuestions(objParseModule.getAnsweredWrongQuestion().length);
+        objStatistics.changeActiveQuestion(objParseModule.getQuestionID());
 
         this.buildQuestion(objParseModule.getQuestionID());
 
@@ -345,7 +366,7 @@ QuestionModule.prototype.setFlagPassedTestLocalStorage = function (objParseModul
 
 QuestionModule.prototype.setFlagPassedTest = function (objParseModule) {
     var arrayTest = objParseModule.getPassedTests();
-    var $passedTest =  $('span' ,this.$listTestName);
+    var $passedTest =  this.$('span' ,this.$listTestName);
 
     for (var i = 0; i < $passedTest.length; ++i) {
         $passedTest.eq(i).html('');
