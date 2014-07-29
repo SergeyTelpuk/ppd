@@ -20,7 +20,6 @@
     <div class='contentQuestions'>
         <aside class="widget"></aside>
         <div class="questions">
-            <div class="titleTest"></div>
             <div class="contentQuestion"></div>
         </div>
     </div>
@@ -45,19 +44,20 @@
 <script id="widgetTemplate" type="text/x-handlebars-template">
     <header>Ваша статистика</header>
     <p>Всех вопросов: <span class='countQuestions'>{{{countQuestions}}}</span></p>
-    <p>активный: <span class='activeQuestions'>{{{activeQuestions}}}</span></p>
-    <p>правильных: <span class='right'>{{{countRight}}}</span></p>
-    <p>неправильных: <span class='wrong'>{{{countWrong}}}</span></p>
+    <p>Активный: <span class='activeQuestions'>{{{activeQuestions}}}</span></p>
+    <p>Правильных: <span class='right'>{{{countRight}}}</span></p>
+    <p>Неправильных: <span class='wrong'>{{{countWrong}}}</span></p>
     <p class="exitTest">Список тестов</p>
 </script>
 
 <script id="questionTemplate" type="text/x-handlebars-template">
     <section class="questions">
+        <header class="titleTest">{{title}}</header>
         <header class="questionText">{{question}}</header>
         <article>
             <div class="answersContent">
                 {{#if questionImg}}
-                <figure>
+                <figure class="imgQuestions">
                     <p><img src="{{questionImg}}" alt="" /></p>
                 </figure>
                 {{/if}}

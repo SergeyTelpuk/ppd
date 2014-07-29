@@ -57,32 +57,59 @@ body{
   padding: 5px;
   border: 1px solid #2c3e50;
 }
+.answer:hover{
+  box-shadow:
+    0 1px 4px rgba(0, 0, 0, .3),
+    -23px 0 20px -23px rgba(0, 0, 0, .8),
+    23px 0 20px -23px rgba(0, 0, 0, .8),
+    0 0 40px rgba(0, 0, 0, .1) inset;
+}
 
 h1.skipAnswerButton{
-  margin-top: 10px;
-  margin-left: 10px;
-  cursor: pointer;
+  margin-top: 6px;
+  display: block;
+  margin: auto;
+  text-align: center;
   width: 100px;
-  text-align: left;
-  color: #d2cc00;
-  border: red solid 2px;
-  padding: 4px;
-  background-color: #ff030c;
+  color: #fff;
+  user-select: none;
+  background: rgb(212,75,56);
+  padding: 3px;
 }
+h1.skipAnswerButton:hover { cursor: pointer; background: rgb(232,95,76); }
+h1.skipAnswerButton:active { cursor: pointer; background: rgb(152,15,0); }
+
 .listAnswers{
   padding-left: 10px;
 }
 .imgQuestions{
-  padding-top: 20px;
-  padding-left: 60px;
-  padding-bottom: 20px;
+  display: block;
+  text-align: center;
+  font-style: italic;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  color: #666;
 }
-img{
-  border: #ffcd13 solid 4px ;
+
+.imgQuestions img{
+  border: 1px solid #000;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
 }
+.countQuestions{
+  float: right;
+  font-size: 1.4em
+}
+.activeQuestions{
+  float: right;
+  font-size: 1.4em;
+}
+
 .titleTest{
   font-size: 1.5em;
-  padding-left: 80px;
+  text-align: center;
+  padding-bottom: 10px;
   border-bottom: black  solid 3px;
 }
 
@@ -124,21 +151,26 @@ ul{
 }
 
 .right{
+  float: right;
   font-size: 1.4em;
   color: green;
 }
 .wrong{
+  float: right;
   font-size: 1.4em;
   color: red;
 }
 .widget{
-  box-shadow:0px 5px 10px #1c1c1c;
+  box-shadow:
+    0 1px 4px rgba(0, 0, 0, .3),
+    -23px 0 20px -23px rgba(0, 0, 0, .8),
+    23px 0 20px -23px rgba(0, 0, 0, .8),
+    0 0 40px rgba(0, 0, 0, .1) inset;
   background-color: rgb(245, 245, 245);
   padding: 8px;
   width: 150px;
   position: relative;
   float: right;
-
 }
 
 .closed{
@@ -151,7 +183,7 @@ ul{
 }
 
 .windowsWrong{
-  border: red solid 5px;
+  box-shadow: 0 0 10px 5px rgba(221, 221, 221, 1);
   background: #ffffff;
   width: 400px;
   height: 300px;
@@ -223,19 +255,26 @@ aside.widget header{
   color: white;
 }
 .exitTest{
-  box-shadow:0px -5px 10px #1c1c1c;
+  box-shadow:
+    0 1px 4px rgba(0, 0, 0, .3),
+    -23px 0 20px -23px rgba(0, 0, 0, .8),
+    23px 0 20px -23px rgba(0, 0, 0, .8),
+    0 0 40px rgba(0, 0, 0, .1) inset;
   text-align: center;
   cursor: pointer;
   color: blue;
   padding: 1px;
-  background-color: #f0ffc3;
+  background-color: #dddddd;
   border: 1px solid blue;
   margin-top: 25%;
 }
 
 .exitTest:hover{
-    border: 2px solid blue;
-    font-size: 1.07em;
+  box-shadow:
+    0 1px 4px rgba(0, 0, 0, .3),
+    -23px 0 20px -23px rgba(0, 0, 0, .8),
+    23px 0 20px -23px rgba(0, 0, 0, .8),
+    0 0 40px rgba(0, 0, 0, .1) inset;
 }
 .questions{
   width: 80%;

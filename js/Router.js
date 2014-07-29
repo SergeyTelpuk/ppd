@@ -91,8 +91,8 @@ Router.prototype.intervalTestInclude = function(testID){
 Router.prototype.checkPassedQuestion = function(testID, questionID){
         if(quizData[testID].questions[questionID].answeredQuestion === true){
            this.$('.answersContent').before("<div class='passedQuestion' >Отвеченный вопрос!</div>");
-           this.$('.answer').addClass('passedQuestion');
-           this.$('.button').append("<h1 class='skipAnswerButton'>пропустить</h1>")
+           this.$('.answer').addClass('passed');
+           this.$('.button').html("<h1 class='skipAnswerButton'>пропустить</h1>")
         }
 };
 

@@ -90,6 +90,7 @@ QuestionModule.prototype.buildQuestion = function () {
     var source = this.$.trim(this.$('#questionTemplate').html());
     var template = Handlebars.compile(source);
     this.$contentQuestion.html(template({
+        title: quizData[this.getIndexActiveTest()].title,
         question: quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].question,
         questionImg: quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].questionImg,
         listAnswer: quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].answers,
@@ -300,10 +301,9 @@ QuestionModule.prototype.buildQuestionIFexit = function (objParseModule, objStat
 
         this.setActiveQuestionIndex(objParseModule.getQuestionID());
 
-        this.QuizzApp.objRouter.checkPassedQuestion(this.getIndexActiveTest(), this.getActiveQuestionIndex());
-
         this.buildQuestion();
 
+        this.QuizzApp.objRouter.checkPassedQuestion(this.getIndexActiveTest(), this.getActiveQuestionIndex());
 
 
         this.$contentQuestions.show();
