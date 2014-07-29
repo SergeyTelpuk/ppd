@@ -11,21 +11,11 @@ function Statistics(appWrapper, $) {
 }
 
 Statistics.prototype.changeWrongQuestions = function (count) {
-    if(count === null){
-        this.$countWrong.text(parseInt(this.$countWrong.text(), 10) + 1)
-    }else{
-        this.$countWrong.text(count)
-    }
-
+        count === null ? this.$countWrong.text(parseInt(this.$countWrong.text(), 10) + 1) : this.$countWrong.text(count);
 };
 
 Statistics.prototype.changeRightQuestions = function (count) {
-    if(count === null){
-        this.$countRight.text(parseInt(this.$countRight.text(), 10) + 1);
-    }else{
-        this.$countRight.text(count);
-    }
-
+     count === null ? this.$countRight.text(parseInt(this.$countRight.text(), 10) + 1): this.$countRight.text(count);
 };
 
 Statistics.prototype.changeActiveQuestion = function (index) {

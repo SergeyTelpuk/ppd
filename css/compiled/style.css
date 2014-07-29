@@ -132,13 +132,18 @@ body {
   margin: 0 auto;
   text-align: center;
 }
-button.answerButton {
-  color: #d2cc00;
-  border: green solid 2px;
-  padding: 4px;
-  background-color: #3d800b;
+.answer {
+  cursor: pointer;
+  margin-top: 10px;
+  padding: 5px;
+  border: 1px solid #2c3e50;
 }
-button.skipAnswerButton {
+h1.skipAnswerButton {
+  margin-top: 10px;
+  margin-left: 10px;
+  cursor: pointer;
+  width: 100px;
+  text-align: left;
   color: #d2cc00;
   border: red solid 2px;
   padding: 4px;
@@ -163,7 +168,17 @@ img {
 a {
   text-decoration: none;
 }
-.hidden {
+.answersContent {
+  padding: 4px;
+  width: 100%;
+  height: 100%;
+}
+.passedQuestion {
+  text-align: center;
+  color: green;
+  background-color: #f0ffc3;
+}
+.floatWindows {
   display: none;
 }
 ul {

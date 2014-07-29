@@ -7,23 +7,20 @@ function QuestionModule(appWrapper, QuizzApp, $) {
     this.indexActiveTest = 0;
     this.countAnsweredQuestion = 0;
 
-    this.$img = null;
-
     this.$widget = this.$('.widget', this.$appWrapper);
+
+    this.$contentQuestions = this.$('.contentQuestions', this.$appWrapper);
+    this.$contentQuestion = this.$('.contentQuestion', this.$appWrapper);
 
     this.$resetTestPassed = this.$('.resetTestPassed', this.$appWrapper);
     this.$listTestName = this.$('.namesTest', this.$appWrapper);
-    this.$hidden = this.$('.hidden', this.$appWrapper).eq(0);
-    this.$floatWindows = this.$('.hidden' ,this.$appWrapper).eq(1);
+
+    this.$floatWindows = this.$('.floatWindows' ,this.$appWrapper);
     this.$closedWindows = this.$('.closed', this.$appWrapper);
     this.$wrongContent = this.$('.wrongContent', this.$appWrapper);
     this.$testList = this.$('.testList', this.$appWrapper);
-    this.$contentQuestions = this.$('.content', this.$appWrapper);
-    this.$imgQuestions = this.$('.imgQuestions', this.$appWrapper);
-    this.$button = this.$('.button', this.$appWrapper);
+
     this.$listAnswers = this.$('.listAnswers', this.$appWrapper);
-    this.$skipAnswerButton = this.$('.skipAnswerButton', this.$appWrapper);
-    this.$answerButton = this.$('.answerButton', this.$appWrapper);
 }
 
 QuestionModule.prototype.getIndexActiveTest = function(){
@@ -48,7 +45,7 @@ QuestionModule.prototype.getCountQuestion = function () {
 
 QuestionModule.prototype.buildOneQuestion = function(){
     if(!this.QuizzApp.objRouter.getFlagRouterHash()){
-        this.buildQuestion(0);
+        this.buildQuestion();
     }else{
         location.hash = 'test/' + (parseInt(this.getIndexActiveTest(),10) + 1) + '/' + 1;
     }
@@ -60,45 +57,19 @@ QuestionModule.prototype.listTestEvent = function (evt) {
     if (target.tagName.toUpperCase() === 'A') {
         this.setIndexActiveTest(target.getAttribute('data-id-question'));
         this.buildOneQuestion();
-        this.$testList.addClass('hidden');
-        this.$hidden.removeClass('hidden');
+        this.$testList.hide();
+        this.$contentQuestions.show();
     }
 };
 
-QuestionModule.prototype.buttonTestEvent = function (evt) {
-    var target = evt.target;
-
-    if (target.className === 'answerButton') {
-        this.clickNextButton();
-    } else if (target.className === 'skipAnswerButton') {
-        this.clickSkipButton();
-    }
-};
-
-QuestionModule.prototype.repeatTest = function (evt) {
+QuestionModule.prototype.repeatTest = function () {
     Utils.resetFlagsANDanswers(this);
-    this.$floatWindows.addClass('hidden');
+    this.$floatWindows.hide();
 
-    this.$skipAnswerButton.removeClass('hidden');
     this.$listAnswers.empty();
     Utils.JSONppdLocalStorageRepeat();
     this.QuizzApp.objRouter.clearHash();
     this.QuizzApp.objRouter.setRouter(this.getIndexActiveTest(), this.getActiveQuestionIndex());
-};
-
-QuestionModule.prototype.getContentLI = function (id, listAnswers) {
-    if (parseInt(id, 10) === 0) {
-        return this.$('<li><input type="radio" name="answer" value="'+id+'" checked=true >'+listAnswers+'</li>');
-    }
-    return  this.$('<li><input type="radio" name="answer" value="'+id+'" >'+listAnswers+'</li>');
-};
-
-QuestionModule.prototype.getContentUL = function (listAnswers) {
-    var $ul = this.$('<ul/>');
-    for (var id = 0; id < listAnswers.length; ++id) {
-        $ul.append(this.getContentLI(id, listAnswers[id]));
-    }
-    return $ul;
 };
 
 QuestionModule.prototype.getActiveQuestionIndex = function(){
@@ -108,60 +79,38 @@ QuestionModule.prototype.setActiveQuestionIndex = function(indexActiveQuestion){
     this.activeQuestionIndex = parseInt(indexActiveQuestion, 10);
 };
 
-
-QuestionModule.prototype.buildQuestion = function (indexActiveQuestion) {
-
-    this.setActiveQuestionIndex(indexActiveQuestion);
-
-//    var source = $.trim($('#questionTemplate').html());
-//    var template = Handlebars.compile(source);
-//    console.log(template);
-
-
-    //this.$activeQuestions.text(this.activeQuestionIndex + 1);
-
-    this.$contentQuestions.text(quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].question);
-
-    try {
-        if (this.$img === null && quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].questionImg) {
-            this.$img = this.$('<img/>').attr('src', quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].questionImg);
-            this.$imgQuestions.append(this.$img);
-        } else if (quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].questionImg) {
-            this.$img.attr('src',  quizData[this.indexActiveTest].questions[this.getActiveQuestionIndex()].questionImg);
-            this.$img.removeClass('hidden');
-        } else if (!quizData[this.indexActiveTest].questions[this.getActiveQuestionIndex()].questionImg && this.$img) {
-            this.$img.addClass('hidden');
-        }
-    } catch (e) {
-        console.log(e.message);
+QuestionModule.prototype.getSkipAnswerButtonFlag = function () {
+    if((this.getCountQuestion() - 1) === this.countAnsweredQuestion){
+        return false;
     }
-
-    this.$listAnswers.append(this.getContentUL(quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].answers));
+    return true;
 };
 
-QuestionModule.prototype.hiddenButtonSkip = function () {
-    if (this.countAnsweredQuestion === quizData[this.indexActiveTest].questions.length - 1) {
-        this.$skipAnswerButton.addClass('hidden');
-    }
+QuestionModule.prototype.buildQuestion = function () {
+    var source = this.$.trim(this.$('#questionTemplate').html());
+    var template = Handlebars.compile(source);
+    this.$contentQuestion.html(template({
+        question: quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].question,
+        questionImg: quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].questionImg,
+        listAnswer: quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].answers,
+        skipAnswerButton: this.getSkipAnswerButtonFlag()
+    }));
 };
 
 QuestionModule.prototype.getNextActiveQuestionIndex = function (idx) {
-    this.hiddenButtonSkip();
-
     do {
-        idx = ++idx > (quizData[this.indexActiveTest].questions.length - 1) ? 0 : idx;
-    } while (quizData[this.indexActiveTest].questions[idx].answeredQuestion);
+        idx = ++idx > (quizData[this.getIndexActiveTest()].questions.length - 1) ? 0 : idx;
+    } while (quizData[this.getIndexActiveTest()].questions[idx].answeredQuestion);
 
     return idx;
 
 };
 
-QuestionModule.prototype.clickNextButton = function () {
-    var $answerID = parseInt(this.$('input:radio[name=answer]:checked').val(),10);
+QuestionModule.prototype.clickNextButton = function (answerID) {
 
     this.setAnsweredQuestion();
 
-    if ((++$answerID) === parseInt(quizData[this.indexActiveTest].questions[this.activeQuestionIndex].right, 10)) {
+    if ((++answerID) === parseInt(quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].right, 10)) {
         this.QuizzApp.objStatistics.changeRightQuestions(null);
         this.QuizzApp.objParseModule.setAnswerRightQuestLocalStorage(this.getActiveQuestionIndex());
         this.nextQuestion();
@@ -169,7 +118,7 @@ QuestionModule.prototype.clickNextButton = function () {
         this.QuizzApp.objParseModule.setAnswerWrongQuestLocalStorage(this.getActiveQuestionIndex());
         this.QuizzApp.objStatistics.changeWrongQuestions(null);
         this.setWrongContent();
-        this.$floatWindows.removeClass('hidden');
+        this.$floatWindows.show();
     }
 
     this.QuizzApp.objParseModule.stringifyStorage();
@@ -177,18 +126,18 @@ QuestionModule.prototype.clickNextButton = function () {
 
 QuestionModule.prototype.setWrongContent = function () {
     this.$wrongContent.html('<p class="wrong">Вы ответили не правильно!</p>' +
-        '<p>Правильный ответ:<br><span class="right">' + quizData[this.indexActiveTest].questions[this.activeQuestionIndex].answers[quizData[this.indexActiveTest].questions[this.activeQuestionIndex].right - 1] +
+        '<p>Правильный ответ:<br><span class="right">' + quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].answers[quizData[this.indexActiveTest].questions[this.activeQuestionIndex].right - 1] +
         '</span></p>');
 };
 
 QuestionModule.prototype.setAnsweredQuestion = function () {
-    quizData[this.indexActiveTest].questions[this.activeQuestionIndex].answeredQuestion = true;
+    quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].answeredQuestion = true;
     ++this.countAnsweredQuestion;
 };
 
 QuestionModule.prototype.nextBuildQuestion = function () {
-    var id = this.getNextActiveQuestionIndex(this.activeQuestionIndex);
-    this.QuizzApp.objRouter.setRouter(this.indexActiveTest, id);
+    var id = this.getNextActiveQuestionIndex(this.getActiveQuestionIndex());
+    this.QuizzApp.objRouter.setRouter(this.getIndexActiveTest(), id);
 };
 
 QuestionModule.prototype.clickSkipButton = function () {
@@ -203,10 +152,10 @@ QuestionModule.prototype.reset = function () {
 };
 
 QuestionModule.prototype.nextQuestion = function () {
-    if (this.countAnsweredQuestion < quizData[this.indexActiveTest].questions.length) {
-        this.$floatWindows.addClass('hidden');
+    if (this.countAnsweredQuestion < quizData[this.getIndexActiveTest()].questions.length) {
+        this.$floatWindows.hide();
         this.nextBuildQuestion();
-    } else if (this.countAnsweredQuestion === quizData[this.indexActiveTest].questions.length) {
+    } else if (this.countAnsweredQuestion === quizData[this.getIndexActiveTest()].questions.length) {
         var self = this;
 
         this.$wrongContent.html(this.QuizzApp.objStatistics.getWrongWindowsStatic());
@@ -217,11 +166,11 @@ QuestionModule.prototype.nextQuestion = function () {
                 return false;
             });
         }
-        this.$floatWindows.removeClass('hidden');
+        this.$floatWindows.show();
         ++this.countAnsweredQuestion;
     } else {
         this.$listAnswers.empty();
-        this.$floatWindows.addClass('hidden');
+        this.$floatWindows.hide();
         this.QuizzApp.objRouter.clearHash();
         this.reset();
     }
@@ -230,7 +179,7 @@ QuestionModule.prototype.nextQuestion = function () {
 
 QuestionModule.prototype.closedTest = function () {
     this.$listAnswers.empty();
-    this.$floatWindows.addClass('hidden');
+    this.$floatWindows.hide();
     Utils.JSONppdLocalStorageReset();
     this.QuizzApp.objRouter.clearHash();
     this.resetTest();
@@ -257,12 +206,16 @@ QuestionModule.prototype.addEventListenerUL = function ($ul) {
     });
 };
 
-QuestionModule.prototype.addEventListenerButton = function () {
-    var self = this;
-    self.$button.on('click', function (evt) {
-        self.buttonTestEvent(evt);
-        return false;
+QuestionModule.prototype.addEventListenerContentQuestion = function () {
+
+    this.$contentQuestion.on('click',  {self: this}, function(event){
+        if(event.target.className === 'skipAnswerButton'){
+            event.data.self.clickSkipButton();
+        }else if(event.target.className === 'answer'){
+            event.data.self.clickNextButton(event.target.getAttribute('data-answers'));
+        }
     });
+
 };
 
 QuestionModule.prototype.addEventListenerClosedWindows = function () {
@@ -300,15 +253,14 @@ QuestionModule.prototype.buildTestWidget = function () {
 };
 
 QuestionModule.prototype.createListTest = function () {
-    var source = this.$.trim($('#testListTitleTemplate').html());
+    var source = this.$.trim(this.$('#testListTitleTemplate').html());
     var template = Handlebars.compile(source);
     var content = template({list: quizData});
     this.$listTestName.append(content);
 
     this.addEventListenerUL(this.$listTestName.children('ul'));
 
-
-    this.addEventListenerButton();
+    this.addEventListenerContentQuestion();
 
     this.addEventListenerClosedWindows();
 
@@ -329,36 +281,44 @@ QuestionModule.prototype.buildQuestionIFexit = function (objParseModule, objStat
     }
 
     if (objParseModule.getTestId() !== null) {
+
         for (var id = 0; id < objParseModule.getAnsweredRightQuestion().length; ++id) {
             quizData[objParseModule.getTestId()].questions[objParseModule.getAnsweredRightQuestion()[id]].answeredQuestion = true;
         }
 
-        for (var id = 0; id < objParseModule.getAnsweredWrongQuestion(); ++id) {
+        for (var id = 0; id < objParseModule.getAnsweredWrongQuestion().length; ++id) {
             quizData[objParseModule.getTestId()].questions[objParseModule.getAnsweredWrongQuestion()[id]].answeredQuestion = true;
         }
 
         this.setCountAnsweredQuestion(objParseModule.getAnsweredRightQuestion().length + objParseModule.getAnsweredWrongQuestion().length);
         this.setIndexActiveTest(objParseModule.getTestId());
-        this.hiddenButtonSkip();
 
         objStatistics.changeRightQuestions(objParseModule.getAnsweredRightQuestion().length);
         objStatistics.changeWrongQuestions(objParseModule.getAnsweredWrongQuestion().length);
         objStatistics.changeActiveQuestion(objParseModule.getQuestionID());
         objStatistics.changeCountQuestion(this.getCountQuestion());
 
-        this.buildQuestion(objParseModule.getQuestionID());
+        this.setActiveQuestionIndex(objParseModule.getQuestionID());
 
-        this.$testList.addClass('hidden');
-        this.$hidden.removeClass('hidden');
+        this.QuizzApp.objRouter.checkPassedQuestion(this.getIndexActiveTest(), this.getActiveQuestionIndex());
+
+        this.buildQuestion();
+
+
+
+        this.$contentQuestions.show();
+        this.$testList.hide();
+
+    }else{
+        this.$contentQuestions.hide();
+        this.$testList.show();
     }
 };
 
 QuestionModule.prototype.resetTest = function () {
-    this.$hidden.addClass('hidden');
-    this.$testList.removeClass('hidden');
-
+    this.$contentQuestions.hide();
+    this.$testList.show();
     this.$testList.addClass('testList');
-    this.$skipAnswerButton.removeClass('hidden');
     Utils.resetFlagsANDanswers(this);
 };
 

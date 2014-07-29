@@ -36,7 +36,8 @@ Router.prototype.buildQuestion = function (activeTestID, activeQuestionID) {
     this.objStatistics.changeActiveQuestion(activeQuestionID);
 
     this.objQuestion.setIndexActiveTest(activeTestID);
-    this.objQuestion.buildQuestion(activeQuestionID);
+    this.objQuestion.setActiveQuestionIndex(activeQuestionID);
+    this.objQuestion.buildQuestion();
     this.objParseModule.setQuestionID(activeQuestionID);
     this.objParseModule.stringifyStorage();
 };
@@ -45,7 +46,6 @@ Router.prototype.checkNextTest = function (test) {
     if (this.getActiveTestID() !== test && this.getActiveTestID() !== null) {
         Utils.resetFlagsANDanswers(this.objQuestion);
         Utils.JSONppdLocalStorageANDRightdWrongReset();
-        this.objQuestion.$skipAnswerButton.removeClass('hidden');
     }
 };
 
@@ -90,9 +90,9 @@ Router.prototype.intervalTestInclude = function(testID){
 
 Router.prototype.checkPassedQuestion = function(testID, questionID){
         if(quizData[testID].questions[questionID].answeredQuestion === true){
-           this.objQuestion.$answerButton.addClass('hidden');
-        }else{
-           this.objQuestion.$answerButton.removeClass('hidden');
+           this.$('.answersContent').before("<div class='passedQuestion' >Отвеченный вопрос!</div>");
+           this.$('.answer').addClass('passedQuestion');
+           this.$('.button').append("<h1 class='skipAnswerButton'>пропустить</h1>")
         }
 };
 

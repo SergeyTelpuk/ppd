@@ -17,24 +17,14 @@
             <div class="namesTest"></div>
         </section>
     </div>
-    <div class="hidden">
-        <div class='contentQuestions'>
-            <aside class="widget"></aside>
-            <div class="questions">
-                <div class="titleTest"></div>
-                <div class="content"></div>
-                <figure class="imgQuestions"></figure>
-                <div class="answers">
-                    <div class="listAnswers"></div>
-                    <div class="button">
-                        <button class="answerButton">ответить</button>
-                        <button class="skipAnswerButton">пропустить</button>
-                    </div>
-                </div>
-            </div>
+    <div class='contentQuestions'>
+        <aside class="widget"></aside>
+        <div class="questions">
+            <div class="titleTest"></div>
+            <div class="contentQuestion"></div>
         </div>
     </div>
-    <div class="hidden">
+    <div class="floatWindows">
         <div class='black'></div>
         <div class='windowsWrong'><span class="closed">[x]</span><div class="wrongContent"></div></div>
     </div>
@@ -65,21 +55,22 @@
     <section class="questions">
         <header class="questionText">{{question}}</header>
         <article>
-            {{#if questionImg}}
-            <figure>
-                <p><img src="img/{{questionImg}}" alt="" /></p>
-                <figcaption>Польский костел</figcaption>
-            </figure>
-            {{/if}}
-            <div class="answers">
+            <div class="answersContent">
+                {{#if questionImg}}
+                <figure>
+                    <p><img src="{{questionImg}}" alt="" /></p>
+                </figure>
+                {{/if}}
                 <div class="listAnswers">
                     {{#each listAnswer}}
-                    <div data-answers="{{@index}}"></div>
+                    <div class="answer" data-answers="{{@index}}">{{this}}</div>
                     {{/each}}
                 </div>
-                <div class="button">
-                    <button class="skipAnswerButton">пропустить</button>
-                </div>
+            </div>
+            <div class="button">
+                {{#if skipAnswerButton}}
+                <h1 class="skipAnswerButton">пропустить</h1>
+                {{/if}}
             </div>
         </article>
     </section>
