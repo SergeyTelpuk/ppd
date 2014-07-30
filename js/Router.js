@@ -50,15 +50,15 @@ Router.prototype.checkNextTest = function (test) {
 };
 
 Router.prototype.floatWindowsQuestion = function () {
-    this.objQuestion.$wrongContent.html('<span class="wrong">Нет такого вопроса!!!</span>' +
+    this.objQuestion.$wrongContent.html('<p class="statisticsWrong">Нет такого вопроса!!!</p>' +
         '<p class="routerWrong">При закрытии окна вы будите отправлены на следующий неотвеченный текущего теста вопрос!</p>');
-    this.objQuestion.$floatWindows.removeClass('hidden');
+    this.objQuestion.$floatWindows.show();
 };
 
 Router.prototype.floatWindowsTest = function () {
-    this.objQuestion.$wrongContent.html('<span class="wrong">Нет такого теста!!!</span>' +
+    this.objQuestion.$wrongContent.html('<p class="statisticsWrong">Нет такого теста!!!</p>' +
         '<p class="routerWrong">При закрытии окна вы будите отправлены на следующий неотвеченный вопрос текущего теста!</p>');
-    this.objQuestion.$floatWindows.removeClass('hidden');
+    this.objQuestion.$floatWindows.show();
 };
 
 Router.prototype.checkFlagHash = function () {

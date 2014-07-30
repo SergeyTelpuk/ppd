@@ -126,9 +126,13 @@ QuestionModule.prototype.clickNextButton = function (answerID) {
 };
 
 QuestionModule.prototype.setWrongContent = function () {
-    this.$wrongContent.html('<p class="wrong">Вы ответили не правильно!</p>' +
-        '<p>Правильный ответ:<br><span class="right">' + quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].answers[quizData[this.indexActiveTest].questions[this.activeQuestionIndex].right - 1] +
-        '</span></p>');
+    this.$wrongContent.html('<p class="statisticsWrong">Вы ответили не правильно!</p>' +
+        '<p class="statisticsRight">Правильный ответ:</p>' +
+        '<p>' + quizData[this.getIndexActiveTest()]
+                                        .questions[this.getActiveQuestionIndex()]
+                                        .answers[quizData[this.getIndexActiveTest()]
+                                        .questions[this.getActiveQuestionIndex()].right - 1] +
+        '</p>');
 };
 
 QuestionModule.prototype.setAnsweredQuestion = function () {

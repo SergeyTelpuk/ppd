@@ -54,7 +54,7 @@ body{
 .answer{
   cursor: pointer;
   margin-top: 10px;
-  padding: 5px;
+  padding: 10px;
   border: 1px solid #2c3e50;
 }
 .answer:hover{
@@ -173,13 +173,51 @@ ul{
   float: right;
 }
 
-.closed{
+p.statistics{
+  padding: 5px;
+  font-size: 1.6em;
+  color: #2c3e50;
+  text-align: center;
+}
+
+p.statisticsRight{
+  padding: 5px;
   color: green;
+  font-size: 1.3em;
+  text-align: center;
+}
+
+p.statisticsWrong{
+  padding: 5px;
+  color: red;
+  font-size: 1.3em;
+  text-align: center;
+}
+h1.repeat{
+  padding: 5px;
+  font-size: 0.6;
   cursor: pointer;
-  font-size: 1.9em;
+  display: block;
+  margin: auto;
+  text-align: center;
+  width: 100px;
+  color: #fff;
+  user-select: none;
+  background: rgb(212,75,56);
+  padding: 3px;
+}
+
+h1.repeat:hover { cursor: pointer; background: rgb(232,95,76); }
+h1.repeat:active { cursor: pointer; background: rgb(152,15,0); }
+
+.closed{
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.8em;
   padding: 10px;
-  position: absolute;
-  right: 5px;
+  position: relative;
+  float: right;
 }
 
 .windowsWrong{
@@ -226,16 +264,16 @@ footer {
 
 div.testList header {
   text-align: center;
-  background: #2c3e50;
+  background-color: steelblue;
   color: #fff;
 }
 
 div.testList header p{
-  position: absolute;
-  left: 70%;
+  padding-right: 5px;
+  position: relative;
+  float: right;
 };
 div.testList header p:hover{
-  font-size: 1.2em;
   cursor: pointer;
 };
 

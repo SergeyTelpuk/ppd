@@ -32,15 +32,15 @@ Statistics.prototype.changeCountQuestion = function(count){
 
 Statistics.prototype.getWrongWindowsStatic = function () {
     if (parseInt(this.$countWrong.text(),10) > (parseInt(this.$countRight.text(),10) + parseInt(this.$countWrong.text(),10)) / 2) {
-        return '<p class="wrong">Ваша статистика!</p>' +
-            '<p>правильных: ' + '<span class="right">' +parseInt(this.$countRight.text(),10) + '</span><br>' +
-            '<span class="wrong">неправильных: ' + parseInt(this.$countWrong.text(),10) + '</span></p>' +
-            '<span class="wrong"><button class="repeat">Повторить</button></span>';
+        return '<p class="statistics">Ваша статистика!</p>' +
+            '<p class="statisticsRight">правильных: '+parseInt(this.$countRight.text(),10) + '</p>' +
+            '<p class="statisticsWrong">неправильных: ' + parseInt(this.$countWrong.text(),10) + '</p>' +
+            '<p><h1 class="repeat">Повторить</h1></p>';
     } else {
-        return '<p class="wrong">Ваша статистика!</p>' +
-            '<p>правильных: ' + '<span class="right">' + parseInt(this.$countRight.text(),10) + '</span><br>' +
-            '<span class="wrong">неправильных: ' + parseInt(this.$countWrong.text(),10) + '</span></p>' +
-            '<span class="right">Вы молодец!!!<span>';
+        return '<p class="statistics">Ваша статистика!</p>' +
+            '<p class="statisticsRight">правильных: '+ parseInt(this.$countRight.text(),10) + '</p>' +
+            '<p class="statisticsWrong">неправильных:' + parseInt(this.$countWrong.text(),10) + '</p>' +
+            '<p class="statisticsRight">Вы молодец!!!</p>';
     }
 
 };
