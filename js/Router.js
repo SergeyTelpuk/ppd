@@ -1,5 +1,5 @@
-function Router(objQuestion, objParseModule, objStatistics, $) {
-    this.$ = $;
+function Router(objQuestion, objParseModule, objStatistics, quizData) {
+    this.quizData = quizData;
 
     this.activeTestID =  null;
     this.activeQuestionID = null;
@@ -23,7 +23,7 @@ Router.prototype.getActiveTestID = function () {
 };
 
 Router.prototype.getCountQuestion = function (activeTestID) {
-    return quizData[activeTestID].questions.length;
+    return this.quizData[activeTestID].questions.length;
 };
 
 Router.prototype.getActiveQuestionID = function () {
@@ -45,7 +45,7 @@ Router.prototype.buildQuestion = function (activeTestID, activeQuestionID) {
 Router.prototype.checkNextTest = function (test) {
     if (this.getActiveTestID() !== test && this.getActiveTestID() !== null) {
         Utils.resetFlagsANDanswers(this.objQuestion);
-        Utils.JSONppdLocalStorageANDRightdWrongReset();
+        Utils.JSONppdLocalStorageANDRightdWrongReset(this.objParseModule);
     }
 };
 
@@ -75,24 +75,24 @@ Router.prototype.getFlagRouterHash = function () {
 }
 
 Router.prototype.intervalQuestionInclude = function(testID ,questionID){
-    if(quizData[testID].questions.length <= questionID){
+    if(this.quizData[testID].questions.length <= questionID){
         return false;
     }
     return true;
 };
 
 Router.prototype.intervalTestInclude = function(testID){
-    if(quizData.length <= testID){
+    if(this.quizData.length <= testID){
         return false;
     }
     return true;
 };
 
 Router.prototype.checkPassedQuestion = function(testID, questionID){
-        if(quizData[testID].questions[questionID].answeredQuestion === true){
-           this.$('.answersContent').before("<div class='passedQuestion' >Отвеченный вопрос!</div>");
-           this.$('.answer').addClass('passed');
-           this.$('.button').html("<h1 class='skipAnswerButton'>пропустить</h1>")
+        if(this.quizData[testID].questions[questionID].answeredQuestion === true){
+           $('.answersContent').before("<div class='passedQuestion' >Отвеченный вопрос!</div>");
+           $('.answer').addClass('passed');
+           $('.button').html("<h1 class='skipAnswerButton'>пропустить</h1>")
         }
 };
 
@@ -131,7 +131,7 @@ Router.prototype.setRouter = function (idTest, idQuestion) {
 Router.prototype.addEventListenerHash = function () {
     if (this.flagRouterHash) {
         var self = this;
-        this.$(window).on('hashchange', function(){
+        $(window).on('hashchange', function(){
             self.buildQuestionHash();
             return false;});
     }

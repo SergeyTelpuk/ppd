@@ -5,25 +5,25 @@ Utils.resetFlagsANDanswers = function (thisObj) {
     thisObj.QuizzApp.objStatistics.changeRightQuestions(0);
     thisObj.QuizzApp.objStatistics.changeWrongQuestions(0);
     thisObj.QuizzApp.objStatistics.changeActiveQuestion(0);
-    for (var id in quizData[thisObj.getIndexActiveTest()].questions) {
-        quizData[thisObj.getIndexActiveTest()].questions[id].answeredQuestion = false;
+    for (var id in thisObj.quizData[thisObj.getIndexActiveTest()].questions) {
+        thisObj.quizData[thisObj.getIndexActiveTest()].questions[id].answeredQuestion = false;
     }
 };
-Utils.JSONppdLocalStorageANDRightdWrongReset = function () {
-    app.objParseModule.JSONppdLocalStorage.answeredRightQuestion = [];
-    app.objParseModule.JSONppdLocalStorage.answeredWrongQuestion = [];
+Utils.JSONppdLocalStorageANDRightdWrongReset = function (objParseModule) {
+    objParseModule.JSONppdLocalStorage.answeredRightQuestion = [];
+    objParseModule.JSONppdLocalStorage.answeredWrongQuestion = [];
 };
 
-Utils.JSONppdLocalStorageRepeat = function () {
-    app.objParseModule.JSONppdLocalStorage.questionID = 0;
-    Utils.JSONppdLocalStorageANDRightdWrongReset();
-    app.objParseModule.stringifyStorage();
+Utils.JSONppdLocalStorageRepeat = function (objParseModule) {
+    objParseModule.JSONppdLocalStorage.questionID = 0;
+    Utils.JSONppdLocalStorageANDRightdWrongReset(objParseModule);
+    objParseModule.stringifyStorage();
 };
 
-Utils.JSONppdLocalStorageReset = function () {
-    app.objParseModule.JSONppdLocalStorage.testID = null;
-    app.objParseModule.JSONppdLocalStorage.questionID = 0;
-    Utils.JSONppdLocalStorageANDRightdWrongReset();
-    app.objParseModule.stringifyStorage();
+Utils.JSONppdLocalStorageReset = function (objParseModule) {
+    objParseModule.JSONppdLocalStorage.testID = null;
+    objParseModule.JSONppdLocalStorage.questionID = 0;
+    Utils.JSONppdLocalStorageANDRightdWrongReset(objParseModule);
+    objParseModule.stringifyStorage();
 };
 

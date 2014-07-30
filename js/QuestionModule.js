@@ -1,5 +1,6 @@
-function QuestionModule(appWrapper, QuizzApp, $) {
-    this.$ = $;
+function QuestionModule(appWrapper, QuizzApp, quizData) {
+    this.quizData = quizData;
+
     this.$appWrapper = appWrapper;
     this.QuizzApp = QuizzApp;
 
@@ -7,20 +8,20 @@ function QuestionModule(appWrapper, QuizzApp, $) {
     this.indexActiveTest = 0;
     this.countAnsweredQuestion = 0;
 
-    this.$widget = this.$('.widget', this.$appWrapper);
+    this.$widget = $('.widget', this.$appWrapper);
 
-    this.$contentQuestions = this.$('.contentQuestions', this.$appWrapper);
-    this.$contentQuestion = this.$('.contentQuestion', this.$appWrapper);
+    this.$contentQuestions = $('.contentQuestions', this.$appWrapper);
+    this.$contentQuestion = $('.contentQuestion', this.$appWrapper);
 
-    this.$resetTestPassed = this.$('.resetTestPassed', this.$appWrapper);
-    this.$listTestName = this.$('.namesTest', this.$appWrapper);
+    this.$resetTestPassed = $('.resetTestPassed', this.$appWrapper);
+    this.$listTestName = $('.namesTest', this.$appWrapper);
 
-    this.$floatWindows = this.$('.floatWindows' ,this.$appWrapper);
-    this.$closedWindows = this.$('.closed', this.$appWrapper);
-    this.$wrongContent = this.$('.wrongContent', this.$appWrapper);
-    this.$testList = this.$('.testList', this.$appWrapper);
+    this.$floatWindows = $('.floatWindows' ,this.$appWrapper);
+    this.$closedWindows = $('.closed', this.$appWrapper);
+    this.$wrongContent = $('.wrongContent', this.$appWrapper);
+    this.$testList = $('.testList', this.$appWrapper);
 
-    this.$listAnswers = this.$('.listAnswers', this.$appWrapper);
+    this.$listAnswers = $('.listAnswers', this.$appWrapper);
 }
 
 QuestionModule.prototype.getIndexActiveTest = function(){
@@ -40,7 +41,7 @@ QuestionModule.prototype.setCountAnsweredQuestion = function (countAnsweredQuest
 };
 
 QuestionModule.prototype.getCountQuestion = function () {
-    return quizData[this.getIndexActiveTest()].questions.length;
+    return this.quizData[this.getIndexActiveTest()].questions.length;
 };
 
 QuestionModule.prototype.buildOneQuestion = function(){
@@ -67,7 +68,7 @@ QuestionModule.prototype.repeatTest = function () {
     this.$floatWindows.hide();
 
     this.$listAnswers.empty();
-    Utils.JSONppdLocalStorageRepeat();
+    Utils.JSONppdLocalStorageRepeat(this.QuizzApp.objParseModule);
     this.QuizzApp.objRouter.clearHash();
     this.QuizzApp.objRouter.setRouter(this.getIndexActiveTest(), this.getActiveQuestionIndex());
 };
@@ -87,21 +88,21 @@ QuestionModule.prototype.getSkipAnswerButtonFlag = function () {
 };
 
 QuestionModule.prototype.buildQuestion = function () {
-    var source = this.$.trim(this.$('#questionTemplate').html());
+    var source = $('#questionTemplate').html();
     var template = Handlebars.compile(source);
     this.$contentQuestion.html(template({
-        title: quizData[this.getIndexActiveTest()].title,
-        question: quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].question,
-        questionImg: quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].questionImg,
-        listAnswer: quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].answers,
+        title: this.quizData[this.getIndexActiveTest()].title,
+        question: this.quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].question,
+        questionImg: this.quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].questionImg,
+        listAnswer: this.quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].answers,
         skipAnswerButton: this.getSkipAnswerButtonFlag()
     }));
 };
 
 QuestionModule.prototype.getNextActiveQuestionIndex = function (idx) {
     do {
-        idx = ++idx > (quizData[this.getIndexActiveTest()].questions.length - 1) ? 0 : idx;
-    } while (quizData[this.getIndexActiveTest()].questions[idx].answeredQuestion);
+        idx = ++idx > (this.quizData[this.getIndexActiveTest()].questions.length - 1) ? 0 : idx;
+    } while (this.quizData[this.getIndexActiveTest()].questions[idx].answeredQuestion);
 
     return idx;
 
@@ -111,7 +112,7 @@ QuestionModule.prototype.clickNextButton = function (answerID) {
 
     this.setAnsweredQuestion();
 
-    if ((++answerID) === parseInt(quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].right, 10)) {
+    if ((++answerID) === parseInt(this.quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].right, 10)) {
         this.QuizzApp.objStatistics.changeRightQuestions(null);
         this.QuizzApp.objParseModule.setAnswerRightQuestLocalStorage(this.getActiveQuestionIndex());
         this.nextQuestion();
@@ -128,15 +129,15 @@ QuestionModule.prototype.clickNextButton = function (answerID) {
 QuestionModule.prototype.setWrongContent = function () {
     this.$wrongContent.html('<p class="statisticsWrong">Вы ответили не правильно!</p>' +
         '<p class="statisticsRight">Правильный ответ:</p>' +
-        '<p>' + quizData[this.getIndexActiveTest()]
+        '<p>' + this.quizData[this.getIndexActiveTest()]
                                         .questions[this.getActiveQuestionIndex()]
-                                        .answers[quizData[this.getIndexActiveTest()]
+                                        .answers[this.quizData[this.getIndexActiveTest()]
                                         .questions[this.getActiveQuestionIndex()].right - 1] +
         '</p>');
 };
 
 QuestionModule.prototype.setAnsweredQuestion = function () {
-    quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].answeredQuestion = true;
+    this.quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].answeredQuestion = true;
     ++this.countAnsweredQuestion;
 };
 
@@ -150,23 +151,23 @@ QuestionModule.prototype.clickSkipButton = function () {
 };
 
 QuestionModule.prototype.reset = function () {
-    Utils.JSONppdLocalStorageReset();
+    Utils.JSONppdLocalStorageReset(this.QuizzApp.objParseModule);
     this.setFlagPassedTestLocalStorage(this.QuizzApp.objParseModule);
     this.setFlagPassedTest(this.QuizzApp.objParseModule);
     this.resetTest();
 };
 
 QuestionModule.prototype.nextQuestion = function () {
-    if (this.countAnsweredQuestion < quizData[this.getIndexActiveTest()].questions.length) {
+    if (this.countAnsweredQuestion < this.quizData[this.getIndexActiveTest()].questions.length) {
         this.$floatWindows.hide();
         this.nextBuildQuestion();
-    } else if (this.countAnsweredQuestion === quizData[this.getIndexActiveTest()].questions.length) {
+    } else if (this.countAnsweredQuestion === this.quizData[this.getIndexActiveTest()].questions.length) {
         var self = this;
 
         this.$wrongContent.html(this.QuizzApp.objStatistics.getWrongWindowsStatic());
 
-        if (self.$('.repeat', this.$appWrapper).length) {
-            self.$('.repeat', this.$appWrapper).on('click', function (evt) {
+        if ($('.repeat', this.$appWrapper).length) {
+            $('.repeat', this.$appWrapper).on('click', function (evt) {
                 self.repeatTest(evt)
                 return false;
             });
@@ -185,16 +186,14 @@ QuestionModule.prototype.nextQuestion = function () {
 QuestionModule.prototype.closedTest = function () {
     this.$listAnswers.empty();
     this.$floatWindows.hide();
-    Utils.JSONppdLocalStorageReset();
+    Utils.JSONppdLocalStorageReset(this.QuizzApp.objParseModule);
     this.QuizzApp.objRouter.clearHash();
     this.resetTest();
-
-
 };
 
 QuestionModule.prototype.addEventListenerExitTest = function () {
     var self = this;
-    self.$('.exitTest', this.$appWrapper).on('click', function (evt) {
+    $('.exitTest', this.$appWrapper).on('click', function (evt) {
         evt.preventDefault();
         self.closedTest();
         return false;
@@ -247,7 +246,7 @@ QuestionModule.prototype.addEventListenerResetPassedTest = function(){
 };
 
 QuestionModule.prototype.buildTestWidget = function () {
-    var source = this.$.trim(this.$('#widgetTemplate').html());
+    var source = $('#widgetTemplate').html();
     var template = Handlebars.compile(source)
     this.$widget.append(template({
         countQuestions: 0,
@@ -258,9 +257,9 @@ QuestionModule.prototype.buildTestWidget = function () {
 };
 
 QuestionModule.prototype.createListTest = function () {
-    var source = this.$.trim(this.$('#testListTitleTemplate').html());
+    var source = $('#testListTitleTemplate').html();
     var template = Handlebars.compile(source);
-    var content = template({list: quizData});
+    var content = template({list: this.quizData});
     this.$listTestName.append(content);
 
     this.addEventListenerUL(this.$listTestName.children('ul'));
@@ -288,31 +287,39 @@ QuestionModule.prototype.buildQuestionIFexit = function (objParseModule, objStat
     if (objParseModule.getTestId() !== null) {
 
         for (var id = 0; id < objParseModule.getAnsweredRightQuestion().length; ++id) {
-            quizData[objParseModule.getTestId()].questions[objParseModule.getAnsweredRightQuestion()[id]].answeredQuestion = true;
+            this.quizData[objParseModule.getTestId()].questions[objParseModule.getAnsweredRightQuestion()[id]].answeredQuestion = true;
         }
 
         for (var id = 0; id < objParseModule.getAnsweredWrongQuestion().length; ++id) {
-            quizData[objParseModule.getTestId()].questions[objParseModule.getAnsweredWrongQuestion()[id]].answeredQuestion = true;
+            this.quizData[objParseModule.getTestId()].questions[objParseModule.getAnsweredWrongQuestion()[id]].answeredQuestion = true;
         }
 
-        this.setCountAnsweredQuestion(objParseModule.getAnsweredRightQuestion().length + objParseModule.getAnsweredWrongQuestion().length);
-        this.setIndexActiveTest(objParseModule.getTestId());
+        if((objParseModule.getAnsweredWrongQuestion().length +  objParseModule.getAnsweredRightQuestion().length) !== this.getCountQuestion()){
+            this.setCountAnsweredQuestion(objParseModule.getAnsweredRightQuestion().length + objParseModule.getAnsweredWrongQuestion().length);
+            this.setIndexActiveTest(objParseModule.getTestId());
 
-        objStatistics.changeRightQuestions(objParseModule.getAnsweredRightQuestion().length);
-        objStatistics.changeWrongQuestions(objParseModule.getAnsweredWrongQuestion().length);
-        objStatistics.changeActiveQuestion(objParseModule.getQuestionID());
-        objStatistics.changeCountQuestion(this.getCountQuestion());
+            objStatistics.changeRightQuestions(objParseModule.getAnsweredRightQuestion().length);
+            objStatistics.changeWrongQuestions(objParseModule.getAnsweredWrongQuestion().length);
+            objStatistics.changeActiveQuestion(objParseModule.getQuestionID());
+            objStatistics.changeCountQuestion(this.getCountQuestion());
 
-        this.setActiveQuestionIndex(objParseModule.getQuestionID());
+            this.setActiveQuestionIndex(objParseModule.getQuestionID());
 
-        this.buildQuestion();
+            this.buildQuestion();
 
-        this.QuizzApp.objRouter.checkPassedQuestion(this.getIndexActiveTest(), this.getActiveQuestionIndex());
+            this.QuizzApp.objRouter.checkPassedQuestion(this.getIndexActiveTest(), this.getActiveQuestionIndex());
 
 
-        this.$contentQuestions.show();
-        this.$testList.hide();
-
+            this.$contentQuestions.show();
+            this.$testList.hide();
+        }else{
+            Utils.resetFlagsANDanswers(this);
+            Utils.JSONppdLocalStorageANDRightdWrongReset(objParseModule);
+            Utils.JSONppdLocalStorageReset(objParseModule);
+            this.setFlagPassedTestLocalStorage(objParseModule);
+            this.$contentQuestions.hide();
+            this.$testList.show();
+        }
     }else{
         this.$contentQuestions.hide();
         this.$testList.show();
@@ -328,13 +335,13 @@ QuestionModule.prototype.resetTest = function () {
 
 QuestionModule.prototype.setFlagPassedTestLocalStorage = function (objParseModule) {
     objParseModule.parseStorage();
-    objParseModule.setPassedTests(this.indexActiveTest);
+    objParseModule.setPassedTests(this.getIndexActiveTest());
     objParseModule.stringifyStorage();
 };
 
 QuestionModule.prototype.setFlagPassedTest = function (objParseModule) {
     var arrayTest = objParseModule.getPassedTests();
-    var $passedTest =  this.$('span' ,this.$listTestName);
+    var $passedTest =  $('span' ,this.$listTestName);
 
     for (var i = 0; i < $passedTest.length; ++i) {
         $passedTest.eq(i).html('');

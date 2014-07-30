@@ -1,12 +1,11 @@
-function Statistics(appWrapper, $) {
-    this.$ = $;
+function Statistics(appWrapper) {
 
     this.$appWrapper = appWrapper;
 
-    this.$countWrong = this.$('.wrong', this.$appWrapper);
-    this.$countRight = this.$('.right', this.$appWrapper);
+    this.$countWrong = $('.wrong', this.$appWrapper);
+    this.$countRight = $('.right', this.$appWrapper);
 
-    this.$activeQuestions = this.$('.activeQuestions',  this.$appWrapper);
+    this.$activeQuestions = $('.activeQuestions',  this.$appWrapper);
 
 }
 
@@ -27,7 +26,7 @@ Statistics.prototype.changeActiveQuestion = function (index) {
 };
 
 Statistics.prototype.changeCountQuestion = function(count){
-  this.$('.countQuestions').text(count)
+  $('.countQuestions',  this.$appWrapper).text(count)
 };
 
 Statistics.prototype.getWrongWindowsStatic = function () {

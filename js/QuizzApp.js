@@ -1,33 +1,53 @@
-function QuizzApp() {
-    this.objStatistics;
-    this.objQuestion;
-    this.objParseModule;
-    this.objRouter;
-}
+$(function($){
+    function QuizzApp() {
+        this.objStatistics;
+        this.objQuestion;
+        this.objParseModule;
+        this.objRouter;
+        this.quizData;
+    };
 
-QuizzApp.prototype.init = function (jQuery) {
-    var $wrapper = jQuery('.appWrapper');
+    QuizzApp.prototype.setFlagFalse = function(){
+        for (var idQuest in this.quizData) {
+            var idQuizData = this.quizData[idQuest].questions;
+            for (var i in idQuizData) {
+                idQuizData[i].answeredQuestion = false;
+            }
+        }
+    };
 
-    this.objParseModule = new ParseModule();
+    QuizzApp.prototype.init = function () {
+        var self = this;
 
-    this.objQuestion = new QuestionModule($wrapper, this, jQuery);
+        var $wrapper = $('.appWrapper');
 
-    this.objQuestion.buildTestWidget();
+        $.getJSON( 'js/json/quizData.json', function(data){
 
-    this.objStatistics = new Statistics($wrapper, jQuery);
+            self.quizData = data;
 
-    this.objRouter = new Router(this.objQuestion, this.objParseModule, this.objStatistics, jQuery);
+            self.setFlagFalse();
 
-    this.objQuestion.createListTest();
+            self.objParseModule = new ParseModule();
 
-    this.objQuestion.buildQuestionIFexit(this.objParseModule, this.objStatistics);
+            self.objQuestion = new QuestionModule($wrapper, self, self.quizData);
 
-    this.objQuestion.setFlagPassedTest(this.objParseModule);
+            self.objQuestion.buildTestWidget();
 
+            self.objStatistics = new Statistics($wrapper);
 
-};
+            self.objRouter = new Router(self.objQuestion, self.objParseModule, self.objStatistics, self.quizData);
 
-var app = new QuizzApp();
-app.init(jQuery);
+            self.objQuestion.createListTest();
+
+            self.objQuestion.buildQuestionIFexit(self.objParseModule, self.objStatistics);
+
+            self.objQuestion.setFlagPassedTest(self.objParseModule);
+        });
+    };
+
+    var app = new QuizzApp();
+    app.init();
+}(jQuery));
+
 
 
