@@ -21,6 +21,7 @@ $(function($){
 
         var $wrapper = $('.appWrapper');
 
+
         $.getJSON( 'js/json/quizData.json', function(data){
 
             self.quizData = data;
@@ -30,6 +31,8 @@ $(function($){
             self.objParseModule = new ParseModule();
 
             self.objQuestion = new QuestionModule($wrapper, self, self.quizData);
+
+            self.objQuestion.hiddenAjaxLoader();
 
             self.objQuestion.buildTestWidget();
 
