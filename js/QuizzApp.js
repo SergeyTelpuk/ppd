@@ -8,12 +8,9 @@ $(function($){
     };
 
     QuizzApp.prototype.setFlagFalse = function(){
-        for (var idQuest in this.quizData) {
-            var idQuizData = this.quizData[idQuest].questions;
-            for (var i in idQuizData) {
-                idQuizData[i].answeredQuestion = false;
-            }
-        }
+        _.each(this.quizData, function(num){
+            num.answeredQuestion = false;
+        });
     };
 
     QuizzApp.prototype.init = function () {

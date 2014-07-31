@@ -136,9 +136,9 @@ QuestionModule.prototype.setWrongContent = function () {
     this.$wrongContent.html('<p class="statisticsWrong">Вы ответили не правильно!</p>' +
         '<p class="statisticsRight">Правильный ответ:</p>' +
         '<p>' + this.quizData[this.getIndexActiveTest()]
-                                        .questions[this.getActiveQuestionIndex()]
-                                        .answers[this.quizData[this.getIndexActiveTest()]
-                                        .questions[this.getActiveQuestionIndex()].right - 1] +
+        .questions[this.getActiveQuestionIndex()]
+        .answers[this.quizData[this.getIndexActiveTest()]
+        .questions[this.getActiveQuestionIndex()].right - 1] +
         '</p>');
 };
 
@@ -347,14 +347,14 @@ QuestionModule.prototype.setFlagPassedTestLocalStorage = function (objParseModul
 };
 
 QuestionModule.prototype.setFlagPassedTest = function (objParseModule) {
-    var arrayTest = objParseModule.getPassedTests();
     var $passedTest =  $('span' ,this.$listTestName);
 
-    for (var i = 0; i < $passedTest.length; ++i) {
-        $passedTest.eq(i).html('');
-    }
+    _.each( $passedTest,function(num, key){
+        $passedTest.eq(key).html('');
+    });
 
-    for (var i = 0; i < arrayTest.length; ++i) {
-        $passedTest.eq(i).html('&#10004');
-    }
+    _.each(objParseModule.getPassedTests(), function(num, key){
+        $passedTest.eq(key).html('&#10004');
+    });
+
 };
