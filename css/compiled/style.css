@@ -142,15 +142,15 @@ body {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), -23px 0 20px -23px rgba(0, 0, 0, 0.8), 23px 0 20px -23px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 0, 0, 0.1) inset;
 }
 h1.skipAnswerButton {
-  margin-top: 6px;
+  margin-top: 10px;
+  float: right;
   display: block;
-  margin: auto;
   text-align: center;
   width: 100px;
   color: #fff;
   user-select: none;
   background: #d44b38;
-  padding: 3px;
+  padding: 4px;
 }
 h1.skipAnswerButton:hover {
   cursor: pointer;
@@ -215,7 +215,7 @@ ul {
   font-size: 1.3em;
 }
 .namesTest {
-  background-color: cadetblue;
+  background-color: #aaaaaa;
 }
 .namesTest ul {
   padding: 5px;
@@ -316,10 +316,8 @@ h1.repeat:active {
   text-align: center;
 }
 footer {
-  background-color: #333;
+  margin-top: 20px;
   width: 100%;
-  bottom: 0;
-  position: relative;
 }
 .wrongContent {
   padding-top: 50px;
