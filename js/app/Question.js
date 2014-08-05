@@ -1,9 +1,10 @@
-define(['Utils'] ,function(Utils){
+define(['Utils', 'vendor/requirejs/text!templates/tests.html', 'vendor/requirejs/text!templates/widget.html', 'vendor/requirejs/text!templates/question.html'],
+     function(Utils, templateTests, templateWidget, templateQuestion){
 
-    function QuestionModule(appWrapper, QuizzApp, quizData) {
+    function Question(appWrapper, QuizzApp, quizData) {
 
-        if(!(this instanceof QuestionModule)){
-            return new QuestionModule();
+        if(!(this instanceof Question)){
+            return new Question(appWrapper, QuizzApp, quizData);
         }
 
         this.quizData = quizData;
@@ -33,31 +34,31 @@ define(['Utils'] ,function(Utils){
         this.$listAnswers = $('.listAnswers', this.$appWrapper);
     }
 
-    QuestionModule.prototype.getIndexActiveTest = function () {
+    Question.prototype.getIndexActiveTest = function () {
         return this.indexActiveTest;
     };
 
-    QuestionModule.prototype.setIndexActiveTest = function (indexActive) {
+    Question.prototype.setIndexActiveTest = function (indexActive) {
         this.indexActiveTest = indexActive;
 
-        this.QuizzApp.objParseModule.setTestId(indexActive);
-        this.QuizzApp.objParseModule.stringifyStorage();
+        this.QuizzApp.objLocalStorage.setTestId(indexActive);
+        this.QuizzApp.objLocalStorage.stringifyStorage();
 
     };
 
-    QuestionModule.prototype.hiddenAjaxLoader = function () {
+    Question.prototype.hiddenAjaxLoader = function () {
         this.$ajaxLoader.hide();
     };
 
-    QuestionModule.prototype.setCountAnsweredQuestion = function (countAnsweredQuestion) {
+    Question.prototype.setCountAnsweredQuestion = function (countAnsweredQuestion) {
         this.countAnsweredQuestion = countAnsweredQuestion;
     };
 
-    QuestionModule.prototype.getCountQuestion = function () {
+    Question.prototype.getCountQuestion = function () {
         return this.quizData[this.getIndexActiveTest()].questions.length;
     };
 
-    QuestionModule.prototype.buildOneQuestion = function () {
+    Question.prototype.buildOneQuestion = function () {
         if (!this.QuizzApp.objRouter.getFlagRouterHash()) {
             this.buildQuestion();
         } else {
@@ -65,7 +66,7 @@ define(['Utils'] ,function(Utils){
         }
     };
 
-    QuestionModule.prototype.listTestEvent = function (evt) {
+    Question.prototype.listTestEvent = function (evt) {
         var target = evt.target;
 
         if (target.tagName.toUpperCase() === 'A') {
@@ -76,33 +77,33 @@ define(['Utils'] ,function(Utils){
         }
     };
 
-    QuestionModule.prototype.repeatTest = function () {
+    Question.prototype.repeatTest = function () {
         Utils.resetFlagsANDanswers(this);
         this.$floatWindows.hide();
 
         this.$listAnswers.empty();
-        Utils.JSONppdLocalStorageRepeat(this.QuizzApp.objParseModule);
+        Utils.JSONppdLocalStorageRepeat(this.QuizzApp.objLocalStorage);
         this.QuizzApp.objRouter.clearHash();
         this.QuizzApp.objRouter.setRouter(this.getIndexActiveTest(), this.getActiveQuestionIndex());
     };
 
-    QuestionModule.prototype.getActiveQuestionIndex = function () {
+    Question.prototype.getActiveQuestionIndex = function () {
         return  parseInt(this.activeQuestionIndex, 10);
     };
-    QuestionModule.prototype.setActiveQuestionIndex = function (indexActiveQuestion) {
+
+    Question.prototype.setActiveQuestionIndex = function (indexActiveQuestion) {
         this.activeQuestionIndex = parseInt(indexActiveQuestion, 10);
     };
 
-    QuestionModule.prototype.getSkipAnswerButtonFlag = function () {
+    Question.prototype.getSkipAnswerButtonFlag = function () {
         if ((this.getCountQuestion() - 1) === this.countAnsweredQuestion) {
             return false;
         }
         return true;
     };
 
-    QuestionModule.prototype.buildQuestion = function () {
-        var source = $('#questionTemplate').html();
-        var template = Handlebars.compile(source);
+    Question.prototype.buildQuestion = function () {
+        var template = Handlebars.compile(templateQuestion);
         this.$contentQuestion.html(template({
             title: this.quizData[this.getIndexActiveTest()].title,
             question: this.quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].question,
@@ -112,7 +113,7 @@ define(['Utils'] ,function(Utils){
         }));
     };
 
-    QuestionModule.prototype.getNextActiveQuestionIndex = function (idx) {
+    Question.prototype.getNextActiveQuestionIndex = function (idx) {
         do {
             idx = ++idx > (this.quizData[this.getIndexActiveTest()].questions.length - 1) ? 0 : idx;
         } while (this.quizData[this.getIndexActiveTest()].questions[idx].answeredQuestion);
@@ -121,25 +122,25 @@ define(['Utils'] ,function(Utils){
 
     };
 
-    QuestionModule.prototype.clickNextButton = function (answerID) {
+    Question.prototype.clickNextButton = function (answerID) {
 
         this.setAnsweredQuestion();
 
         if ((++answerID) === parseInt(this.quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].right, 10)) {
             this.QuizzApp.objStatistics.changeRightQuestions(null);
-            this.QuizzApp.objParseModule.setAnswerRightQuestLocalStorage(this.getActiveQuestionIndex());
+            this.QuizzApp.objLocalStorage.setAnswerRightQuestLocalStorage(this.getActiveQuestionIndex());
             this.nextQuestion();
         } else {
-            this.QuizzApp.objParseModule.setAnswerWrongQuestLocalStorage(this.getActiveQuestionIndex());
+            this.QuizzApp.objLocalStorage.setAnswerWrongQuestLocalStorage(this.getActiveQuestionIndex());
             this.QuizzApp.objStatistics.changeWrongQuestions(null);
             this.setWrongContent();
             this.$floatWindows.show();
         }
 
-        this.QuizzApp.objParseModule.stringifyStorage();
+        this.QuizzApp.objLocalStorage.stringifyStorage();
     };
 
-    QuestionModule.prototype.setWrongContent = function () {
+    Question.prototype.setWrongContent = function () {
         this.$wrongContent.html('<p class="statisticsWrong">Вы ответили не правильно!</p>' +
             '<p class="statisticsRight">Правильный ответ:</p>' +
             '<p>' + this.quizData[this.getIndexActiveTest()]
@@ -149,28 +150,28 @@ define(['Utils'] ,function(Utils){
             '</p>');
     };
 
-    QuestionModule.prototype.setAnsweredQuestion = function () {
+    Question.prototype.setAnsweredQuestion = function () {
         this.quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].answeredQuestion = true;
         ++this.countAnsweredQuestion;
     };
 
-    QuestionModule.prototype.nextBuildQuestion = function () {
+    Question.prototype.nextBuildQuestion = function () {
         var id = this.getNextActiveQuestionIndex(this.getActiveQuestionIndex());
         this.QuizzApp.objRouter.setRouter(this.getIndexActiveTest(), id);
     };
 
-    QuestionModule.prototype.clickSkipButton = function () {
+    Question.prototype.clickSkipButton = function () {
         this.nextBuildQuestion();
     };
 
-    QuestionModule.prototype.reset = function () {
-        Utils.JSONppdLocalStorageReset(this.QuizzApp.objParseModule);
-        this.setFlagPassedTestLocalStorage(this.QuizzApp.objParseModule);
-        this.setFlagPassedTest(this.QuizzApp.objParseModule);
+    Question.prototype.reset = function () {
+        Utils.JSONppdLocalStorageReset(this.QuizzApp.objLocalStorage);
+        this.setFlagPassedTestLocalStorage(this.QuizzApp.objLocalStorage);
+        this.setFlagPassedTest(this.QuizzApp.objLocalStorage);
         this.resetTest();
     };
 
-    QuestionModule.prototype.nextQuestion = function () {
+    Question.prototype.nextQuestion = function () {
         if (this.countAnsweredQuestion < this.quizData[this.getIndexActiveTest()].questions.length) {
             this.$floatWindows.hide();
             this.nextBuildQuestion();
@@ -196,15 +197,15 @@ define(['Utils'] ,function(Utils){
     };
 
 
-    QuestionModule.prototype.closedTest = function () {
+    Question.prototype.closedTest = function () {
         this.$listAnswers.empty();
         this.$floatWindows.hide();
-        Utils.JSONppdLocalStorageReset(this.QuizzApp.objParseModule);
+        Utils.JSONppdLocalStorageReset(this.QuizzApp.objLocalStorage);
         this.QuizzApp.objRouter.clearHash();
         this.resetTest();
     };
 
-    QuestionModule.prototype.addEventListenerExitTest = function () {
+    Question.prototype.addEventListenerExitTest = function () {
         var self = this;
         $('.exitTest', this.$appWrapper).on('click', function (evt) {
             evt.preventDefault();
@@ -214,7 +215,7 @@ define(['Utils'] ,function(Utils){
     };
 
 
-    QuestionModule.prototype.addEventListenerUL = function ($ul) {
+    Question.prototype.addEventListenerUL = function ($ul) {
         var self = this;
         $ul.on('click', function (evt) {
             evt.preventDefault();
@@ -223,7 +224,7 @@ define(['Utils'] ,function(Utils){
         });
     };
 
-    QuestionModule.prototype.addEventListenerContentQuestion = function () {
+    Question.prototype.addEventListenerContentQuestion = function () {
 
         this.$contentQuestion.on('click', {self: this}, function (event) {
             if (event.target.className === 'skipAnswerButton') {
@@ -235,7 +236,7 @@ define(['Utils'] ,function(Utils){
 
     };
 
-    QuestionModule.prototype.addEventListenerClosedWindows = function () {
+    Question.prototype.addEventListenerClosedWindows = function () {
         var self = this;
 
         self.$closedWindows.on('click', function (evt) {
@@ -244,13 +245,13 @@ define(['Utils'] ,function(Utils){
         });
     };
 
-    QuestionModule.prototype.resetTestPassed = function () {
-        this.QuizzApp.objParseModule.resetTestPassed();
-        this.QuizzApp.objParseModule.stringifyStorage();
-        this.setFlagPassedTest(this.QuizzApp.objParseModule);
+    Question.prototype.resetTestPassed = function () {
+        this.QuizzApp.objLocalStorage.resetTestPassed();
+        this.QuizzApp.objLocalStorage.stringifyStorage();
+        this.setFlagPassedTest(this.QuizzApp.objLocalStorage);
     };
 
-    QuestionModule.prototype.addEventListenerResetPassedTest = function () {
+    Question.prototype.addEventListenerResetPassedTest = function () {
         var self = this;
         self.$resetTestPassed.on('click', function () {
             self.resetTestPassed();
@@ -258,9 +259,8 @@ define(['Utils'] ,function(Utils){
         });
     };
 
-    QuestionModule.prototype.buildTestWidget = function () {
-        var source = $('#widgetTemplate').html();
-        var template = Handlebars.compile(source)
+    Question.prototype.buildTestWidget = function () {
+        var template = Handlebars.compile(templateWidget)
         this.$widget.append(template({
             countQuestions: 0,
             activeQuestions: 0,
@@ -270,9 +270,10 @@ define(['Utils'] ,function(Utils){
         this.$widget.show();
     };
 
-    QuestionModule.prototype.createListTest = function () {
-        var source = $('#testListTitleTemplate').html();
-        var template = Handlebars.compile(source);
+    Question.prototype.createListTest = function () {
+        console.log(templateTests);
+        var template = Handlebars.compile(templateTests);
+        console.log(this.quizData);
         var content = template({list: this.quizData});
         this.$listTestName.append(content);
 
@@ -290,34 +291,34 @@ define(['Utils'] ,function(Utils){
 
     };
 
-    QuestionModule.prototype.buildQuestionIFexit = function (objParseModule, objStatistics) {
+    Question.prototype.buildQuestionIFexit = function (objLocalStorage, objStatistics) {
 
         if (JSON.parse(localStorage.getItem('JSONppdLocalStorage'))) {
-            objParseModule.parseStorage();
+            objLocalStorage.parseStorage();
         } else {
-            objParseModule.stringifyStorage();
+            objLocalStorage.stringifyStorage();
         }
 
-        if (objParseModule.getTestId() !== null) {
+        if (objLocalStorage.getTestId() !== null) {
 
-            for (var id = 0; id < objParseModule.getAnsweredRightQuestion().length; ++id) {
-                this.quizData[objParseModule.getTestId()].questions[objParseModule.getAnsweredRightQuestion()[id]].answeredQuestion = true;
+            for (var id = 0; id < objLocalStorage.getAnsweredRightQuestion().length; ++id) {
+                this.quizData[objLocalStorage.getTestId()].questions[objLocalStorage.getAnsweredRightQuestion()[id]].answeredQuestion = true;
             }
 
-            for (var id = 0; id < objParseModule.getAnsweredWrongQuestion().length; ++id) {
-                this.quizData[objParseModule.getTestId()].questions[objParseModule.getAnsweredWrongQuestion()[id]].answeredQuestion = true;
+            for (var id = 0; id < objLocalStorage.getAnsweredWrongQuestion().length; ++id) {
+                this.quizData[objLocalStorage.getTestId()].questions[objLocalStorage.getAnsweredWrongQuestion()[id]].answeredQuestion = true;
             }
 
-            if ((objParseModule.getAnsweredWrongQuestion().length + objParseModule.getAnsweredRightQuestion().length) !== this.getCountQuestion()) {
-                this.setCountAnsweredQuestion(objParseModule.getAnsweredRightQuestion().length + objParseModule.getAnsweredWrongQuestion().length);
-                this.setIndexActiveTest(objParseModule.getTestId());
+            if ((objLocalStorage.getAnsweredWrongQuestion().length + objLocalStorage.getAnsweredRightQuestion().length) !== this.getCountQuestion()) {
+                this.setCountAnsweredQuestion(objLocalStorage.getAnsweredRightQuestion().length + objLocalStorage.getAnsweredWrongQuestion().length);
+                this.setIndexActiveTest(objLocalStorage.getTestId());
 
-                objStatistics.changeRightQuestions(objParseModule.getAnsweredRightQuestion().length);
-                objStatistics.changeWrongQuestions(objParseModule.getAnsweredWrongQuestion().length);
-                objStatistics.changeActiveQuestion(objParseModule.getQuestionID());
+                objStatistics.changeRightQuestions(objLocalStorage.getAnsweredRightQuestion().length);
+                objStatistics.changeWrongQuestions(objLocalStorage.getAnsweredWrongQuestion().length);
+                objStatistics.changeActiveQuestion(objLocalStorage.getQuestionID());
                 objStatistics.changeCountQuestion(this.getCountQuestion());
 
-                this.setActiveQuestionIndex(objParseModule.getQuestionID());
+                this.setActiveQuestionIndex(objLocalStorage.getQuestionID());
 
                 this.buildQuestion();
 
@@ -327,9 +328,9 @@ define(['Utils'] ,function(Utils){
                 this.$testList.hide();
             } else {
                 Utils.resetFlagsANDanswers(this);
-                Utils.JSONppdLocalStorageANDRightdWrongReset(objParseModule);
-                Utils.JSONppdLocalStorageReset(objParseModule);
-                this.setFlagPassedTestLocalStorage(objParseModule);
+                Utils.JSONppdLocalStorageANDRightdWrongReset(objLocalStorage);
+                Utils.JSONppdLocalStorageReset(objLocalStorage);
+                this.setFlagPassedTestLocalStorage(objLocalStorage);
                 this.$contentQuestions.hide();
                 this.$testList.show();
             }
@@ -339,31 +340,31 @@ define(['Utils'] ,function(Utils){
         }
     };
 
-    QuestionModule.prototype.resetTest = function () {
+    Question.prototype.resetTest = function () {
         this.$contentQuestions.hide();
         this.$testList.show();
         this.$testList.addClass('testList');
         Utils.resetFlagsANDanswers(this);
     };
 
-    QuestionModule.prototype.setFlagPassedTestLocalStorage = function (objParseModule) {
-        objParseModule.parseStorage();
-        objParseModule.setPassedTests(this.getIndexActiveTest());
-        objParseModule.stringifyStorage();
+    Question.prototype.setFlagPassedTestLocalStorage = function (objLocalStorage) {
+        objLocalStorage.parseStorage();
+        objLocalStorage.setPassedTests(this.getIndexActiveTest());
+        objLocalStorage.stringifyStorage();
     };
 
-    QuestionModule.prototype.setFlagPassedTest = function (objParseModule) {
+    Question.prototype.setFlagPassedTest = function (objLocalStorage) {
         var $passedTest = $('span', this.$listTestName);
 
         _.each($passedTest, function (num, key) {
             $passedTest.eq(key).html('');
         });
 
-        _.each(objParseModule.getPassedTests(), function (num) {
+        _.each(objLocalStorage.getPassedTests(), function (num) {
             $passedTest.eq(num).html('&#10004');
         });
 
     };
 
-    return QuestionModule;
+    return Question;
 });

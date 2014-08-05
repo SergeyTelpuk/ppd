@@ -1,9 +1,9 @@
 define(function(){
 
-    function ParseModule() {
+    function LocalStorage() {
 
-        if(!(this instanceof ParseModule)){
-            return new ParseModule();
+        if(!(this instanceof LocalStorage)){
+            return new LocalStorage();
         }
 
         this.JSONppdLocalStorage = {
@@ -13,44 +13,44 @@ define(function(){
             "answeredWrongQuestion": [],
             "passedTests" : []
         }
-    };
+    }
 
-    ParseModule.prototype.resetTestPassed = function(){
+    LocalStorage.prototype.resetTestPassed = function(){
         this.JSONppdLocalStorage.passedTests = [];
     };
 
-    ParseModule.prototype.setTestId = function (testId) {
+    LocalStorage.prototype.setTestId = function (testId) {
         this.JSONppdLocalStorage.testID = testId;
     };
 
-    ParseModule.prototype.setQuestionID = function (questionID) {
+    LocalStorage.prototype.setQuestionID = function (questionID) {
         this.JSONppdLocalStorage.questionID = questionID;
     };
 
-    ParseModule.prototype.setAnswerRightQuestLocalStorage = function (answerIndex) {
+    LocalStorage.prototype.setAnswerRightQuestLocalStorage = function (answerIndex) {
         this.JSONppdLocalStorage.answeredRightQuestion.push(answerIndex);
     };
 
-    ParseModule.prototype.setAnswerWrongQuestLocalStorage = function(answerIndex){
+    LocalStorage.prototype.setAnswerWrongQuestLocalStorage = function(answerIndex){
         this.JSONppdLocalStorage.answeredWrongQuestion.push(answerIndex);
     };
 
-    ParseModule.prototype.getTestId = function () {
+    LocalStorage.prototype.getTestId = function () {
         return this.JSONppdLocalStorage.testID;
     };
 
-    ParseModule.prototype.getQuestionID = function () {
+    LocalStorage.prototype.getQuestionID = function () {
         return this.JSONppdLocalStorage.questionID;
     };
 
-    ParseModule.prototype.getAnsweredRightQuestion = function () {
+    LocalStorage.prototype.getAnsweredRightQuestion = function () {
         return this.JSONppdLocalStorage.answeredRightQuestion;
     };
-    ParseModule.prototype.getAnsweredWrongQuestion  = function(){
+    LocalStorage.prototype.getAnsweredWrongQuestion  = function(){
         return this.JSONppdLocalStorage.answeredWrongQuestion;
     };
 
-    ParseModule.prototype.setPassedTests = function(testActiveId){
+    LocalStorage.prototype.setPassedTests = function(testActiveId){
         if(this.JSONppdLocalStorage.passedTests.length > 0){
             for(var i = 0; i <  this.JSONppdLocalStorage.passedTests.length; ++i){
                 if(this.JSONppdLocalStorage.passedTests[i] === testActiveId){
@@ -63,18 +63,18 @@ define(function(){
         }
     };
 
-    ParseModule.prototype.getPassedTests = function(){
+    LocalStorage.prototype.getPassedTests = function(){
         return  this.JSONppdLocalStorage.passedTests;
     };
 
 
-    ParseModule.prototype.stringifyStorage = function () {
+    LocalStorage.prototype.stringifyStorage = function () {
         localStorage.setItem('JSONppdLocalStorage', JSON.stringify(this.JSONppdLocalStorage));
     };
 
-    ParseModule.prototype.parseStorage = function () {
+    LocalStorage.prototype.parseStorage = function () {
         this.JSONppdLocalStorage = JSON.parse(localStorage.getItem('JSONppdLocalStorage'));
     };
 
-    return ParseModule;
+    return LocalStorage;
 });
