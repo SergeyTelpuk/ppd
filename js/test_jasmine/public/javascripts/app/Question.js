@@ -1,4 +1,3 @@
-
 function Question(appWrapper, QuizzApp, quizData) {
 
     if(!(this instanceof Question)){
