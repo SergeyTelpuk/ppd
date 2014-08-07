@@ -35,7 +35,7 @@ module.exports = function(grunt) {
 				options: {
 
 					// configure a namespace for your templates
-					namespace: 'Hbs.templates',
+					namespace: 'HbsTemplate.templates',
 					node: true,
 					wrapped: true,
 

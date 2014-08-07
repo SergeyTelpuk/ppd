@@ -102,7 +102,7 @@ define(['Utils'],
         };
 
         Question.prototype.buildQuestion = function () {
-            this.$contentQuestion.html(Hbs.templates.question({
+            this.$contentQuestion.html(HbsTemplate.templates.question({
                 title: this.quizData[this.getIndexActiveTest()].title,
                 question: this.quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].question,
                 questionImg: this.quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].questionImg,
@@ -258,7 +258,7 @@ define(['Utils'],
         };
 
         Question.prototype.buildTestWidget = function () {
-            this.$widget.append(Hbs.templates.widget({
+            this.$widget.append(HbsTemplate.templates.widget({
                 countQuestions: 0,
                 activeQuestions: 0,
                 countRight: 0,
@@ -268,7 +268,7 @@ define(['Utils'],
         };
 
         Question.prototype.createListTest = function () {
-            this.$listTestName.append(Hbs.templates.tests({list: this.quizData}));
+            this.$listTestName.append(HbsTemplate.templates.tests({list: this.quizData}));
 
             this.addEventListenerUL(this.$listTestName.children('ul'));
 

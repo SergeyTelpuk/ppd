@@ -2,10 +2,10 @@ var glob = ('undefined' === typeof window) ? global : window,
 
 Handlebars = glob.Handlebars || require('handlebars');
 
-this["Hbs"] = this["Hbs"] || {};
-this["Hbs"]["templates"] = this["Hbs"]["templates"] || {};
+this["HbsTemplate"] = this["HbsTemplate"] || {};
+this["HbsTemplate"]["templates"] = this["HbsTemplate"]["templates"] || {};
 
-this["Hbs"]["templates"]["question"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["HbsTemplate"]["templates"]["question"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression, self=this;
@@ -59,7 +59,7 @@ function program5(depth0,data) {
   return buffer;
   });
 
-this["Hbs"]["templates"]["tests"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["HbsTemplate"]["templates"]["tests"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
@@ -84,7 +84,7 @@ function program1(depth0,data) {
   return buffer;
   });
 
-this["Hbs"]["templates"]["widget"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["HbsTemplate"]["templates"]["widget"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, functionType="function";
@@ -110,4 +110,4 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-if (typeof exports === 'object' && exports) {module.exports = this["Hbs"]["templates"];}
+if (typeof exports === 'object' && exports) {module.exports = this["HbsTemplate"]["templates"];}
