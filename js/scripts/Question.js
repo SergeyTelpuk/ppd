@@ -1,5 +1,5 @@
-define(['Utils', 'hbs!templates/hbs/tests', 'hbs!templates/hbs/widget', 'hbs!templates/hbs/question'],
-    function(Utils, templateTests, templateWidget, templateQuestion){
+define(['Utils'],
+    function(Utils){
         function Question(appWrapper, QuizzApp, quizData) {
 
             if(!(this instanceof Question)){
@@ -102,7 +102,7 @@ define(['Utils', 'hbs!templates/hbs/tests', 'hbs!templates/hbs/widget', 'hbs!tem
         };
 
         Question.prototype.buildQuestion = function () {
-            this.$contentQuestion.html(templateQuestion({
+            this.$contentQuestion.html(Hbs.templates.question({
                 title: this.quizData[this.getIndexActiveTest()].title,
                 question: this.quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].question,
                 questionImg: this.quizData[this.getIndexActiveTest()].questions[this.getActiveQuestionIndex()].questionImg,
@@ -258,7 +258,7 @@ define(['Utils', 'hbs!templates/hbs/tests', 'hbs!templates/hbs/widget', 'hbs!tem
         };
 
         Question.prototype.buildTestWidget = function () {
-            this.$widget.append(templateWidget({
+            this.$widget.append(Hbs.templates.widget({
                 countQuestions: 0,
                 activeQuestions: 0,
                 countRight: 0,
@@ -268,8 +268,7 @@ define(['Utils', 'hbs!templates/hbs/tests', 'hbs!templates/hbs/widget', 'hbs!tem
         };
 
         Question.prototype.createListTest = function () {
-            var content = templateTests({list: this.quizData});
-            this.$listTestName.append(content);
+            this.$listTestName.append(Hbs.templates.tests({list: this.quizData}));
 
             this.addEventListenerUL(this.$listTestName.children('ul'));
 

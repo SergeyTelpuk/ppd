@@ -1,4 +1,4 @@
-define(function(){
+define([],function(){
     var Utils = {};
 
     Utils.resetFlagsANDanswers = function (thisObj) {

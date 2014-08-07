@@ -1,5 +1,5 @@
-define(['jquery', 'underscore', 'handlebars', 'LocalStorage', 'Question', 'Statistics', 'Router'],
-    function($, _, Handlebars, LocalStorage, Question, Statistics ,Router){
+define(['jquery','underscore', 'handlebars', 'hbsTemplate'  ,'LocalStorage', 'Question', 'Statistics', 'Router'],
+    function($, _, Handlebars, Hbs ,LocalStorage, Question, Statistics ,Router){
 
         function QuizzApp() {
             if(!(this instanceof QuizzApp)){
