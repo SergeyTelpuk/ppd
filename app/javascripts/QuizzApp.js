@@ -19,7 +19,7 @@ define(['LocalStorage', 'Question', 'Statistics', 'Router'],
             var $wrapper = $('.appWrapper');
 
 
-            $.getJSON( 'js/json/quizData.json', function(data){
+            $.getJSON( 'app/json/quizData.json', function(data){
 
                 self.quizData = data;
 
