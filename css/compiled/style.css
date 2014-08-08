@@ -136,7 +136,7 @@ body {
   cursor: pointer;
   margin-top: 10px;
   padding: 10px;
-  border: 1px solid #2c3e50;
+  border: 5px ridge #dddddd;
 }
 .answer:hover {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), -23px 0 20px -23px rgba(0, 0, 0, 0.8), 23px 0 20px -23px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 0, 0, 0.1) inset;
@@ -316,7 +316,9 @@ h1.repeat:active {
   text-align: center;
 }
 footer {
-  margin-top: 20px;
+  padding: 5px;
+  border-top: black  solid 3px;
+  margin-top: 90px;
   width: 100%;
 }
 .wrongContent {
@@ -382,16 +384,18 @@ aside.widget header {
   color: white;
 }
 .exitTest {
+  cursor: pointer;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), -23px 0 20px -23px rgba(0, 0, 0, 0.8), 23px 0 20px -23px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 0, 0, 0.1) inset;
   text-align: center;
-  cursor: pointer;
-  color: blue;
+  color: #ffffff;
   padding: 1px;
   background-color: #dddddd;
-  border: 1px solid blue;
+  border: 4px outset #ffffff;
   margin-top: 25%;
 }
 .exitTest:hover {
+  cursor: pointer;
+  border: 4px inset #ffffff;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), -23px 0 20px -23px rgba(0, 0, 0, 0.8), 23px 0 20px -23px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 0, 0, 0.1) inset;
 }
 .questions {
