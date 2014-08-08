@@ -180,7 +180,7 @@ define(['Utils'],
 
                 if ($('.repeat', this.$appWrapper).length) {
                     $('.repeat', this.$appWrapper).on('click', function (evt) {
-                        self.repeatTest(evt)
+                        self.repeatTest(evt);
                         return false;
                     });
                 }

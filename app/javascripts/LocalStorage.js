@@ -11,7 +11,7 @@ define([],function(){
             "answeredRightQuestion": [],
             "answeredWrongQuestion": [],
             "passedTests" : []
-        }
+        };
     }
 
     LocalStorage.prototype.resetTestPassed = function(){

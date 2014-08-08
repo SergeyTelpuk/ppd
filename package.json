@@ -1,13 +1,32 @@
 {
-  "name": "PDD",
-  "version": "0.1.0",
-  "devDependencies": {
-    "grunt": "~0.4.1",
+  "name": "exadel-training-sergey",
+  "version": "0.0.0",
+  "description": "",
+  "main": "Gruntfile.js",
+  "dependencies": {
+    "grunt": "^0.4.5",
     "grunt-contrib-concat": "^0.5.0",
     "grunt-contrib-handlebars": "^0.8.0",
-    "grunt-contrib-imagemin": "^0.7.1",
     "grunt-contrib-requirejs": "^0.4.4",
     "grunt-contrib-uglify": "^0.5.1",
-    "grunt-contrib-watch": "^0.6.1"
-  }
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-contrib-imagemin": "^0.7.1"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-requirejs": "^0.4.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Telpuk/exadel-training-sergey.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Telpuk/exadel-training-sergey/issues"
+  },
+  "homepage": "https://github.com/Telpuk/exadel-training-sergey"
 }
