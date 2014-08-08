@@ -1,1 +1,1 @@
-describe("ПДД", function(){    it('Мой тест', function(){        expect().toEqual();    });});
+describe("ПДД", function(){    it('Мой тест', function(){        expect(2).toEqual(2);    });});
