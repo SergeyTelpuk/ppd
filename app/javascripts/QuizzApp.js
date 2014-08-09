@@ -1,52 +1,54 @@
 define(['LocalStorage', 'Question', 'Statistics', 'Router'],
-    function(LocalStorage, Question, Statistics ,Router){
+	function(LocalStorage, Question, Statistics ,Router){
 
-        function QuizzApp() {
-            if(!(this instanceof QuizzApp)){
-                return new QuizzApp();
-            }
-        }
+		"use strict"
 
-        QuizzApp.prototype.setAnsweredQuestionFalse = function(){
-            _.each(this.quizData, function(num){
-                num.answeredQuestion = false;
-            });
-        };
+		function QuizzApp() {
+			if(!(this instanceof QuizzApp)){
+				return new QuizzApp();
+			}
+		}
 
-        QuizzApp.prototype.init = function () {
-            var self = this;
+		QuizzApp.prototype.setAnsweredQuestionFalse = function(){
+			_.each(this.quizData, function(num){
+				num.answeredQuestion = false;
+			});
+		};
 
-            var $wrapper = $('.appWrapper');
+		QuizzApp.prototype.init = function () {
+			var self = this;
+
+			var $wrapper = $('.appWrapper');
 
 
-            $.getJSON( 'app/json/quizData.json', function(data){
+			$.getJSON( 'app/json/quizData.json', function(data){
 
-                self.quizData = data;
+				self.quizData = data;
 
-                self.setAnsweredQuestionFalse();
+				self.setAnsweredQuestionFalse();
 
-                self.objLocalStorage = new LocalStorage();
+				self.objLocalStorage = new LocalStorage();
 
-                self.objQuestion = new Question($wrapper, self, self.quizData);
+				self.objQuestion = new Question($wrapper, self, self.quizData);
 
-                self.objQuestion.hiddenAjaxLoader();
+				self.objQuestion.hiddenAjaxLoader();
 
-                self.objQuestion.buildTestWidget();
+				self.objQuestion.buildTestWidget();
 
-                self.objStatistics = new Statistics($wrapper);
+				self.objStatistics = new Statistics($wrapper);
 
-                self.objRouter = new Router(self.objQuestion, self.objLocalStorage, self.objStatistics, self.quizData);
+				self.objRouter = new Router(self.objQuestion, self.objLocalStorage, self.objStatistics, self.quizData);
 
-                self.objQuestion.createListTest();
+				self.objQuestion.createListTest();
 
-                self.objQuestion.buildQuestionIFexit(self.objLocalStorage, self.objStatistics);
+				self.objQuestion.buildQuestionIFexit(self.objLocalStorage, self.objStatistics);
 
-                self.objQuestion.setFlagPassedTest(self.objLocalStorage);
-            });
-        };
+				self.objQuestion.setFlagPassedTest(self.objLocalStorage);
+			});
+		};
 
-        return new QuizzApp();
-    });
+		return new QuizzApp();
+	});
 
 
 
