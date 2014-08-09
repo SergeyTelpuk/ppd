@@ -12,12 +12,12 @@ module.exports = function(grunt) {
 //			}
 //		},
 //
-//		uglify: {
-//			build: {
-//				src: 'js/build/production.js',
-//				dest: 'js/build/production.min.js'
-//			}
-//		},
+		uglify: {
+			build: {
+				src: 'app/templates/compiledHbs.js',
+				dest: 'app/templates/compiledHbs.min.js'
+			}
+		},
 //
 //		imagemin: {
 //			dynamic: {
@@ -50,7 +50,7 @@ module.exports = function(grunt) {
 
                 // output file: input files
                 files: {
-                    'app/templates/compiled.js': 'hbsTemplates/*.hbs'
+                    'app/templates/compiledHbs.js': 'hbsTemplates/*.hbs'
                 }
             }
         },
@@ -106,15 +106,15 @@ module.exports = function(grunt) {
 
     // 3. Тут мы указываем Grunt, что хотим использовать этот плагин
 //	grunt.loadNpmTasks('grunt-contrib-concat');
-//	grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
 //	grunt.loadNpmTasks('grunt-contrib-imagemin');
 //	grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-requirejs');
+//    grunt.loadNpmTasks('grunt-requirejs');
     grunt.loadNpmTasks('grunt-contrib-handlebars');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
+//    grunt.loadNpmTasks('grunt-contrib-jshint');
 
 
     // 4. Указываем, какие задачи выполняются, когда мы вводим «grunt» в терминале
-    grunt.registerTask('default', [/*'concat','uglify', 'imagemin',*/ /*'jshint',*/'handlebars','requirejs'  /*'watch'*/]);
+    grunt.registerTask('default', [/*'concat',*/'handlebars','uglify'/*, 'imagemin',*/ /*'jshint',/*,'requirejs' 'watch'*/]);
 
 };
