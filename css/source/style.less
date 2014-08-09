@@ -78,6 +78,12 @@ html{
 	font-style: italic;
 }
 
+*{
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
 html{
 	font-family: PTSans, Arial, sans-serif;
 	font-size: 62,5%;
@@ -86,6 +92,7 @@ html{
 
 body{
 	width: 75%;
+	min-width: 1100px;
 	height: 100%;
 	margin: 30px auto;
 	padding: 50px ;
@@ -101,6 +108,7 @@ body{
 	text-align: center;
 }
 .answer{
+	overflow: auto;
 	cursor: pointer;
 	margin-top: 10px;
 	padding: 10px;
@@ -112,6 +120,10 @@ body{
 		-23px 0 20px -23px rgba(0, 0, 0, .8),
 		23px 0 20px -23px rgba(0, 0, 0, .8),
 		0 0 40px rgba(0, 0, 0, .1) inset;
+}
+
+.contentQuestions{
+	overflow: auto;
 }
 
 h1.skipAnswerButton{
@@ -147,10 +159,12 @@ h1.skipAnswerButton:active { cursor: pointer; background: rgb(152,15,0); }
 	border-radius: 10px;
 }
 .countQuestions{
+	margin-right: 30px;
 	float: right;
 	font-size: 1.4em
 }
 .activeQuestions{
+	margin-right: 30px;
 	float: right;
 	font-size: 1.4em;
 }
@@ -220,17 +234,20 @@ ul{
 }
 
 .right{
+	margin-right: 30px;
 	float: right;
 	font-size: 1.4em;
 	color: green;
 }
 .wrong{
+	margin-right: 30px;
 	float: right;
 	font-size: 1.4em;
 	color: red;
 }
 .widget{
 	display: none;
+	overflow: auto;
 	box-shadow:
 		0 1px 4px rgba(0, 0, 0, .3),
 		-23px 0 20px -23px rgba(0, 0, 0, .8),
@@ -241,6 +258,10 @@ ul{
 	width: 20%;
 	position: relative;
 	float: right;
+}
+
+.widget p{
+	margin-left: 10px;
 }
 
 p.statistics{
@@ -303,8 +324,8 @@ h1.repeat:active { cursor: pointer; background: rgb(152,15,0); }
 	text-align: center;
 }
 footer {
-  padding: 5px;
-    border-top: black  solid 3px;;
+	padding: 5px;
+	border-top: black  solid 3px;;
 	margin-top: 90px;
 	width: 100%;
 }
@@ -382,7 +403,7 @@ aside.widget header{
 	color: white;
 }
 .exitTest{
-    cursor: pointer;
+	cursor: pointer;
 	font-weight: bold;
 	box-shadow:
 		0 1px 4px rgba(0, 0, 0, .3),
@@ -398,8 +419,8 @@ aside.widget header{
 }
 
 .exitTest:hover{
-    cursor: pointer;
-    border: 4px inset #ffffff;
+	cursor: pointer;
+	border: 4px inset #ffffff;
 	box-shadow:
 		0 1px 4px rgba(0, 0, 0, .3),
 		-23px 0 20px -23px rgba(0, 0, 0, .8),
