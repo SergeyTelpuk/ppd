@@ -9,6 +9,7 @@ define([],function(){
 		this.JSONppdLocalStorage = {
 			"testID": null,
 			"questionID": 0,
+            "timer": 0,
 			"answeredRightQuestion": [],
 			"answeredWrongQuestion": [],
 			"passedTests" : []
@@ -18,6 +19,15 @@ define([],function(){
 	LocalStorage.prototype.resetTestPassed = function(){
 		this.JSONppdLocalStorage.passedTests = [];
 	};
+
+    LocalStorage.prototype.setTimer = function(timer){
+        this.JSONppdLocalStorage.timer = timer;
+    };
+
+    LocalStorage.prototype.getTimer = function(){
+        return this.JSONppdLocalStorage.timer;
+    };
+
 
 	LocalStorage.prototype.setTestId = function (testId) {
 		this.JSONppdLocalStorage.testID = testId;

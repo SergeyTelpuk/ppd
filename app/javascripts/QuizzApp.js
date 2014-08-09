@@ -1,5 +1,5 @@
-define(['LocalStorage', 'Question', 'Statistics', 'Router'],
-	function(LocalStorage, Question, Statistics ,Router){
+define(['LocalStorage', 'Question', 'Statistics', 'Router', 'Timer'],
+	function(LocalStorage, Question, Statistics ,Router, Timer){
 
 		"use strict"
 
@@ -41,7 +41,8 @@ define(['LocalStorage', 'Question', 'Statistics', 'Router'],
 
 				self.objQuestion.createListTest();
 
-				self.objQuestion.buildQuestionIFexit(self.objLocalStorage, self.objStatistics);
+
+				self.objQuestion.buildQuestionIFexit(self.objLocalStorage, self.objStatistics, Timer);
 
 				self.objQuestion.setFlagPassedTest(self.objLocalStorage);
 			});

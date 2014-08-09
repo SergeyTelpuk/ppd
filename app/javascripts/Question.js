@@ -1,4 +1,4 @@
-define(['Utils'],function(Utils){
+define(['Utils', 'Timer'],function(Utils, Timer){
 
 	"use strict"
 	function Question(appWrapper, QuizzApp, quizData) {
@@ -213,12 +213,16 @@ define(['Utils'],function(Utils){
 		});
 	};
 
+    Question.prototype.startTimer = function(){
+        Timer.start();
+    };
 
 	Question.prototype.addEventListenerUL = function ($ul) {
 		var self = this;
 		$ul.on('click', function (evt) {
 			evt.preventDefault();
 			self.listTestEvent(evt);
+            self.startTimer();
 			return false;
 		});
 	};
@@ -285,7 +289,7 @@ define(['Utils'],function(Utils){
 
 	};
 
-	Question.prototype.buildQuestionIFexit = function (objLocalStorage, objStatistics) {
+	Question.prototype.buildQuestionIFexit = function (objLocalStorage, objStatistics, Timer) {
 
 		if (JSON.parse(localStorage.getItem('JSONppdLocalStorage'))) {
 			objLocalStorage.parseStorage();
@@ -317,6 +321,12 @@ define(['Utils'],function(Utils){
 				this.buildQuestion();
 
 				this.QuizzApp.objRouter.checkPassedQuestion(this.getIndexActiveTest(), this.getActiveQuestionIndex());
+
+                Timer.setDuration(objLocalStorage.getTimer());
+
+                Timer.goTimer();
+
+                Timer.start();
 
 				this.$contentQuestions.show();
 				this.$testList.hide();
