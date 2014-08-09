@@ -200,6 +200,7 @@ define(['Utils', 'Timer'],function(Utils, Timer){
 		this.$listAnswers.empty();
 		this.$floatWindows.hide();
 		Utils.JSONppdLocalStorageReset(this.QuizzApp.objLocalStorage);
+        Timer.reset();
 		this.QuizzApp.objRouter.clearHash();
 		this.resetTest();
 	};

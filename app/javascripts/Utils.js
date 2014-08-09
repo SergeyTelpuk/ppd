@@ -26,6 +26,7 @@ define([],function(){
 	Utils.JSONppdLocalStorageReset = function (objParseModule) {
 		objParseModule.JSONppdLocalStorage.testID = null;
 		objParseModule.JSONppdLocalStorage.questionID = 0;
+        objParseModule.JSONppdLocalStorage.timer = 0;
 		Utils.JSONppdLocalStorageANDRightdWrongReset(objParseModule);
 		objParseModule.stringifyStorage();
 	};
