@@ -168,10 +168,10 @@ define(['Utils', 'Timer'],function(Utils, Timer){
     Question.prototype.reset = function () {
         Utils.JSONppdLocalStorageReset(this.QuizzApp.objLocalStorage);
 
-        if(Timer.getDuration() !== 0){
+        if(Timer.getDuration() > 0){
             this.setFlagPassedTestLocalStorage(this.QuizzApp.objLocalStorage);
         }
-
+        Timer.reset();
         this.setFlagPassedTest(this.QuizzApp.objLocalStorage);
         this.resetTest();
     };
