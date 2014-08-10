@@ -340,6 +340,24 @@ h1.repeat {
   background: #d44b38;
   padding: 3px;
 }
+.timeUp {
+  color: red;
+  font-size: 1.5em;
+  padding: 10px;
+}
+h1.repeatT {
+  padding: 5px;
+  font-size: 0.6;
+  cursor: pointer;
+  display: block;
+  margin: auto;
+  text-align: center;
+  width: 100px;
+  color: #fff;
+  user-select: none;
+  background: #d44b38;
+  padding: 3px;
+}
 h1.repeat:hover {
   cursor: pointer;
   background: #e85f4c;
