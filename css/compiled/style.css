@@ -195,7 +195,8 @@ h1.skipAnswerButton {
   color: #fff;
   user-select: none;
   background: #d44b38;
-  padding: 4px;
+  padding: 5px;
+  padding-left: 4px;
 }
 h1.skipAnswerButton:hover {
   cursor: pointer;
@@ -327,6 +328,37 @@ p.statisticsWrong {
   font-size: 1.3em;
   text-align: center;
 }
+.timer {
+  font-size: 2em;
+  margin-top: 10px;
+  padding-left: 20px;
+}
+.blink {
+  -webkit-animation: blink 2s linear infinite;
+  animation: blink 2s linear infinite;
+}
+@-webkit-keyframes blink {
+  0% {
+    color: red;
+  }
+  50% {
+    color: red;
+  }
+  100% {
+    color: red;
+  }
+}
+@keyframes blink {
+  0% {
+    color: red;
+  }
+  50% {
+    color: red;
+  }
+  100% {
+    color: red;
+  }
+}
 h1.repeat {
   padding: 5px;
   font-size: 0.6;
@@ -387,11 +419,15 @@ h1.repeat:active {
   text-align: center;
 }
 footer {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: .8em;
+  text-transform: uppercase;
+  color: #666666;
+  margin-top: 40px;
+  margin-left: 0px;
+  padding-left: 8px;
+  border-top: 1px dashed #999;
   clear: both;
-  padding: 5px;
-  border-top: black  solid 3px;
-  margin-top: 90px;
-  width: 100%;
 }
 .wrongContent {
   padding-top: 50px;
