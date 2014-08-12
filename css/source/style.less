@@ -128,17 +128,23 @@ body{
 	overflow: auto;
 }
 
+.contentQuestion{
+	width:  100%;
+}
+
+.button{
+	margin-top: 15px;
+	margin-left: 75%;
+}
+
 h1.skipAnswerButton{
-	margin-top: 10px;
-	float: right;
 	display: block;
 	text-align: center;
-	width: 100px;
+	width: 150px;
 	color: #fff;
 	user-select: none;
 	background: rgb(212,75,56);
 	padding: 5px;
-  padding-left: 4px;
 }
 h1.skipAnswerButton:hover { cursor: pointer; background: rgb(232,95,76); }
 h1.skipAnswerButton:active { cursor: pointer; background: rgb(152,15,0); }
@@ -208,27 +214,34 @@ ul{
 	font-size: 1.3em;
 }
 
-.namesTest{
-	background-color: #aaaaaa;
-}
 
 .namesTest ul{
-	padding: 5px;
 	list-style-type: none;
 }
 
 .namesTest ul li {
-	margin:20px;
+	margin-top:40px;
 }
 
 .namesTest ul a{
-	padding: 10px;
-	border: 1px solid #ffffff;
+	font-size: 1.5em;
+	font-weight: bold;
+	cursor: pointer;
+	text-align: center;
 	color: #ffffff;
-	font-size: 1.3em;
+	padding: 10px;
+	background-color: #dddddd;
+	border: 4px outset #ffffff;
+	margin-top: 25%;
 }
-.namesTest ul a:hover{
-	color: green;
+.namesTest ul a:active{
+	cursor: pointer;
+	border: 4px inset #ffffff;
+	box-shadow:
+		0 1px 4px rgba(0, 0, 0, .3),
+		-23px 0 20px -23px rgba(0, 0, 0, .8),
+		23px 0 20px -23px rgba(0, 0, 0, .8),
+		0 0 40px rgba(0, 0, 0, .1) inset;
 }
 
 .namesTest ul span{
@@ -290,24 +303,38 @@ p.statisticsWrong{
 }
 
 .timer{
-  font-size: 2em;
-  margin-top: 10px;
-  padding-left: 20px;
+	font-size: 2em;
+	margin-top: 10px;
+	padding-left: 20px;
 
 }
 .blink {
-  -webkit-animation: blink 2s linear infinite;
-  animation: blink 2s linear infinite;
+	-webkit-animation: blink 2s linear infinite;
+	animation: blink 2s linear infinite;
 }
 @-webkit-keyframes blink {
-  0% { color: red; }
-  50% { color: red; }
-  100% { color: red; }
+	from{
+		color: #B94A48;
+	}
+	50% {
+		color: #B94A48;
+	}
+	to {
+		-webkit-transform: scale(1.01);-moz-transform: scale(1.01);-ms-transform: scale(1.01);-o-transform: scale(1.01);transform: scale(1.01);
+		color: red;
+	}
 }
 @keyframes blink {
-  0% { color: red; }
-  50% { color: red; }
-  100% { color: red; }
+	from{
+		color: #B94A48;
+	}
+	50% {
+		color: #B94A48;
+	}
+	to {
+		-webkit-transform: scale(1.01);-moz-transform: scale(1.01);-ms-transform: scale(1.01);-o-transform: scale(1.01);transform: scale(1.01);
+		color: red;
+	}
 }
 
 h1.repeat{
@@ -325,23 +352,23 @@ h1.repeat{
 }
 
 .timeUp{
-  color: red;
-  font-size: 1.5em;
-  padding: 10px;
+	color: red;
+	font-size: 1.5em;
+	padding: 10px;
 }
 
 h1.repeatT{
-  padding: 5px;
-  font-size: 0.6;
-  cursor: pointer;
-  display: block;
-  margin: auto;
-  text-align: center;
-  width: 100px;
-  color: #fff;
-  user-select: none;
-  background: rgb(212,75,56);
-  padding: 3px;
+	padding: 5px;
+	font-size: 0.6;
+	cursor: pointer;
+	display: block;
+	margin: auto;
+	text-align: center;
+	width: 100px;
+	color: #fff;
+	user-select: none;
+	background: rgb(212,75,56);
+	padding: 3px;
 }
 
 h1.repeat:hover { cursor: pointer; background: rgb(232,95,76); }
@@ -369,15 +396,15 @@ h1.repeat:active { cursor: pointer; background: rgb(152,15,0); }
 	text-align: center;
 }
 footer {
-  font-family: Verdana, Arial, Helvetica, sans-serif;
-  font-size: .8em;
-  text-transform: uppercase;
-  color: #666666;
-  margin-top: 40px;
-  margin-left: 0px;
-  padding-left: 8px;
-  border-top: 1px dashed #999;
-  clear: both;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: .8em;
+	text-transform: uppercase;
+	color: #666666;
+	margin-top: 40px;
+	margin-left: 0px;
+	padding-left: 8px;
+	border-top: 1px dashed #999;
+	clear: both;
 }
 
 
@@ -468,7 +495,7 @@ aside.widget header{
 	margin-top: 25%;
 }
 
-.exitTest:hover{
+.exitTest:active{
 	cursor: pointer;
 	border: 4px inset #ffffff;
 	box-shadow:

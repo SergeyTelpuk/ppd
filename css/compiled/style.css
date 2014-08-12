@@ -186,17 +186,21 @@ body {
 .contentQuestions {
   overflow: auto;
 }
+.contentQuestion {
+  width: 100%;
+}
+.button {
+  margin-top: 15px;
+  margin-left: 75%;
+}
 h1.skipAnswerButton {
-  margin-top: 10px;
-  float: right;
   display: block;
   text-align: center;
-  width: 100px;
+  width: 150px;
   color: #fff;
   user-select: none;
   background: #d44b38;
   padding: 5px;
-  padding-left: 4px;
 }
 h1.skipAnswerButton:hover {
   cursor: pointer;
@@ -262,24 +266,27 @@ ul {
   padding: 10px;
   font-size: 1.3em;
 }
-.namesTest {
-  background-color: #aaaaaa;
-}
 .namesTest ul {
-  padding: 5px;
   list-style-type: none;
 }
 .namesTest ul li {
-  margin: 20px;
+  margin-top: 40px;
 }
 .namesTest ul a {
-  padding: 10px;
-  border: 1px solid #ffffff;
+  font-size: 1.5em;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
   color: #ffffff;
-  font-size: 1.3em;
+  padding: 10px;
+  background-color: #dddddd;
+  border: 4px outset #ffffff;
+  margin-top: 25%;
 }
-.namesTest ul a:hover {
-  color: green;
+.namesTest ul a:active {
+  cursor: pointer;
+  border: 4px inset #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), -23px 0 20px -23px rgba(0, 0, 0, 0.8), 23px 0 20px -23px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 0, 0, 0.1) inset;
 }
 .namesTest ul span {
   color: green;
@@ -338,24 +345,34 @@ p.statisticsWrong {
   animation: blink 2s linear infinite;
 }
 @-webkit-keyframes blink {
-  0% {
-    color: red;
+  from {
+    color: #B94A48;
   }
   50% {
-    color: red;
+    color: #B94A48;
   }
-  100% {
+  to {
+    -webkit-transform: scale(1.01);
+    -moz-transform: scale(1.01);
+    -ms-transform: scale(1.01);
+    -o-transform: scale(1.01);
+    transform: scale(1.01);
     color: red;
   }
 }
 @keyframes blink {
-  0% {
-    color: red;
+  from {
+    color: #B94A48;
   }
   50% {
-    color: red;
+    color: #B94A48;
   }
-  100% {
+  to {
+    -webkit-transform: scale(1.01);
+    -moz-transform: scale(1.01);
+    -ms-transform: scale(1.01);
+    -o-transform: scale(1.01);
+    transform: scale(1.01);
     color: red;
   }
 }
@@ -502,7 +519,7 @@ aside.widget header {
   border: 4px outset #ffffff;
   margin-top: 25%;
 }
-.exitTest:hover {
+.exitTest:active {
   cursor: pointer;
   border: 4px inset #ffffff;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), -23px 0 20px -23px rgba(0, 0, 0, 0.8), 23px 0 20px -23px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 0, 0, 0.1) inset;
