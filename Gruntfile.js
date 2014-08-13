@@ -38,7 +38,6 @@ module.exports = function(grunt) {
 		handlebars: {
 			compile: {
 				options: {
-
 					// configure a namespace for your templates
 					namespace: 'HbsTemplate.templates',
 					node: true,
@@ -106,7 +105,6 @@ module.exports = function(grunt) {
 				}
 			}
 		}
-
 	});
 
 

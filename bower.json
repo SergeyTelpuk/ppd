@@ -1,25 +1,8 @@
 {
-	"name": "exadel-training-sergey",
-	"version": "0.0.1",
-	"homepage": "https://github.com/Telpuk/exadel-training-sergey",
-	"authors": [
-		"telpuk <telpuk.sergey@gmail.com>"
-	],
-	"description": "ppd",
-	"main": "pdd",
-	"license": "MIT",
-	"ignore": [
-		"**/.*",
-		"node_modules",
-		"bower_components",
-		"js/vendor",
-		"test",
-		"tests"
-	],
-	"dependencies": {
-		"handlebars": "latest",
-		"jquery": "latest",
-		"requirejs": "latest",
-		"underscore": "latest"
-	}
+  "name": "exadel-training-sergey",
+  "private": true,
+  "dependencies": {
+    "jquery": "~1.11.0"
+  },
+  "devDependencies": {}
 }
