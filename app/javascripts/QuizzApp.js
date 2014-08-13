@@ -3,11 +3,7 @@ define(['LocalStorage', 'Question', 'Statistics', 'Router', 'Timer'],
 
 		"use strict"
 
-		function QuizzApp() {
-			if(!(this instanceof QuizzApp)){
-				return new QuizzApp();
-			}
-		}
+		function QuizzApp() { }
 
 		QuizzApp.prototype.setAnsweredQuestionFalse = function(){
 			_.each(this.quizData, function(num){
@@ -18,8 +14,7 @@ define(['LocalStorage', 'Question', 'Statistics', 'Router', 'Timer'],
 		QuizzApp.prototype.init = function () {
 			var self = this;
 
-			var $wrapper = $('.appWrapper');
-
+			self.$wrapper = $('.appWrapper');
 
 			$.getJSON( 'app/json/quizData.json', function(data){
 
@@ -27,19 +22,24 @@ define(['LocalStorage', 'Question', 'Statistics', 'Router', 'Timer'],
 
 				self.setAnsweredQuestionFalse();
 
-				self.objLocalStorage = new LocalStorage();
+				self.objLocalStorage =  LocalStorage;
 
-				self.objQuestion = new Question($wrapper, self, self.quizData);
+				self.objQuestion =  Question;
+
+                self.objQuestion.setQuizData(self.quizData);
+                self.objQuestion.setObjQuizzApp(self);
+                self.objQuestion.setAppWrapper(self.$wrapper);
+
 
 				self.objQuestion.hiddenAjaxLoader();
 
 				self.objQuestion.buildTestWidget();
 
-				self.objStatistics = new Statistics($wrapper);
+				self.objStatistics =  Statistics;
 
-				self.objRouter = new Router(self.objQuestion, self.objLocalStorage, self.objStatistics, self.quizData);
-
-				self.objQuestion.createListTest();
+				self.objRouter =  Router;
+                self.objRouter.setQuizData(self.quizData);
+				self.objQuestion.createListTest(Router);
 
 
 				self.objQuestion.buildQuestionIFexit(self.objLocalStorage, self.objStatistics, Timer);

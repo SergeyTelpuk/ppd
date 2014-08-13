@@ -1,10 +1,6 @@
-define([],function(){
+define(function(){
 	"use strict"
 	function LocalStorage() {
-
-		if(!(this instanceof LocalStorage)){
-			return new LocalStorage();
-		}
 
 		this.JSONppdLocalStorage = {
 			"testID": null,
@@ -86,5 +82,5 @@ define([],function(){
 		this.JSONppdLocalStorage = JSON.parse(localStorage.getItem('JSONppdLocalStorage'));
 	};
 
-	return LocalStorage;
+	return new LocalStorage();
 });

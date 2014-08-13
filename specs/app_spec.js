@@ -1,0 +1,1 @@
+define(function(require) {    describe("первый тест", function() {        describe('Создание списков тестов',function(){            var io =  require('QuizzApp');            io.init();            console.log(io.);            it("Проверка на устоновку свойств", function() {                expect(2).toBe(2);            })        });    });});
