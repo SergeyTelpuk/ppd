@@ -77,7 +77,6 @@ module.exports = function(grunt) {
 //		},
 
 
-
         jasmine: {
             taskName: {
                 src: 'javascripts/*.js',
@@ -118,9 +117,11 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-handlebars');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-requirejs');
+    grunt.loadNpmTasks('grunt-contrib-connect');
+    //grunt.loadNpmTasks('grunt-contrib-requirejs');
+
 
     // 4. Указываем, какие задачи выполняются, когда мы вводим «grunt» в терминале
-    grunt.registerTask('default', ['handlebars','uglify', 'jasmine', 'watch']);
+    grunt.registerTask('default', ['handlebars','uglify' ,'jasmine', 'watch']);
 
 };

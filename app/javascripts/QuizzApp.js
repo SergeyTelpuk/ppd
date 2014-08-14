@@ -12,9 +12,19 @@ define(['LocalStorage', 'Question', 'Statistics', 'Router', 'Timer'],
 		};
 
 		QuizzApp.prototype.init = function () {
+
 			var self = this;
 
 			self.$wrapper = $('.appWrapper');
+
+            self.objLocalStorage =  LocalStorage;
+
+            self.objQuestion =  Question;
+
+            self.objStatistics =  Statistics;
+
+            self.objRouter =  Router;
+
 
 			$.getJSON( 'app/json/quizData.json', function(data){
 
@@ -22,31 +32,21 @@ define(['LocalStorage', 'Question', 'Statistics', 'Router', 'Timer'],
 
 				self.setAnsweredQuestionFalse();
 
-				self.objLocalStorage =  LocalStorage;
-
-				self.objQuestion =  Question;
-
-				self.objQuestion.setQuizData(self.quizData);
+				self.objQuestion.setQuizData(data);
 				self.objQuestion.setObjQuizzApp(self);
 				self.objQuestion.setAppWrapper(self.$wrapper);
 
-
 				self.objQuestion.hiddenAjaxLoader();
-
-				self.objStatistics =  Statistics;
 
 				self.objQuestion.buildTestWidget(self);
 
 
-
-				self.objRouter =  Router;
-				self.objRouter.setQuizData(self.quizData);
+				self.objRouter.setQuizData(data);
 				self.objQuestion.createListTest(Router);
 
+				self.objQuestion.buildQuestionIFexit(LocalStorage, Statistics, Timer);
 
-				self.objQuestion.buildQuestionIFexit(self.objLocalStorage, self.objStatistics, Timer);
-
-				self.objQuestion.setFlagPassedTest(self.objLocalStorage);
+				self.objQuestion.setFlagPassedTest(LocalStorage);
 			});
 		};
 

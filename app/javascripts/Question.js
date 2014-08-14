@@ -106,10 +106,7 @@ define(['Utils', 'Timer'],
         };
 
         Question.prototype.getSkipAnswerButtonFlag = function () {
-            if ((this.getCountQuestion() - 1) === this.countAnsweredQuestion) {
-                return false;
-            }
-            return true;
+            return (this.getCountQuestion() - 1) !== this.countAnsweredQuestion;
         };
 
         Question.prototype.buildQuestion = function () {
@@ -123,12 +120,11 @@ define(['Utils', 'Timer'],
         };
 
         Question.prototype.getNextActiveQuestionIndex = function (idx) {
-            do {
-                idx = ++idx > (this.quizData[this.getIndexActiveTest()].questions.length - 1) ? 0 : idx;
-            } while (this.quizData[this.getIndexActiveTest()].questions[idx].answeredQuestion);
+                do {
+                    idx = ++idx > (this.quizData[this.getIndexActiveTest()].questions.length - 1) ? 0 : idx;
+                } while (this.quizData[this.getIndexActiveTest()].questions[idx].answeredQuestion);
 
-            return idx;
-
+                return idx;
         };
 
         Question.prototype.clickNextButton = function (answerID) {
@@ -285,7 +281,7 @@ define(['Utils', 'Timer'],
                 countRight: 0,
                 countWrong: 0
             }));
-	        objQuizzApp.objStatistics.setElementsJquery();
+            objQuizzApp.objStatistics.setElementsJquery();
             this.$widget.show();
         };
 
