@@ -278,13 +278,14 @@ define(['Utils', 'Timer'],
             });
         };
 
-        Question.prototype.buildTestWidget = function () {
+        Question.prototype.buildTestWidget = function (objQuizzApp) {
             this.$widget.append(HbsTemplate.templates.widget({
                 countQuestions: 0,
                 activeQuestions: 0,
                 countRight: 0,
                 countWrong: 0
             }));
+	        objQuizzApp.objStatistics.setElementsJquery();
             this.$widget.show();
         };
 

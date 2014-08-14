@@ -26,19 +26,21 @@ define(['LocalStorage', 'Question', 'Statistics', 'Router', 'Timer'],
 
 				self.objQuestion =  Question;
 
-                self.objQuestion.setQuizData(self.quizData);
-                self.objQuestion.setObjQuizzApp(self);
-                self.objQuestion.setAppWrapper(self.$wrapper);
+				self.objQuestion.setQuizData(self.quizData);
+				self.objQuestion.setObjQuizzApp(self);
+				self.objQuestion.setAppWrapper(self.$wrapper);
 
 
 				self.objQuestion.hiddenAjaxLoader();
 
-				self.objQuestion.buildTestWidget();
-
 				self.objStatistics =  Statistics;
 
+				self.objQuestion.buildTestWidget(self);
+
+
+
 				self.objRouter =  Router;
-                self.objRouter.setQuizData(self.quizData);
+				self.objRouter.setQuizData(self.quizData);
 				self.objQuestion.createListTest(Router);
 
 
