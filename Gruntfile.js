@@ -87,7 +87,8 @@ module.exports = function(grunt) {
                     vendor: [
                         'vendor/jquery/dist/jquery.js',
                         'vendor/jasmine-jquery/lib/jasmine-jquery.js',
-                        'vendor/jasmine-ajax/lib/mock-ajax.js'
+                        'vendor/jasmine-ajax/lib/mock-ajax.js',
+                        'vendor/jasmine/lib/jasmine-core/jasmine-html.js'
                     ],
                     templateOptions: {
                         requireConfigFile: 'app/init.js'
